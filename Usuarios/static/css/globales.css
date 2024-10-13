@@ -1,0 +1,49 @@
+:root {
+    --main-font-color: #000000;
+    --main-bg-color: #ffffff;
+    --font-family: 'Montserrat', sans-serif;
+    --heading-size: 2.5rem;
+    --text-size: 1.2rem;
+}
+
+/* Global styles */
+body {
+    font-family: var(--font-family);
+    color: var(--main-font-color);
+    background-color: var(--main-bg-color); /* Cambiar a un color de fondo definido */
+}
+
+h1 {
+    font-size: var(--heading-size);
+    color: var(--main-font-color);
+}
+
+p {
+    font-size: var(--text-size);
+}
+
+/* Estilos del botón */
+.btn {
+    background-color: #582168; /* Utiliza la variable definida */
+    color: white; /* Color del texto */
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #9e4ab8; /* Color al pasar el mouse */
+}
+
+/* Navbar styles */
+.navbar {
+    background-color: #eaeaea; /* Cambiar si deseas usar una variable */
+}
+
+.navbar-brand, .nav-link {
+    font-size: 1rem;
+    color: var(--main-font-color) !important;
+}
+
+.navbar-toggler-icon {
+    background-color: var(--main-font-color); /* Cambiar de color a un fondo */
+}
+
