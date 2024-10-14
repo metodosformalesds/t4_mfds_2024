@@ -1,0 +1,34 @@
+/*Estilos propios de pantalla de inicio. Emiliano*/
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+.text-area {
+    flex: 1;
+}
+
+.text-area p{
+    padding-top: 20px;
+    font-size: 50px;
+}
+.btn-secondary{
+    width: 200px; /* Ancho fijo */
+    height: 60px;
+    font-size: 2rem; 
+}
+
+.image-gallery {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+}
+
+.image-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-width: 250px;
+    border-radius: 20px;
+}
