@@ -1,0 +1,89 @@
+.register-container {
+    margin-top: -40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.register-form {
+    background-color: #eaeaea;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 600px;
+    
+    
+}
+
+.register-form h2 {
+    color: var(--font-family);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.register-form input {
+    display: block;
+    margin: 0 auto;
+    width: 75%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 90px;
+    font-size: 16px;
+}
+
+.register-form label {
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: block;
+    color: #000000;
+    text-align: center;
+}
+
+.register-form button.register-btn {
+    display: block;
+    margin: 0 auto;
+    background-color: #B12A76;
+    color: #fff;
+    padding: 10px;
+    width: 40%;
+    border: none;
+    border-radius: 90px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.register-form .google-register {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.google-btn {
+    background-color: #fff;
+    color: #000000;
+    padding: 10px;
+    width: 60%;
+    border: none;
+    border-radius: 90px;
+    font-size: 16px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+.google-logo{
+    width: 20px; /* Adjust the size as needed */
+    height: auto;
+    margin-right: 10px; /* Space between the logo and the text */
+}
+
+.register-form p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.register-form a {
+    color: #B12A76;
+    text-decoration: none;
+}
