@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publicar Servicio</title>
+  <link rel="icon" href="{% static 'images/logoICONO.ico' %}" type="image/x-icon">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Archivo CSS personalizado -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/globales.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/publicar_servicio.css' %}">
+  <!-- Fuentes de Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'index' %}"><img class=logo src="{% static 'images/logoDR.png' %}" alt="Logo" width="105" height="auto"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-left">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'acerca_de' %}">Acerca de</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'inicio_sesion' %}">Iniciar sesion</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'registro_cliente' %}" class="btn btn-primary">Únete</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!--Formulario para ingresar los datos de tu publicación-->
+    <form class="add-services">
+      <!--Sección Información de la publicación-->
+      <section class="containers-add-services sec-1">
+       <h2>Información de la publicación</h2>
+       <div class="buttons-containers">
+        <button type="button" class="btn btn-primary add-btn">Limpiar</button>
+        <button type="button" class="btn btn-primary add-btn">Eliminar</button>
+        <button type="submit" class="btn btn-primary add-btn">Publicar</button>
+       </div>
+       
+      </section>
+
+     <!--Sección para ingresar tus datos-->
+     <section class="containers-add-services sec-2">
+       <div class="services-information item">
+        <label class="text-label">Nombre del servicio:</label>
+        <input type="text" class="config-input" required>
+       </div>
+       <div class="services-information item">
+        <label class="text-label">Calle:</label>
+        <input type="text" class="config-input" required>
+       </div>
+       <div class="services-information item">
+        <label class="text-label">Número exterior:</label>
+        <input type="text" class="config-input" required>
+       </div>
+       <div class="services-information item">
+        <label class="text-label">Número interior:</label>
+        <input type="text" class="config-input">
+       </div>
+       <div class="services-information item">
+        <label class="text-label sel-label">Tipo de servicio:</label>
+        <select name="service-type" class="select-service">
+          <option value="" required>Tipo de servicio</option>
+          <option value="tipo1">Tipo 1</option>
+          <option value="tipo2">Tipo 2</option>
+          <option value="tipo3">Tipo 3</option>
+        </select>
+       </div>
+       <div class="services-information item">
+        <label class="text-label">Colonia:</label>
+        <input type="text" class="config-input" required>
+       </div>
+       <div class="services-information item">
+        <label class="text-label">Código Postal:</label>
+        <input type="text" class="config-input" required>
+       </div>
+       <div class="services-information item">
+        <label class="text-label">Precio mínimo:</label>
+        <input type="text" class="config-input" required>
+       </div>
+       <div class="services-information item">
+        <label class="text-label">Precio máximo:</label>
+        <input type="text" class="config-input" required>
+       </div>
+     </section>
+
+    <!--Sección para la información detallada de tu producto-->
+     <section class="containers-add-services sec-3">
+      <label class="lab-sec-3">Información detallada:</label>
+      <textarea class="area-sec-3"></textarea>
+     </section>
+
+     <!--Sección para ingresar las fotos de tu producto-->
+     <section class="containers-add-services sec-4">
+      <label class="lab-sec-4">Carga de imágenes:</label>
+      <div class="upload-container">
+          <input type="file" accept="image/*">
+      </div>
+     </section>
+    </form>
+
+  
+
+  
+
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
