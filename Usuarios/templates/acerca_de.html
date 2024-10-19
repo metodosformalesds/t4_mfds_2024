@@ -1,120 +1,32 @@
+<!-- Hereda del archivo html base que incluye el navbar y footer -->
+{% extends 'base.html' %}
+
+<!-- Carga los archivos estaticos -->
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicio</title>
-  <link rel="icon" href="{% static 'images/logoICONO.ico' %}" type="image/x-icon">
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Archivo CSS personalizado -->
-  <link rel="stylesheet" type="text/css" href="{% static 'css/globales.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/acerca_de.css' %}">
-  <!-- Fuentes de Google -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    footer {
-        background-color: rgba(150, 43, 107, 0.9); /* Color de fondo del pie de página más opaco */
-        color: white; /* Color del texto */
-        text-align: center; /* Centra el texto */
-        padding: 5px 0; /* Espaciado interno ajustado */
-        position: relative; /* Asegura que se posicione correctamente */
-        bottom: 0; /* Posición en la parte inferior */
-        width: 100%; /* Ancho completo */
-        max-height: 80px; /* Limita la altura máxima */
-        overflow: hidden; /* Oculta el contenido que excede el max-height */
-    }
 
-    footer p {
-        margin: 0; /* Elimina el margen del párrafo */
-        font-size: 1.4em; /* Tamaño de fuente del texto de derechos de autor */
-    }
+{% block title %} Acerca de {% endblock title %}
 
-    footer a {
-        color: white; /* Color de los enlaces */
-        text-decoration: none; /* Elimina el subrayado */
-        font-size: 0.98em; /* Tamaño de fuente de los enlaces */
-    }
+{% block css %} 
+<link rel="stylesheet" type="text/css" href="{% static 'css/acerca_de.css' %}">
+{% endblock css %}
 
-    footer a:hover {
-        text-decoration: underline; /* Subraya el enlace al pasar el ratón */
-    }
+{% block content %}
 
-    footer .list-inline {
-        padding: 0; /* Elimina el espaciado */
-        margin: 0; /* Elimina el margen */
-    }
-
-    footer .list-inline-item {
-        display: inline; /* Alinea los elementos de la lista en línea */
-        margin: 0 5px; /* Espaciado entre los enlaces ajustado */
-    }
-  </style>
-</head>
-<body>
-  <!-- Barra de navegación -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'index' %}"><img class=logo src="{% static 'images/logoDR.png' %}" alt="Logo" width="105" height="auto"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-left">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'servicios_sin_login' %}">Servicios</a>
-          </li>        
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'acerca_de' %}">Acerca de</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'inicio_sesion' %}">Iniciar sesión</a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'registro_cliente' %}" class="btn btn-primary">Únete</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Contenido principal -->
-  <div class="container main-content">
-    <div class="text-area">
-      <h1>Conócenos un poco</h1>
-    </div>
-
-    <div class="aside-about-us">
-      <aside class="first-about-us">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam perferendis repellendus ex minima veniam nihil esse ipsum, magnam fuga.</p>
-        <img class="image-item" src="{% static 'images/img1.jpg' %}" alt="Imagen 1">
-      </aside>
-      <aside class="second-about-us">
-        <img class="image-item" src="{% static 'images/img2.jpg' %}" alt="Imagen 2">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam perferendis repellendus ex minima veniam nihil esse ipsum, magnam fuga.</p>
-      </aside>
-    </div>
+<div class="container main-content">
+  <div class="text-area">
+    <h1>Conócenos un poco</h1>
   </div>
 
-  <!-- Pie de página -->
-  <footer>
-      <div class="container text-center">
-          <p>&copy; 2024 DecoRent. Todos los derechos reservados.</p>
-          <ul class="list-inline">
-              <li class="list-inline-item"><a href="#terminos">Términos de Servicio</a></li>
-              <li class="list-inline-item"><a href="#privacidad">Política de Privacidad</a></li>
-              <li class="list-inline-item"><a href="#contacto">Contacto</a></li>
-          </ul>
-      </div>
-  </footer>
+  <div class="aside-about-us">
+    <aside class="first-about-us">
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam perferendis repellendus ex minima veniam nihil esse ipsum, magnam fuga.</p>
+      <img class="image-item" src="{% static 'images/img1.jpg' %}" alt="Imagen 1">
+    </aside>
+    <aside class="second-about-us">
+      <img class="image-item" src="{% static 'images/img2.jpg' %}" alt="Imagen 2">
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam perferendis repellendus ex minima veniam nihil esse ipsum, magnam fuga.</p>
+    </aside>
+  </div>
+</div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{% endblock content %}

@@ -1,184 +1,49 @@
+<!-- Hereda del archivo html base que incluye el navbar y footer -->
+{% extends 'base.html' %}
+
+<!-- Carga los archivos estaticos -->
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicio de sesión</title>
-  <link rel="icon" href="{% static 'images/logoICONO.ico' %}" type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/globales.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/inicio_sesion.css' %}">
-  <style>
-    .login-container {
-        display: flex;
-        justify-content: center; /* Centrar horizontalmente */
-        align-items: center; /* Centrar verticalmente */
-        flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
-        margin-top: 80px; /* Espacio superior para bajar la sección */
-        margin-bottom: 40px; /* Aumentar el margen inferior para separar del footer */
-        background-color: #f8f9fa; /* Fondo claro para el contraste */
-    }
-    .login-form {
-        width: 100%; /* Asegura que el formulario ocupe todo el ancho */
-        max-width: 700px; /* Cambiado a 600px para mayor ancho del formulario */
-    }
-    .login-btn {
-        width: 100%; /* Asegura que el botón ocupe todo el ancho */
-        max-width: 150px; /* Cambiado para hacer el botón menos ancho */
-        padding: 10px; /* Espaciado interno */
-        margin-top: 10px; /* Espacio encima del botón */
-        border: none; /* Sin borde */
-        border-radius: 5px; /* Bordes redondeados */
-        font-size: 16px; /* Tamaño de fuente */
-        transition: background-color 0.3s; /* Transición suave para el cambio de color */
-    }
-    .login-btn:hover {
-        background-color: #e9ecef; /* Color de fondo al pasar el mouse */
-    }
-    .google-login, .apple-login, .facebook-login {
-        margin-top: 10px; /* Espacio encima del botón de Google */
-        padding-left: 110px; /* Espacio para mover los botones hacia la derecha */
-    }
-    .social-btn {
-        margin: 10px 0; /* Espacio vertical entre los botones */
-        width: 80%; /* Asegura que los botones ocupen el ancho completo del contenedor */
-    }
-    .google-btn, .apple-btn, .facebook-btn {
-      display: flex; /* Usar flexbox para alinear el contenido */
-      align-items: center; /* Centrar verticalmente */
-      justify-content: center; /* Centrar horizontalmente */
-      padding: 10px; /* Espaciado interno */
-      margin-top: 10px; /* Espacio encima de los botones */
-      border: none; /* Sin borde */
-      border-radius: 5px; /* Bordes redondeados */
-      font-size: 16px; /* Tamaño de fuente */
-      max-width: 400px; /* Cambiado a 150px para hacer los botones menos anchos */
-      width: 100%; /* Asegura que el botón ocupe todo el ancho */
-      transition: background-color 0.3s, box-shadow 0.3s; /* Transición suave para el cambio de color y sombra */
-    }
-    .google-btn:hover, .apple-btn:hover, .facebook-btn:hover {
-        background-color: #e9ecef; /* Color de fondo al pasar el mouse */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra al pasar el mouse */
-    }
-    
-    footer {
-        background-color: rgba(150, 43, 107, 0.9); /* Color de fondo del pie de página más opaco */
-        color: white; /* Color del texto */
-        text-align: center; /* Centra el texto */
-        padding: 10px 0; /* Aumentar el espaciado interno para mayor separación */
-        position: relative; /* Asegura que se posicione correctamente */
-        bottom: 0; /* Posición en la parte inferior */
-        width: 100%; /* Ancho completo */
-        max-height: 80px; /* Limita la altura máxima */
-        overflow: hidden; /* Oculta el contenido que excede el max-height */
-        border-top: 10px solid white; /* Agrega un borde superior para mayor separación visual */
-    }
 
-    footer p {
-        margin: 0; /* Elimina el margen del párrafo */
-        font-size: 1.4em; /* Tamaño de fuente del texto de derechos de autor */
-    }
+{% block title %} Inicio de sesión {% endblock title %}
 
-    footer a {
-        color: white; /* Color de los enlaces */
-        text-decoration: none; /* Elimina el subrayado */
-        font-size: 0.98em; /* Tamaño de fuente de los enlaces */
-    }
+{% block css %} 
+<link rel="stylesheet" type="text/css" href="{% static 'css/inicio_sesion.css' %}">
+{% endblock css %}
 
-    footer a:hover {
-        text-decoration: underline; /* Subraya el enlace al pasar el ratón */
-    }
+{% block content %}
 
-    footer .list-inline {
-        padding: 0; /* Elimina el espaciado */
-        margin: 0; /* Elimina el margen */
-    }
+<section class="login-container">
+  <form class="login-form">
+      <h2>Inicio de sesión</h2>
+      <input type="email" placeholder="Correo electrónico" required>
+      <input type="password" placeholder="Contraseña" required>
 
-    footer .list-inline-item {
-        display: inline; /* Alinea los elementos de la lista en línea */
-        margin: 0 5px; /* Espaciado entre los enlaces ajustado */
-    }
-  </style>
-</head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'index' %}"><img class=logo src="{% static 'images/logoDR.png' %}" alt="Logo" width="105" height="auto"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-left">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'servicios_sin_login' %}">Servicios</a>
-          </li>        
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'acerca_de' %}">Acerca de</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'inicio_sesion' %}">Iniciar sesión</a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'registro_cliente' %}" class="btn btn-primary">Únete</a>
-          </li>
-        </ul>
+      <button type="submit" class="login-btn">Entrar</button>
+
+      <label>¿Aún no tienes cuenta? <a href="{% url 'registro_cliente' %}">Regístrate</a></label>
+      
+      <div class="google-login">
+          <button type="button" class="google-btn">
+              <img src="{% static 'images/google_logo.png' %}" alt="Google logo" class="google-logo">
+              Iniciar sesión con Google
+          </button>
       </div>
-    </div>
-  </nav>
 
-  <section class="login-container">
-    <form class="login-form">
-        <h2>Inicio de sesión</h2>
-        <input type="email" placeholder="Correo electrónico" required>
-        <input type="password" placeholder="Contraseña" required>
-
-        <button type="submit" class="login-btn">Entrar</button>
-
-        <label>¿Aún no tienes cuenta? <a href="{% url 'registro_cliente' %}">Regístrate</a></label>
-        
-        <div class="google-login">
-            <button type="button" class="google-btn">
-                <img src="{% static 'images/google_logo.png' %}" alt="Google logo" class="google-logo">
-                Iniciar sesión con Google
-            </button>
-        </div>
-
-        <div class="apple-login">
-            <button type="button" class="apple-btn">
-                <img src="{% static 'images/apple_logo.png' %}" alt="Apple logo" class="google-logo">
-                Iniciar sesión con Apple
-            </button>
-        </div>
-
-        <div class="facebook-login">
-            <button type="button" class="facebook-btn">
-                <img src="{% static 'images/facebook_logo.png' %}" alt="Facebook logo" class="google-logo">
-                Iniciar sesión con Facebook
-            </button>
-        </div>
-        
-    </form>
-  </section>
-
-  <!-- Pie de página -->
-  <footer>
-      <div class="container text-center">
-          <p>&copy; 2024 DecoRent. Todos los derechos reservados.</p>
-          <ul class="list-inline">
-              <li class="list-inline-item"><a href="#terminos">Términos de Servicio</a></li>
-              <li class="list-inline-item"><a href="#privacidad">Política de Privacidad</a></li>
-              <li class="list-inline-item"><a href="#contacto">Contacto</a></li>
-          </ul>
+      <div class="apple-login">
+          <button type="button" class="apple-btn">
+              <img src="{% static 'images/apple_logo.png' %}" alt="Apple logo" class="google-logo">
+              Iniciar sesión con Apple
+          </button>
       </div>
-  </footer>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+      <div class="facebook-login">
+          <button type="button" class="facebook-btn">
+              <img src="{% static 'images/facebook_logo.png' %}" alt="Facebook logo" class="google-logo">
+              Iniciar sesión con Facebook
+          </button>
+      </div>
+      
+  </form>
+</section>
+
+{% endblock content %}

@@ -92,3 +92,55 @@
     height: auto;
     margin-right: 10px;
 }
+
+.login-container {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+    margin-top: 80px; /* Espacio superior para bajar la sección */
+    margin-bottom: 40px; /* Aumentar el margen inferior para separar del footer */
+    background-color: #f8f9fa; /* Fondo claro para el contraste */
+}
+.login-form {
+    width: 100%; /* Asegura que el formulario ocupe todo el ancho */
+    max-width: 700px; /* Cambiado a 600px para mayor ancho del formulario */
+}
+.login-btn {
+    width: 100%; /* Asegura que el botón ocupe todo el ancho */
+    max-width: 150px; /* Cambiado para hacer el botón menos ancho */
+    padding: 10px; /* Espaciado interno */
+    margin-top: 10px; /* Espacio encima del botón */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente */
+    transition: background-color 0.3s; /* Transición suave para el cambio de color */
+}
+.login-btn:hover {
+    background-color: #e9ecef; /* Color de fondo al pasar el mouse */
+}
+.google-login, .apple-login, .facebook-login {
+    margin-top: 10px; /* Espacio encima del botón de Google */
+    padding-left: 110px; /* Espacio para mover los botones hacia la derecha */
+}
+.social-btn {
+    margin: 10px 0; /* Espacio vertical entre los botones */
+    width: 80%; /* Asegura que los botones ocupen el ancho completo del contenedor */
+}
+.google-btn, .apple-btn, .facebook-btn {
+  display: flex; /* Usar flexbox para alinear el contenido */
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  padding: 10px; /* Espaciado interno */
+  margin-top: 10px; /* Espacio encima de los botones */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 16px; /* Tamaño de fuente */
+  max-width: 400px; /* Cambiado a 150px para hacer los botones menos anchos */
+  width: 100%; /* Asegura que el botón ocupe todo el ancho */
+  transition: background-color 0.3s, box-shadow 0.3s; /* Transición suave para el cambio de color y sombra */
+}
+.google-btn:hover, .apple-btn:hover, .facebook-btn:hover {
+    background-color: #e9ecef; /* Color de fondo al pasar el mouse */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra al pasar el mouse */
+}
