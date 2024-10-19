@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def servicios_sin_login(request):
+    return render(request, 'servicios_sin_login.html')

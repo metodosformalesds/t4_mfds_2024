@@ -1,4 +1,9 @@
 /*Estilos propios de pantalla de Registro proveedor. Saul*/
+.container {
+    height: auto; /* Asegúrate de que se ajuste al contenido */
+    min-height: 100vh; /* Asegúrate de que al menos ocupe la altura completa de la ventana */
+  }
+  
 .register-container {
     display: flex;
     justify-content: center;

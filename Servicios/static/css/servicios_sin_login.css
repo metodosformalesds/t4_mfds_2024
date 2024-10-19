@@ -1,0 +1,18 @@
+/* Estilos para la barra de navegación */
+.navbar {
+  background-color: #f8f9fa; /* Color de fondo */
+}
+
+.navbar .nav-link {
+  color: #000; /* Color del texto de los enlaces */
+  font-weight: bold; /* Negrita para el texto */
+}
+
+.navbar .nav-link:hover {
+  color: #962b6b; /* Color al pasar el mouse */
+}
+
+.navbar .navbar-brand img {
+  width: 105px; /* Ancho de la imagen del logo */
+  height: auto; /* Mantiene la proporción */
+}

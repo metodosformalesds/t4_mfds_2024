@@ -1,3 +1,8 @@
+.container {
+    height: auto; /* Asegúrate de que se ajuste al contenido */
+    min-height: 100vh; /* Asegúrate de que al menos ocupe la altura completa de la ventana */
+  }
+  
 .register-container {
     margin-top: -40px;
     display: flex;

@@ -1,5 +1,8 @@
 from django.shortcuts import render
 
+def servicios_sin_login(request):
+    return render(request, 'Template/servicios_sin_login.html')  
+
 def inicio(request):
     return render(request, 'index.html')
 
