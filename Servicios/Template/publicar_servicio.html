@@ -100,7 +100,12 @@ h2{
 }
 </style>
 
-
+<!--Script JavaScript para limpiar datos del formulario. Se usa en la pantalla principal para cuando se agregue un archivo con funcionalidades-->
+<script>
+  function limpiarFormulario() {
+  document.getElementById("miFormulario").reset(); // Resetea todos los campos del formulario
+}
+</script>
 
 
 
@@ -142,12 +147,12 @@ h2{
   </nav>
 
   <!--Formulario para ingresar los datos de tu publicación-->
-    <form class="add-services">
+    <form id="miFormulario" class="add-services">
       <!--Sección Información de la publicación-->
       <section class="containers-add-services sec-1">
        <h2>Información de la publicación</h2>
        <div class="buttons-containers">
-        <button type="button" class="btn btn-primary add-btn">Limpiar</button>
+        <button type="button" onclick="limpiarFormulario()" class="btn btn-primary add-btn">Limpiar</button>
         <button type="button" class="btn btn-primary add-btn">Eliminar</button>
         <button type="submit" class="btn btn-primary add-btn">Publicar</button>
        </div>
