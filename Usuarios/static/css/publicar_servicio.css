@@ -1,0 +1,82 @@
+body{
+    font-size: 20px;
+}
+
+/*Estilo para el formulario*/
+.add-services{
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    gap: 30px;
+}
+
+/*Estilo para la sección "Información de la publicación" */
+.sec-1{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+h2{
+    font-size: 40px;
+    display: flex;
+   
+    
+}
+.buttons-containers{
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+}
+.add-btn{
+    font-size: 30px;
+    width: 300px;;
+}
+
+/*Estilos para la seccción "Ingresar datos" */
+.sec-2{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 20px;
+
+}
+.text-label {
+    grid-column: span 1;
+    margin-bottom: 5px;
+}
+.config-input, .select-service {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.select-service{
+    background-color: #ccc;
+    border: transparent;
+}
+.sel-label{
+    margin-bottom: 10px;
+}
+
+/*Estilos para la sección "Información detallada de tu producto" */
+.sec-3{
+    display: grid;
+    grid-template-columns: 2;
+
+}
+.lab-sec-3{
+    margin-bottom: 5px;
+}
+.area-sec-3{
+    width: 100%;
+    height: 250px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/*Estilos para la sección "Publicar foto de tu producto" */
+.upload-container {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+}
+.lab-sec-4{
+    margin-bottom: 5px;
+}
