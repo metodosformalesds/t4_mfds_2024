@@ -13,106 +13,146 @@
   <!-- Fuentes de Google -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
+  <style>
+    body {
+      font-size: 16px; /* Tamaño de fuente reducido */
+      display: flex;
+      flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+      min-height: 100vh; /* Asegura que el cuerpo ocupe toda la altura de la ventana */
+      margin: 0; /* Elimina el margen por defecto */
+    }
 
-  <!--Estilo de la página. Estará en el head por el momento. Se dejará el archivo creado para en un futuro arreglar este problema.-->
-<style>
-  body{
-    font-size: 20px;
-}
+    /* Estilo para el formulario */
+    .add-services {
+      display: flex;
+      flex-direction: column;
+      padding: 20px; /* Reducción en el padding */
+      gap: 20px; /* Reducción en el gap */
+      flex: 1; /* Permite que esta sección ocupe el espacio restante */
+    }
 
-/*Estilo para el formulario*/
-.add-services{
-    display: flex;
-    flex-direction: column;
-    padding: 30px;
-    gap: 30px;
-}
+    /* Estilo para la sección "Información de la publicación" */
+    .sec-1 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
 
-/*Estilo para la sección "Información de la publicación" */
-.sec-1{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-}
-h2{
-    font-size: 40px;
-    display: flex;
-   
-    
-}
-.buttons-containers{
-    display: flex;
-    justify-content: flex-start;
-    gap: 20px;
-}
-.add-btn{
-    font-size: 30px;
-    width: 300px;;
-}
+    h2 {
+      font-size: 32px; /* Tamaño de fuente reducido */
+      display: flex;
+    }
 
-/*Estilos para la seccción "Ingresar datos" */
-.sec-2{
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 20px;
+    .buttons-containers {
+      display: flex;
+      justify-content: flex-start;
+      gap: 15px; /* Espaciado reducido entre botones */
+    }
 
-}
-.text-label {
-    grid-column: span 1;
-    margin-bottom: 5px;
-}
-.config-input, .select-service {
-    width: 100%;
-    padding: 5px;
-    box-sizing: border-box;
-}
-.select-service{
-    background-color: #ccc;
-    border: transparent;
-}
-.sel-label{
-    margin-bottom: 10px;
-}
+    .add-btn {
+      font-size: 24px; /* Tamaño de fuente reducido para los botones */
+      width: 250px; /* Reducción en el ancho */
+    }
 
-/*Estilos para la sección "Información detallada de tu producto" */
-.sec-3{
-    display: grid;
-    grid-template-columns: 2;
+    /* Estilos para la sección "Ingresar datos" */
+    .sec-2 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px; /* Espaciado reducido */
+    }
 
-}
-.lab-sec-3{
-    margin-bottom: 5px;
-}
-.area-sec-3{
-    width: 100%;
-    height: 250px;
-    padding: 10px;
-    box-sizing: border-box;
-}
+    .text-label {
+      grid-column: span 1;
+      margin-bottom: 5px;
+    }
 
-/*Estilos para la sección "Publicar foto de tu producto" */
-.upload-container {
-    border: 2px dashed #ccc;
-    padding: 20px;
-    text-align: center;
-}
-.lab-sec-4{
-    margin-bottom: 5px;
-}
-</style>
+    .config-input, .select-service {
+      width: 100%;
+      padding: 4px; /* Reducción en el padding */
+      box-sizing: border-box;
+    }
 
-<!--Script JavaScript para limpiar datos del formulario. Se usa en la pantalla principal para cuando se agregue un archivo con funcionalidades-->
-<script>
-  function limpiarFormulario() {
-  document.getElementById("miFormulario").reset(); // Resetea todos los campos del formulario
-}
-</script>
+    .select-service {
+      background-color: #ccc;
+      border: transparent;
+    }
 
+    .sel-label {
+      margin-bottom: 5px; /* Reducción en el margen */
+    }
 
+    /* Estilos para la sección "Información detallada de tu producto" */
+    .sec-3 {
+      display: grid;
+      grid-template-columns: 2;
+    }
 
+    .lab-sec-3 {
+      margin-bottom: 5px;
+    }
 
+    .area-sec-3 {
+      width: 100%;
+      height: 200px; /* Altura reducida */
+      padding: 8px; /* Reducción en el padding */
+      box-sizing: border-box;
+    }
 
+    /* Estilos para la sección "Publicar foto de tu producto" */
+    .upload-container {
+      border: 2px dashed #ccc;
+      padding: 15px; /* Reducción en el padding */
+      text-align: center;
+    }
 
+    .lab-sec-4 {
+      margin-bottom: 5px;
+    }
 
+    footer {
+      background-color: rgba(150, 43, 107, 0.9); /* Color de fondo del pie de página más opaco */
+      color: white; /* Color del texto */
+      text-align: center; /* Centra el texto */
+      padding: 10px 0; /* Ajustado el espaciado interno */
+      position: relative; /* Asegura que se posicione correctamente */
+      bottom: 0; /* Posición en la parte inferior */
+      width: 100%; /* Ancho completo */
+      max-height: 80px; /* Limita la altura máxima */
+      overflow: hidden; /* Oculta el contenido que excede el max-height */
+      border-top: 10px solid white; /* Agrega un borde superior para mayor separación visual */
+    }
+
+    footer p {
+      margin: 0; /* Elimina el margen del párrafo */
+      font-size: 1.2em; /* Tamaño de fuente reducido para el pie de página */
+    }
+
+    footer a {
+      color: white; /* Color de los enlaces */
+      text-decoration: none; /* Elimina el subrayado */
+      font-size: 0.9em; /* Tamaño de fuente de los enlaces reducido */
+    }
+
+    footer a:hover {
+      text-decoration: underline; /* Subraya el enlace al pasar el ratón */
+    }
+
+    footer .list-inline {
+      padding: 0; /* Elimina el espaciado */
+      margin: 0; /* Elimina el margen */
+    }
+
+    footer .list-inline-item {
+      display: inline; /* Alinea los elementos de la lista en línea */
+      margin: 0 5px; /* Espaciado entre los enlaces ajustado */
+    }
+  </style>
+
+  <!-- Script JavaScript para limpiar datos del formulario -->
+  <script>
+    function limpiarFormulario() {
+      document.getElementById("miFormulario").reset(); // Resetea todos los campos del formulario
+    }
+  </script>
 </head>
 <body>
   <!-- Barra de navegación -->
@@ -136,7 +176,7 @@ h2{
         </ul>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'inicio_sesion' %}">Iniciar sesion</a>
+            <a class="nav-link active" href="{% url 'inicio_sesion' %}">Iniciar sesión</a>
           </li>
           <li class="nav-item">
             <a href="{% url 'registro_cliente' %}" class="btn btn-primary">Únete</a>
@@ -146,38 +186,37 @@ h2{
     </div>
   </nav>
 
-  <!--Formulario para ingresar los datos de tu publicación-->
-    <form id="miFormulario" class="add-services">
-      <!--Sección Información de la publicación-->
-      <section class="containers-add-services sec-1">
-       <h2>Información de la publicación</h2>
-       <div class="buttons-containers">
+  <!-- Formulario para ingresar los datos de tu publicación -->
+  <form id="miFormulario" class="add-services">
+    <!-- Sección Información de la publicación -->
+    <section class="containers-add-services sec-1">
+      <h2>Información de la publicación</h2>
+      <div class="buttons-containers">
         <button type="button" onclick="limpiarFormulario()" class="btn btn-primary add-btn">Limpiar</button>
         <button type="button" class="btn btn-primary add-btn">Eliminar</button>
         <button type="submit" class="btn btn-primary add-btn">Publicar</button>
-       </div>
-       
-      </section>
+      </div>
+    </section>
 
-     <!--Sección para ingresar tus datos-->
-     <section class="containers-add-services sec-2">
-       <div class="services-information item">
+    <!-- Sección para ingresar tus datos -->
+    <section class="containers-add-services sec-2">
+      <div class="services-information item">
         <label class="text-label">Nombre del servicio:</label>
         <input type="text" class="config-input" required>
-       </div>
-       <div class="services-information item">
+      </div>
+      <div class="services-information item">
         <label class="text-label">Calle:</label>
         <input type="text" class="config-input" required>
-       </div>
-       <div class="services-information item">
+      </div>
+      <div class="services-information item">
         <label class="text-label">Número exterior:</label>
         <input type="text" class="config-input" required>
-       </div>
-       <div class="services-information item">
+      </div>
+      <div class="services-information item">
         <label class="text-label">Número interior:</label>
         <input type="text" class="config-input">
-       </div>
-       <div class="services-information item">
+      </div>
+      <div class="services-information item">
         <label class="text-label sel-label">Tipo de servicio:</label>
         <select name="service-type" class="select-service">
           <option value="" required>Tipo de servicio</option>
@@ -185,45 +224,51 @@ h2{
           <option value="tipo2">Tipo 2</option>
           <option value="tipo3">Tipo 3</option>
         </select>
-       </div>
-       <div class="services-information item">
+      </div>
+      <div class="services-information item">
         <label class="text-label">Colonia:</label>
         <input type="text" class="config-input" required>
-       </div>
-       <div class="services-information item">
+      </div>
+      <div class="services-information item">
         <label class="text-label">Código Postal:</label>
         <input type="text" class="config-input" required>
-       </div>
-       <div class="services-information item">
+      </div>
+      <div class="services-information item">
         <label class="text-label">Precio mínimo:</label>
         <input type="text" class="config-input" required>
-       </div>
-       <div class="services-information item">
+      </div>
+      <div class="services-information item">
         <label class="text-label">Precio máximo:</label>
         <input type="text" class="config-input" required>
-       </div>
-     </section>
+      </div>
+    </section>
 
-    <!--Sección para la información detallada de tu producto-->
-     <section class="containers-add-services sec-3">
+    <!-- Sección para la información detallada de tu producto -->
+    <section class="containers-add-services sec-3">
       <label class="lab-sec-3">Información detallada:</label>
       <textarea class="area-sec-3"></textarea>
-     </section>
+    </section>
 
-     <!--Sección para ingresar las fotos de tu producto-->
-     <section class="containers-add-services sec-4">
+    <!-- Sección para ingresar las fotos de tu producto -->
+    <section class="containers-add-services sec-4">
       <label class="lab-sec-4">Carga de imágenes:</label>
       <div class="upload-container">
-          <input type="file" accept="image/*">
+        <input type="file" accept="image/*">
       </div>
-     </section>
-    </form>
+    </section>
+  </form>
 
-  
-
-  
-
-
+  <!-- Pie de página -->
+  <footer>
+    <div class="container text-center">
+      <p>&copy; 2024 DecoRent. Todos los derechos reservados.</p>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href="#terminos">Términos de Servicio</a></li>
+        <li class="list-inline-item"><a href="#privacidad">Política de Privacidad</a></li>
+        <li class="list-inline-item"><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+  </footer>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
