@@ -1,3 +1,7 @@
 from django.contrib import admin
+from Usuarios.models import User, Cliente, Proveedor
 
-# Register your models here.
+#Arega las tablas creadas al panel de Admin
+admin.site.register(User)
+admin.site.register(Cliente)
+admin.site.register(Proveedor)

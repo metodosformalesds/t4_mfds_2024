@@ -47,3 +47,40 @@ p {
     background-color: var(--main-font-color); /* Cambiar de color a un fondo */
 }
 
+/* Estilos del footer */
+footer {
+    background-color: rgba(150, 43, 107, 0.9); /* Color de fondo del pie de página más opaco */
+    color: white; /* Color del texto */
+    text-align: center; /* Centra el texto */
+    padding: 5px 0; /* Espaciado interno ajustado */
+    position: relative; /* Asegura que se posicione correctamente */
+    bottom: 0; /* Posición en la parte inferior */
+    width: 100%; /* Ancho completo */
+    max-height: 80px; /* Limita la altura máxima */
+    overflow: hidden; /* Oculta el contenido que excede el max-height */
+}
+
+footer p {
+    margin: 0; /* Elimina el margen del párrafo */
+    font-size: 1.4em; /* Tamaño de fuente del texto de derechos de autor */
+}
+
+footer a {
+    color: white; /* Color de los enlaces */
+    text-decoration: none; /* Elimina el subrayado */
+    font-size: 0.98em; /* Tamaño de fuente de los enlaces */
+}
+
+footer a:hover {
+    text-decoration: underline; /* Subraya el enlace al pasar el ratón */
+}
+
+footer .list-inline {
+    padding: 0; /* Elimina el espaciado */
+    margin: 0; /* Elimina el margen */
+}
+
+footer .list-inline-item {
+    display: inline; /* Alinea los elementos de la lista en línea */
+    margin: 0 5px; /* Espaciado entre los enlaces ajustado */
+}

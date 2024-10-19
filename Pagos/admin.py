@@ -1,3 +1,5 @@
 from django.contrib import admin
+from Pagos.models import Contratacion
 
-# Register your models here.
+#Arega las tablas creadas al panel de Admin
+admin.site.register(Contratacion)
