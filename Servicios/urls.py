@@ -3,4 +3,5 @@ from . import views
 
 urlpatterns = [
     path('', views.servicios_sin_login, name='servicios_sin_login'),
+    path('publicar_servicio/', views.publicar_servicio, name='publicar_servicio'),
 ]
