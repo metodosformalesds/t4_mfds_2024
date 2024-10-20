@@ -15,3 +15,5 @@ def registro_proveedor(request):
 def inicio_sesion(request):
     return render(request, 'inicio_sesion.html')
 
+def publicar_servicio(request):
+    return render(request, 'publicar_servicio.html')

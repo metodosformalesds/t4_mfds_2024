@@ -1,0 +1,61 @@
+<!-- Hereda del archivo html base que incluye el navbar y footer -->
+{% extends 'base.html' %}
+
+<!-- Carga los archivos estaticos -->
+{% load static %}
+
+{% block title %} Publicar servicio {% endblock title %}
+
+{% block css %} 
+<link rel="stylesheet" type="text/css" href="{% static 'css/publicar_servicio.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container">
+    <!-- Service Name and Rating -->
+    <div class="service-header">
+        <h1>Nombre del servicio</h1>
+        <div class="rating">
+            <span>★★★★★</span> 
+            <span>0.0</span> 
+            <a href="#">Ver Reseñas</a>
+        </div>
+    </div>
+
+    <!-- Company Name and Price -->
+    <div class="company-details">
+        <h2>Nombre de la empresa</h2>
+        <p>$$$ Precio</p>
+    </div>
+
+    <!-- Action Buttons and Image Placeholder -->
+    <div class="action-section">
+        <div class="buttons">
+            <button class="quote-btn">Solicitar presupuesto</button>
+            <button class="message-btn">Enviar mensaje</button>
+        </div>
+
+        <div class="image-placeholder">
+            <span>Image</span>
+        </div>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="contact-info">
+        <p><strong>Contacto de la empresa</strong></p>
+        <p>📧 <a href="mailto:empresa@correo.com">empresa@correo.com</a></p>
+        <p>📞 656-1234567</p>
+    </div>
+
+    <!-- Description Section -->
+    <div class="main-content">
+        <div class="description">
+            <h3>Descripción del servicio</h3>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie...
+            </p>
+        </div>
+    </div>
+</div>
+
+    {% endblock content %}
