@@ -11,7 +11,7 @@
 {% endblock css %}
 
 {% block content %}
-<div class="container">
+<div class="container1">
     <!-- Service Name and Rating -->
     <div class="service-header">
         <h1>Nombre del servicio</h1>
@@ -58,4 +58,64 @@
     </div>
 </div>
 
+
+
+<div class="container2">
+    <h1>Ubicación</h1>
+    <div class="map-container">
+        <div class="map">
+            <img src="{% static 'imagenes/map_placeholder.png' %}" alt="Map Location">
+        </div>
+    </div>
+</div>
+
+
+<section class="reviews-section">
+    <h2>Reseñas</h2>
+    <div class="reviews-container">
+        <!-- Review Card 1 -->
+        <div class="review-card">
+            <h3>Nombre del usuario</h3>
+            <p class="review-date">12/12/24</p>
+            <div class="rating">
+                <span>⭐⭐⭐⭐⭐</span> <!-- Example of star rating -->
+                <span class="rating-value">0.0</span>
+            </div>
+            <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+        </div>
+
+        <!-- Review Card 2 -->
+        <div class="review-card">
+            <h3>Nombre del usuario</h3>
+            <p class="review-date">12/12/24</p>
+            <div class="rating">
+                <span>⭐⭐⭐⭐⭐</span>
+                <span class="rating-value">0.0</span>
+            </div>
+            <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+        </div>
+
+        <!-- Review Card 3 -->
+        <div class="review-card">
+            <h3>Nombre del usuario</h3>
+            <p class="review-date">12/12/24</p>
+            <div class="rating">
+                <span>⭐⭐⭐⭐⭐</span>
+                <span class="rating-value">0.0</span>
+            </div>
+            <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+        </div>
+
+        <!-- Review Card 4 -->
+        <div class="review-card">
+            <h3>Nombre del usuario</h3>
+            <p class="review-date">12/12/24</p>
+            <div class="rating">
+                <span>⭐⭐⭐⭐⭐</span>
+                <span class="rating-value">0.0</span>
+            </div>
+            <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+        </div>
+    </div>
+</section>
     {% endblock content %}
