@@ -10,6 +10,11 @@ class User(AbstractUser):
     registro_con_facebook = models.BooleanField(default=False)
     registro_con_ios = models.BooleanField(default=False)
     
+    username = None  # Desactiva el campo de username
+    
+    USERNAME_FIELD = 'email' # Se cambia el USERNAME_FIELD para usar el email
+    REQUIRED_FIELDS = []  # Se deja vacío para que solo se requiera el email y la contraseña
+    
     # Se cambia el related_name para evitar un conflicto entre dos nombres iguales
     groups = models.ManyToManyField(
         'auth.Group',

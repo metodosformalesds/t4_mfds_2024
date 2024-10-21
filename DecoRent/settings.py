@@ -133,3 +133,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #Directorio de archivos media (imagenes)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTHENTICATION_BACKENDS = [
+    'Usuarios.backends.EmailBackend',  # Backend de autenticacion personalizado
+    'django.contrib.auth.backends.ModelBackend',  # Se mantiene el backend predeterminado para seguridad
+]
+
+# Define el campo email como el identificador para la autenticación
+AUTH_USER_MODEL = 'Usuarios.User'  # Asegúrate de que apunte a tu modelo personalizado

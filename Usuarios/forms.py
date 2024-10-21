@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from .models import User
 
@@ -82,3 +83,26 @@ class RegistroProveedorForm(UserCreationForm):
         if commit:
             user.save() #Guarda al usuario en la tabla User
         return user
+    
+class InicioSesionForm(forms.Form):
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={'placeholder': 'Correo electrónico'}),
+        label=''  # Esto elimina el label automático
+    )
+    password = forms.CharField(
+        label='',
+        widget=forms.PasswordInput(attrs={'placeholder': 'Contraseña'})
+    )
+    
+    #Funcion que valida los datos de inicio de sesion
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+        
+        if email and password:
+            user = authenticate(username=email, password=password)
+            if not user:
+                raise forms.ValidationError("Correo o contraseña incorrecta")
+        return self.cleaned_data
+    

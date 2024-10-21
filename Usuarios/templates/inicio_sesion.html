@@ -6,44 +6,46 @@
 
 {% block title %} Inicio de sesión {% endblock title %}
 
-{% block css %} 
+{% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/inicio_sesion.css' %}">
 {% endblock css %}
 
 {% block content %}
 
 <section class="login-container">
-  <form class="login-form">
-      <h2>Inicio de sesión</h2>
-      <input type="email" placeholder="Correo electrónico" required>
-      <input type="password" placeholder="Contraseña" required>
+    <form method="POST" class="login-form">
+        {% csrf_token %}
+        <h2>Inicio de sesión</h2>
+        
+        <!-- Esto generará los campos del formulario y los mensajes de error automáticamente -->
+        {{ form.as_p }}
 
-      <button type="submit" class="login-btn">Entrar</button>
+        <button type="submit" class="login-btn">Entrar</button>
 
-      <label>¿Aún no tienes cuenta? <a href="{% url 'registro_cliente' %}">Regístrate</a></label>
-      
-      <div class="google-login">
-          <button type="button" class="google-btn">
-              <img src="{% static 'images/google_logo.png' %}" alt="Google logo" class="google-logo">
-              Iniciar sesión con Google
-          </button>
-      </div>
+        <label>¿Aún no tienes cuenta? <a href="{% url 'registro_cliente' %}">Regístrate</a></label>
 
-      <div class="apple-login">
-          <button type="button" class="apple-btn">
-              <img src="{% static 'images/apple_logo.png' %}" alt="Apple logo" class="google-logo">
-              Iniciar sesión con Apple
-          </button>
-      </div>
+        <div class="google-login">
+            <button type="button" class="google-btn">
+                <img src="{% static 'images/google_logo.png' %}" alt="Google logo" class="google-logo">
+                Iniciar sesión con Google
+            </button>
+        </div>
 
-      <div class="facebook-login">
-          <button type="button" class="facebook-btn">
-              <img src="{% static 'images/facebook_logo.png' %}" alt="Facebook logo" class="google-logo">
-              Iniciar sesión con Facebook
-          </button>
-      </div>
-      
-  </form>
+        <div class="apple-login">
+            <button type="button" class="apple-btn">
+                <img src="{% static 'images/apple_logo.png' %}" alt="Apple logo" class="google-logo">
+                Iniciar sesión con Apple
+            </button>
+        </div>
+
+        <div class="facebook-login">
+            <button type="button" class="facebook-btn">
+                <img src="{% static 'images/facebook_logo.png' %}" alt="Facebook logo" class="google-logo">
+                Iniciar sesión con Facebook
+            </button>
+        </div>
+
+    </form>
 </section>
 
 {% endblock content %}

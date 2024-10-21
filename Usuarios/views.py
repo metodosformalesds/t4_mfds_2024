@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import RegistroClienteForm, RegistroProveedorForm
+from .forms import RegistroClienteForm, RegistroProveedorForm, InicioSesionForm
 from .models import Cliente, Proveedor
-from django.contrib.auth import login
-import uuid
+from django.contrib.auth import login, authenticate
 
 def inicio(request):
     """Renderiza la página de inicio.
@@ -37,19 +36,16 @@ def registro_cliente(request):
         if form.is_valid():
             # Obtener el nombre completo
             nombre_completo = form.cleaned_data['nombre_completo']
-            # Crear un nombre de usuario único
-            username = f"{nombre_completo.replace(' ', '_')}_{uuid.uuid4().hex[:8]}"
                 
             # Guarda el nuevo usuario en la tabla User
-            user = form.save(commit=False) #Se crea la entrada pero no se confirma
-            user.username = username #Asigna el nombre de usuario
-            user.save() # Se confirma la nueva entrada
+            user = form.save()
             
-            # Crear una entrada en la tabla Cliente
+            # Guarda el nuevo usuario en la tabla User Cliente
             Cliente.objects.create(user=user, nombre_completo=nombre_completo)  # Crea el cliente asociado al usuario
             
-            # Inicia sesion automaticamente
-            login(request, user) 
+            # Inicia sesión automáticamente usando el backend personalizado
+            login(request, user, backend='Usuarios.backends.EmailBackend')
+            
             # Envia a la pantalla de servicios
             return redirect('servicios_sin_login')
     else: # En el caso contrario seria una solicitud GET en la que solo mostramos la pagina
@@ -64,19 +60,16 @@ def registro_proveedor(request):
         if form.is_valid():
             # Obtener el nombre de la empresa
             nombre_empresa = form.cleaned_data['nombre_empresa']
-            # Crear un nombre de usuario único
-            username = f"{nombre_empresa.replace(' ', '_')}_{uuid.uuid4().hex[:8]}"
                 
             # Guarda el nuevo usuario en la tabla User
-            user = form.save(commit=False) #Se crea la entrada pero no se confirma
-            user.username = username #Asigna el nombre de usuario
-            user.save() # Se confirma la nueva entrada
+            user = form.save() 
             
             # Crear una entrada en la tabla Proveedor
             Proveedor.objects.create(user=user, nombre_empresa=nombre_empresa, clabe=form.cleaned_data['clabe'])  # Crea el proveedor asociado al usuario
             
-            # Inicia sesion automaticamente
-            login(request, user) 
+            # Inicia sesión automáticamente usando el backend personalizado
+            login(request, user, backend='Usuarios.backends.EmailBackend')
+            
             # Envia a la pantalla de servicios
             return redirect('servicios_sin_login')
     else: # En el caso contrario seria una solicitud GET en la que solo mostramos la pagina
@@ -85,4 +78,19 @@ def registro_proveedor(request):
     return render(request, 'registro_proveedor.html', {'form': form})
 
 def inicio_sesion(request):
-    return render(request, 'inicio_sesion.html')
+    # Si la solicitud es de tipo POST quiere decir que se recibieron datos
+    if request.method == 'POST':
+        form = InicioSesionForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=email, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('servicios_sin_login')
+            else:
+                form.add_error(None, "Correo o contraseña incorrecta")
+    else:
+        form = InicioSesionForm()
+            
+    return render(request, 'inicio_sesion.html', {'form': form})
