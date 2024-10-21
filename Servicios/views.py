@@ -5,3 +5,6 @@ def servicios_sin_login(request):
 
 def publicar_servicio(request):
     return render(request, 'publicar_servicio.html')
+
+def publicacion_servicio(request):
+    return render(request, 'publicacion_servicio.html')
