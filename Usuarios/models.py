@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 
 #Extension del modelo de usuarios de django para clientes y proveedores
 class User(AbstractUser):
-    nombre_completo = models.CharField(max_length=255, blank=False)
     email = models.EmailField(unique=True, default='default@example.com')
     es_cliente = models.BooleanField(default=False)
     es_proveedor = models.BooleanField(default=False)
@@ -32,10 +31,10 @@ class User(AbstractUser):
 #Modelo para clientes derivado de User
 class Cliente(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    nombre_completo = models.CharField(max_length=255, blank=False, default='')
     
 #Modelo para proveedores derivado de User
 class Proveedor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nombre_empresa = models.CharField(max_length=255)
-    direccion = models.CharField(max_length=255)
-    clabe = models.CharField(max_length=255)
+    clabe = models.CharField(max_length=18)
