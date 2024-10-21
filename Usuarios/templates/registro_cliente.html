@@ -6,47 +6,49 @@
 
 {% block title %} Regístrate {% endblock title %}
 
-{% block css %} 
+{% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/registro_cliente.css' %}">
 {% endblock css %}
 
 {% block content %}
 
 <section class="register-container">
-  <form class="register-form" id="registerForm">
-      <h2>Regístrate como cliente</h2>
-      <input type="text" id="fullName" placeholder="Nombre completo" required>
-      <input type="email" id="email" placeholder="Correo electrónico" required>
-      <input type="password" id="password" placeholder="Contraseña" required>
+    <form method="POST" class="register-form" id="registerForm">
+        {% csrf_token %}
+        <h2>Regístrate como cliente</h2>
 
-      <button type="submit" class="register-btn">Registrarse</button>
+        <!-- Esto generará los campos del formulario y los mensajes de error automáticamente -->
+        {{ form.as_p }}
 
-      <label>¿Ya tienes una cuenta? <a href="{% url 'inicio_sesion' %}">Da clic aquí</a></label>
-      
-      <div class="social-register">
-          <div class="social-btn">
-              <button type="button" class="google-btn">
-                  <img src="{% static 'images/google_logo.png' %}" alt="Google logo" class="google-logo">
-                  Registrarse con Google
-              </button>
-          </div>
-          <div class="social-btn">
-              <button type="button" class="apple-btn">
-                  <img src="{% static 'images/apple_logo.png' %}" alt="Apple logo" class="google-logo">
-                  Registrarse con Apple
-              </button>
-          </div>
-          <div class="social-btn">
-              <button type="button" class="facebook-btn">
-                  <img src="{% static 'images/facebook_logo.png' %}" alt="Facebook logo" class="google-logo">
-                  Registrarse con Facebook
-              </button>
-          </div>
-      </div>
+        <button type="submit" class="register-btn">Registrarse</button>
 
-      <label>¿Deseas publicar tus servicios? <a href="{% url 'registro_proveedor' %}">Registrarse como proveedor aquí</a></label>
-      
-  </form>
+        <label>¿Ya tienes una cuenta? <a href="{% url 'inicio_sesion' %}">Da clic aquí</a></label>
+
+        <div class="social-register">
+            <div class="social-btn">
+                <button type="button" class="google-btn">
+                    <img src="{% static 'images/google_logo.png' %}" alt="Google logo" class="google-logo">
+                    Registrarse con Google
+                </button>
+            </div>
+            <div class="social-btn">
+                <button type="button" class="apple-btn">
+                    <img src="{% static 'images/apple_logo.png' %}" alt="Apple logo" class="google-logo">
+                    Registrarse con Apple
+                </button>
+            </div>
+            <div class="social-btn">
+                <button type="button" class="facebook-btn">
+                    <img src="{% static 'images/facebook_logo.png' %}" alt="Facebook logo" class="google-logo">
+                    Registrarse con Facebook
+                </button>
+            </div>
+        </div>
+
+        <label>¿Deseas publicar tus servicios? <a href="{% url 'registro_proveedor' %}">Registrarse como proveedor
+                aquí</a></label>
+
+    </form>
 </section>
 
 {% endblock content %}

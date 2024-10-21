@@ -4,11 +4,11 @@ from django.contrib.auth.models import AbstractUser
 #Extension del modelo de usuarios de django para clientes y proveedores
 class User(AbstractUser):
     nombre_completo = models.CharField(max_length=255, blank=False)
-    email = models.EmailField(unique=True),
+    email = models.EmailField(unique=True, default='default@example.com')
     es_cliente = models.BooleanField(default=False)
-    es_proveedor = models.BooleanField(default=False),
-    registro_con_google = models.BooleanField(default=False),
-    registro_con_facebook = models.BooleanField(default=False),
+    es_proveedor = models.BooleanField(default=False)
+    registro_con_google = models.BooleanField(default=False)
+    registro_con_facebook = models.BooleanField(default=False)
     registro_con_ios = models.BooleanField(default=False)
     
     # Se cambia el related_name para evitar un conflicto entre dos nombres iguales
