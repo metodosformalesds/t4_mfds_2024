@@ -24,11 +24,14 @@
 
         <label>¿Aún no tienes cuenta? <a href="{% url 'registro_cliente' %}">Regístrate</a></label>
 
+        {% load socialaccount %}
+        {% providers_media_js %}
+
         <div class="google-login">
-            <button type="button" class="google-btn">
+            <a href="{% provider_login_url 'google' %}" class="google-btn">
                 <img src="{% static 'images/google_logo.png' %}" alt="Google logo" class="google-logo">
                 Iniciar sesión con Google
-            </button>
+            </a>
         </div>
 
         <div class="apple-login">

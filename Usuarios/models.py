@@ -1,5 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import BaseUserManager
+
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('El usuario debe tener un email')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('El superusuario debe tener is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('El superusuario debe tener is_superuser=True.')
+
+        return self.create_user(email, password, **extra_fields)
 
 #Extension del modelo de usuarios de django para clientes y proveedores
 class User(AbstractUser):
@@ -14,6 +36,7 @@ class User(AbstractUser):
     
     USERNAME_FIELD = 'email' # Se cambia el USERNAME_FIELD para usar el email
     REQUIRED_FIELDS = []  # Se deja vacío para que solo se requiera el email y la contraseña
+    objects = UserManager()  # Asocia el UserManager personalizado
     
     # Se cambia el related_name para evitar un conflicto entre dos nombres iguales
     groups = models.ManyToManyField(

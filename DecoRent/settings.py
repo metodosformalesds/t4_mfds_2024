@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-uz7))qty0ah^7744lcdxg7)0b=9rwo&kvq3g^k#65*55_f-g(5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://team4mfds.pythonanywhere.com/?']
 
 
 # Application definition
@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',#Google
+    'allauth',#Google
+    'allauth.account',#Google
+    'allauth.socialaccount',#Google
+    'allauth.socialaccount.providers.google',#Google
     'Usuarios',
     'Servicios',
     'Solicitudes',
@@ -53,6 +58,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+
 ]
 
 ROOT_URLCONF = 'DecoRent.urls'
@@ -137,7 +146,34 @@ MEDIA_ROOT = BASE_DIR / 'media'
 AUTHENTICATION_BACKENDS = [
     'Usuarios.backends.EmailBackend',  # Backend de autenticacion personalizado
     'django.contrib.auth.backends.ModelBackend',  # Se mantiene el backend predeterminado para seguridad
+    
+    'allauth.account.auth_backends.AuthenticationBackend',#Google
 ]
 
 # Define el campo email como el identificador para la autenticación
 AUTH_USER_MODEL = 'Usuarios.User'  # Asegúrate de que apunte a tu modelo personalizado
+
+SITE_ID = 2
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'OAUTH2_CLIENT_ID': '612675233053-0m1q85c3u0jbvv5iu1cfnevp4sa7k76q.apps.googleusercontent.com',
+        'OAUTH2_CLIENT_SECRET': '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',
+    }
+}
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Indica que no se usa el campo username
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'optional'  # O puede ser 'mandatory', dependiendo de lo que prefieras
+ACCOUNT_UNIQUE_EMAIL = True
+LOGIN_REDIRECT_URL = 'servicios_sin_login'  # Redirige a la página principal (solucion temporal)
+
+
