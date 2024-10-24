@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-uz7))qty0ah^7744lcdxg7)0b=9rwo&kvq3g^k#65*55_f-g(5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://team4mfds.pythonanywhere.com/?']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://mfdsteam4.pythonanywhere.com/'] 
 
 
 # Application definition
@@ -153,7 +153,8 @@ AUTHENTICATION_BACKENDS = [
 # Define el campo email como el identificador para la autenticación
 AUTH_USER_MODEL = 'Usuarios.User'  # Asegúrate de que apunte a tu modelo personalizado
 
-SITE_ID = 1
+SITE_ID = 2 
+
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
