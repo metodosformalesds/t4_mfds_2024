@@ -153,7 +153,7 @@ AUTHENTICATION_BACKENDS = [
 # Define el campo email como el identificador para la autenticación
 AUTH_USER_MODEL = 'Usuarios.User'  # Asegúrate de que apunte a tu modelo personalizado
 
-SITE_ID = 2
+SITE_ID = 1
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {

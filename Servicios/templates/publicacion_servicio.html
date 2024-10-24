@@ -1,121 +1,229 @@
-<!-- Hereda del archivo html base que incluye el navbar y footer -->
-{% extends 'base.html' %}
-
-<!-- Carga los archivos estaticos -->
 {% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publicación servicio</title>
+  <link rel="icon" href="{% static 'images/logoICONO.ico' %}" type="image/x-icon">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Archivo CSS personalizado -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/publicacion_servicio.css' %}">
+  <!-- Fuentes de Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'index' %}"><img class=logo src="{% static 'images/logoDR.png' %}" alt="Logo" width="100" height="auto"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-left">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'servicios_sin_login' %}">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'acerca_de' %}">Acerca de</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'inicio_sesion' %}">Iniciar sesión</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'registro_cliente' %}" class="btn btn-primary">Únete</a>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-notifications ms-2" onclick="toggleNotifications()">
+              <img src="{% static 'images/icono_notificacion.jpg' %}" style="width: 25px; height: auto;"> <!-- Icono del botón -->
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-{% block title %} Publicacion servicio {% endblock title %}
-
-{% block css %} 
-<link rel="stylesheet" type="text/css" href="{% static 'css/publicacion_servicio.css' %}">
-{% endblock css %}
-
-{% block content %}
-<div class="container1">
+  <div class="container1">
     <!-- Service Name and Rating -->
     <div class="service-header">
-        <h1>Nombre del servicio</h1>
-        <div class="rating">
-            <span>★★★★★</span> 
-            <span>0.0</span> 
-            <a href="#">Ver Reseñas</a>
-        </div>
+      <h1>Nombre del servicio</h1>
+      <div class="rating">
+        <span>★★★★★</span> 
+        <span>0.0</span> 
+        <a href="#">Ver Reseñas</a>
+      </div>
     </div>
 
     <!-- Company Name and Price -->
     <div class="company-details">
-        <h2>Nombre de la empresa</h2>
-        <p>$$$ Precio</p>
+      <h2>Nombre de la empresa</h2>
+      <p>$$$ Precio</p>
     </div>
 
     <!-- Action Buttons and Image Placeholder -->
     <div class="action-section">
-        <div class="buttons">
-            <button class="quote-btn">Solicitar presupuesto</button>
-            <button class="message-btn">Enviar mensaje</button>
-        </div>
+      <div class="buttons">
+        <button class="quote-btn" data-bs-toggle="modal" data-bs-target="#requestQuoteModal">Solicitar presupuesto</button>
+        <button class="message-btn">Enviar mensaje</button>
+      </div>
 
-        <div class="image-placeholder">
-            <span>Image</span>
-        </div>
+      <div class="image-placeholder">
+        <span>Image</span>
+      </div>
     </div>
 
     <!-- Contact Info -->
     <div class="contact-info">
-        <p><strong>Contacto de la empresa</strong></p>
-        <p>📧 <a href="mailto:empresa@correo.com">empresa@correo.com</a></p>
-        <p>📞 656-1234567</p>
+      <p><strong>Contacto de la empresa</strong></p>
+      <p>📧 <a href="mailto:empresa@correo.com">empresa@correo.com</a></p>
+      <p>📞 656-1234567</p>
     </div>
 
     <!-- Description Section -->
     <div class="main-content">
-        <div class="description">
-            <h3>Descripción del servicio</h3>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie...
-            </p>
-        </div>
+      <div class="description">
+        <h3>Descripción del servicio</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie...</p>
+      </div>
     </div>
-</div>
+  </div>
 
-
-
-<div class="container2">
+  <div class="container2">
     <h1>Ubicación</h1>
     <div class="map-container">
-        <div class="map">
-            <img src="{% static 'imagenes/map_placeholder.png' %}" alt="Map Location">
-        </div>
+      <div class="map">
+        <img src="{% static 'imagenes/map_placeholder.png' %}" alt="Map Location">
+      </div>
     </div>
-</div>
+  </div>
 
-
-<section class="reviews-section">
+  <section class="reviews-section">
     <h2>Reseñas</h2>
     <div class="reviews-container">
-        <!-- Review Card 1 -->
-        <div class="review-card">
-            <h3>Nombre del usuario</h3>
-            <p class="review-date">12/12/24</p>
-            <div class="rating">
-                <span>⭐⭐⭐⭐⭐</span> <!-- Example of star rating -->
-                <span class="rating-value">0.0</span>
-            </div>
-            <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+      <!-- Review Card 1 -->
+      <div class="review-card">
+        <h3>Nombre del usuario</h3>
+        <p class="review-date">12/12/24</p>
+        <div class="rating">
+          <span>⭐⭐⭐⭐⭐</span>
+          <span class="rating-value">0.0</span>
         </div>
+        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+      </div>
 
-        <!-- Review Card 2 -->
-        <div class="review-card">
-            <h3>Nombre del usuario</h3>
-            <p class="review-date">12/12/24</p>
-            <div class="rating">
-                <span>⭐⭐⭐⭐⭐</span>
-                <span class="rating-value">0.0</span>
-            </div>
-            <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+      <!-- Review Card 2 -->
+      <div class="review-card">
+        <h3>Nombre del usuario</h3>
+        <p class="review-date">12/12/24</p>
+        <div class="rating">
+          <span>⭐⭐⭐⭐⭐</span>
+          <span class="rating-value">0.0</span>
         </div>
+        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+      </div>
 
-        <!-- Review Card 3 -->
-        <div class="review-card">
-            <h3>Nombre del usuario</h3>
-            <p class="review-date">12/12/24</p>
-            <div class="rating">
-                <span>⭐⭐⭐⭐⭐</span>
-                <span class="rating-value">0.0</span>
-            </div>
-            <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+      <!-- Review Card 3 -->
+      <div class="review-card">
+        <h3>Nombre del usuario</h3>
+        <p class="review-date">12/12/24</p>
+        <div class="rating">
+          <span>⭐⭐⭐⭐⭐</span>
+          <span class="rating-value">0.0</span>
         </div>
+        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+      </div>
 
-        <!-- Review Card 4 -->
-        <div class="review-card">
-            <h3>Nombre del usuario</h3>
-            <p class="review-date">12/12/24</p>
-            <div class="rating">
-                <span>⭐⭐⭐⭐⭐</span>
-                <span class="rating-value">0.0</span>
-            </div>
-            <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+      <!-- Review Card 4 -->
+      <div class="review-card">
+        <h3>Nombre del usuario</h3>
+        <p class="review-date">12/12/24</p>
+        <div class="rating">
+          <span>⭐⭐⭐⭐⭐</span>
+          <span class="rating-value">0.0</span>
         </div>
+        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+      </div>
     </div>
-</section>
-    {% endblock content %}
+  </section>
+
+  <!-- Modal para solicitar presupuesto -->
+<div class="modal fade" id="requestQuoteModal" tabindex="-1" aria-labelledby="requestQuoteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="requestQuoteModalLabel">Solicitud de servicio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h6>Nombre del servicio</h6>
+        <p>Nombre del proveedor</p>
+        <h5>Ingresa la información de tu evento:</h5>
+        <form>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label for="guestCount" class="form-label">Cantidad de invitados:</label>
+                <input type="number" class="form-control" id="guestCount" required>
+              </div>
+              <div class="col-md-3">
+                <label for="eventDuration" class="form-label">Duración del evento (horas):</label>
+                <input type="number" class="form-control" id="eventDuration" required>
+              </div>
+              <div class="col-md-3">
+                <label for="eventDate" class="form-label">Fecha:</label>
+                <input type="date" class="form-control" id="eventDate" required>
+              </div>
+              <div class="col-md-3">
+                <label for="eventType" class="form-label">Tipo de evento:</label>
+                <select class="form-select" id="eventType" required>
+                  <option value="" disabled selected>Seleccionar tipo</option>
+                  <option value="cumpleaños">Cumpleaños</option>
+                  <option value="evento corporativo">Evento Corporativo</option>
+                </select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="street" class="form-label">Calle:</label>
+                <input type="text" class="form-control" id="street" required>
+              </div>
+              <div class="col-md-3">
+                <label for="exteriorNumber" class="form-label">Número exterior:</label>
+                <input type="text" class="form-control" id="exteriorNumber" required>
+              </div>
+              <div class="col-md-3">
+                <label for="interiorNumber" class="form-label">Número interior:</label>
+                <input type="text" class="form-control" id="interiorNumber">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="colony" class="form-label">Colonia:</label>
+                <input type="text" class="form-control" id="colony" required>
+              </div>
+              <div class="col-md-6">
+                <label for="postalCode" class="form-label">Código Postal:</label>
+                <input type="text" class="form-control" id="postalCode" required>
+              </div>
+            <div class="d-flex justify-content-end"> <!-- Alineación a la derecha usando Flexbox -->
+            <button type="submit" class="btn btn-primary me-2">Enviar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Para usar las flechas -->
+
+</body>
+</html>
