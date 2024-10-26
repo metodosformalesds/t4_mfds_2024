@@ -5,6 +5,7 @@ class Servicio(models.Model):
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=255)
     categoria = models.CharField(max_length=255)
+    direccion = models.CharField(max_length=500)
     precio_minimo = models.DecimalField(max_digits=10, decimal_places=2)
     precio_maximo = models.DecimalField(max_digits=10, decimal_places=2)
     informacion_detallada = models.TextField()

@@ -118,17 +118,24 @@
           </li>
         </ul>
         <ul class="navbar-nav ms-auto">
+          {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'inicio_sesion' %}">Iniciar sesión</a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'registro_cliente' %}" class="btn btn-primary">Únete</a>
+            <a class="nav-link active" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
           </li>
           <li class="nav-item">
             <button class="btn btn-notifications ms-2" onclick="toggleNotifications()">
               <img src="{% static 'images/icono_notificacion.jpg' %}" style="width: 25px; height: auto;"> <!-- Icono del botón -->
             </button>
           </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'inicio_sesion' %}">Iniciar sesión</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'registro_cliente' %}" class="btn btn-primary">Únete</a>
+          </li>
+          {% endif %}
+          
         </ul>
       </div>
     </div>
@@ -176,6 +183,7 @@
 
     <!-- Acordeón para categorías -->
     <div class="accordion" id="accordionCategorias">
+      {% if user.es_proveedor %}
       <!-- Primera sección de servicios -->
       <div class="accordion-item">
         <h2 class="accordion-header" id="categoriaHeading1">
@@ -213,6 +221,7 @@
           </div>
         </div>
       </div>
+      {% endif %}
 
       <!-- Segunda sección de servicios (duplicada) -->
       <div class="accordion-item">

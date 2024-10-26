@@ -6,7 +6,7 @@
 
 {% block title %} Publicar Servicio {% endblock title %}
 
-{% block css %} 
+{% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/publicar_servicio.css' %}">
 {% endblock css %}
 
@@ -22,7 +22,7 @@
 {% block content %}
 
 <!-- Formulario para ingresar los datos de tu publicación -->
-<form id="miFormulario" class="add-services">
+<form id="miFormulario" class="add-services" method="POST" enctype="multipart/form-data">
   <!-- Sección Información de la publicación -->
   <section class="containers-add-services sec-1">
     <h2>Información de la publicación</h2>
@@ -32,62 +32,67 @@
     </div>
   </section>
 
+  {% csrf_token %}
+
   <!-- Sección para ingresar tus datos -->
   <section class="containers-add-services sec-2">
     <div class="services-information item">
-      <label class="text-label">Nombre del servicio:</label>
-      <input type="text" class="config-input" required>
+      <label for="id_nombre" class="text-label">Nombre del servicio:</label>
+      <input type="text" name="nombre" class="config-input" maxlength="255" required="" id="id_nombre">
     </div>
     <div class="services-information item">
-      <label class="text-label">Calle:</label>
-      <input type="text" class="config-input" required>
+      <label for="id_calle" class="text-label">Calle:</label>
+      <input type="text" name="calle" class="config-input" maxlength="255" required id="id_calle">
     </div>
     <div class="services-information item">
-      <label class="text-label">Número exterior:</label>
-      <input type="text" class="config-input" required>
+      <label for="id_numero_exterior" class="text-label">Numero exterior:</label>
+      <input type="text" name="numero_exterior" class="config-input" maxlength="10" required id="id_numero_exterior">
     </div>
     <div class="services-information item">
-      <label class="text-label">Número interior:</label>
-      <input type="text" class="config-input">
+      <label for="id_numero_interior" class="text-label">Numero interior:</label>
+      <input type="text" name="numero_interior" class="config-input" maxlength="10" id="id_numero_interior">
     </div>
     <div class="services-information item">
-      <label class="text-label sel-label">Tipo de servicio:</label>
-      <select name="service-type" class="select-service">
-        <option value="" required>Tipo de servicio</option>
-        <option value="tipo1">Tipo 1</option>
-        <option value="tipo2">Tipo 2</option>
-        <option value="tipo3">Tipo 3</option>
+      <label for="id_categoria" class="text-label sel-label">Categoria:</label>
+      <select name="categoria" class="select-service" maxlength="255" id="id_categoria">
+        <option value="Entretenmiento">Entretenmiento</option>
+        <option value="Equipamiento_Mobiliario">Equipamiento y mobiliario</option>
+        <option value="Espacios_Eventos">Espacios para eventos</option>
+        <option value="Catering">Catering</option>
+        <option value="Fotografia">Fotografía</option>
+        <option value="Decoracion">Decoración</option>
       </select>
     </div>
     <div class="services-information item">
-      <label class="text-label">Colonia:</label>
-      <input type="text" class="config-input" required>
+      <label for="id_colonia" class="text-label">Colonia:</label>
+      <input type="text" name="colonia" class="config-input" maxlength="255" required id="id_colonia">
     </div>
     <div class="services-information item">
-      <label class="text-label">Código Postal:</label>
-      <input type="text" class="config-input" required>
+      <label for="id_codigo_postal" class="text-label">Codigo postal:</label>
+      <input type="text" name="codigo_postal" class="config-input" maxlength="10" required id="id_codigo_postal">
     </div>
     <div class="services-information item">
-      <label class="text-label">Precio mínimo:</label>
-      <input type="text" class="config-input" required>
+      <label for="id_precio_minimo" class="text-label">Precio minimo:</label>
+      <input type="number" name="precio_minimo" class="config-input" step="0.01" required id="id_precio_minimo">
     </div>
     <div class="services-information item">
-      <label class="text-label">Precio máximo:</label>
-      <input type="text" class="config-input" required>
+      <label for="id_precio_maximo" class="text-label">Precio maximo:</label>
+      <input type="number" name="precio_maximo" class="config-input" step="0.01" required id="id_precio_maximo">
     </div>
   </section>
 
   <!-- Sección para la información detallada de tu producto -->
   <section class="containers-add-services sec-3">
-    <label class="lab-sec-3">Información detallada:</label>
-    <textarea class="area-sec-3"></textarea>
+    <label for="id_informacion_detallada" class="lab-sec-3">Informacion detallada:</label>
+    <textarea name="informacion_detallada" cols="40" rows="10" class="area-sec-3" required
+      id="id_informacion_detallada"></textarea>
   </section>
-
+  {{ error }}
   <!-- Sección para ingresar las fotos de tu producto -->
   <section class="containers-add-services sec-4">
-    <label class="lab-sec-4">Carga de imágenes:</label>
+    <label for="id_imagen" class="lab-sec-4">Carga de imágenes:</label>
     <div class="upload-container">
-      <input type="file" accept="image/*">
+      <input type="file" name="imagen" multiple required id="id_imagen">
     </div>
   </section>
 </form>
