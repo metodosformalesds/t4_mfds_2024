@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import RegistroClienteForm, RegistroProveedorForm, InicioSesionForm
 from .models import Cliente, Proveedor
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout, authenticate
 
 def inicio(request):
     """Renderiza la página de inicio.
@@ -94,3 +94,7 @@ def inicio_sesion(request):
         form = InicioSesionForm()
             
     return render(request, 'inicio_sesion.html', {'form': form})
+
+def cerrar_sesion(request):
+    logout(request) #Elimina la cookie de sesion
+    return redirect('index')
