@@ -234,51 +234,32 @@
           <div class="accordion-body">
             <div class="row mt-4">
               <!-- Servicio de Fotografía -->
-              <div class="col-md-2 mb-4">
-                <div class="service-box text-center p-3">
-                  <img src="{% static 'images/ServicioFoto.png' %}" alt="Servicio de Fotografía" class="img-fluid mb-2">
-                  <h5>Fotografía</h5>
-                  <div class="service-info">
-                    <div class="rating">⭐⭐⭐⭐☆</div>
-                    <div class="price">Desde $3000</div>
+              <div class="container mt-5">
+                <h2 class="text-center">Nuestros Servicios</h2>
+            
+                <!-- Lista de servicios -->
+                <div class="row mt-4">
+                  {% for servicio in servicios %}
+                  <div class="col-md-2 mb-4">
+                      <div class="service-box text-center p-3">
+                          {% if servicio.imagenes.first %}
+                          <img src="{{ servicio.imagenes.first.imagen.url }}" alt="{{ servicio.nombre }}" class="img-fluid mb-2">
+                          {% else %}
+                          <img src="{% static 'images/default-image.jpg' %}" alt="Imagen no disponible" class="img-fluid mb-2">
+                          {% endif %}
+                          <h5>{{ servicio.nombre }}</h5>
+                          <div class="service-info">
+                              <div class="rating">{{ servicio.promedio_calificacion }}</div>
+                              <div class="price">Desde ${{ servicio.precio_minimo }}</div>
+                          </div>
+                          <a href="{% url 'publicacion_servicio' servicio.id %}" class="btn btn-add mt-2">Ver</a>
+                      </div>
                   </div>
-                  <a href="{%url 'publicacion_servicio'%}" class="btn btn-add mt-2">Ver</a>
+                  {% endfor %}
+                  
                 </div>
-              </div>
-              <!-- Servicio de Mesas -->
-              <div class="col-md-2 mb-4">
-                <div class="service-box text-center p-3">
-                  <img src="{% static 'images/ServicioMesas.png' %}" alt="Servicio de Mesas" class="img-fluid mb-2">
-                  <h5>Mesas y Decoración</h5>
-                  <div class="service-info">
-                    <div class="rating">⭐⭐⭐⭐☆</div>
-                    <div class="price">Desde $3500</div>
-                  </div>
-                  <a href="{%url 'publicacion_servicio'%}" class="btn btn-add mt-2">Ver</a>
-                </div>
-              </div>
-              <!-- Servicio de Florería -->
-              <div class="col-md-2 mb-4">
-                <div class="service-box text-center p-3">
-                  <img src="{% static 'images/ServicioFloreria.jpg' %}" alt="Servicio de Florería" class="img-fluid mb-2">
-                  <h5>Florería</h5>
-                  <div class="service-info">
-                    <div class="rating">⭐⭐⭐⭐☆</div>
-                    <div class="price">Desde $4000</div>
-                  </div>
-                  <a href="{%url 'publicacion_servicio'%}" class="btn btn-add mt-2">Ver</a>
-                </div>
-              </div>
-              <!-- Servicio de Globos -->
-              <div class="col-md-2 mb-4">
-                <div class="service-box text-center p-3">
-                  <img src="{% static 'images/ServicioGlobos.jpeg' %}" alt="Servicio de Globos" class="img-fluid mb-2">
-                  <h5>Decoración con Globos</h5>
-                  <div class="service-info">
-                    <div class="rating">⭐⭐⭐⭐☆</div>
-                    <div class="price">Desde $2500</div>
-                  </div>
-                  <a href="{%url 'publicacion_servicio'%}" class="btn btn-add mt-2">Ver</a>
+            </div>
+            
                 </div>
               </div>
             </div>

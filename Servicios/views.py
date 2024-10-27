@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from .forms import PublicarServicioForm, MultipleImagenesServiciosForm
-from .models import Imagenes_Servicios
+from .models import Imagenes_Servicios, Servicio
 from PIL import Image
 import os
 
 def servicios_sin_login(request):
-    return render(request, 'servicios_sin_login.html')
+    # Obtener todos los servicios de la base de datos
+    print("Template cargado correctamente")
+    servicios = Servicio.objects.all()
+    return render(request, 'servicios_sin_login.html', {'servicios': servicios})
 
 
 def publicar_servicio(request):
@@ -79,5 +82,12 @@ def publicar_servicio(request):
     })
 
 
-def publicacion_servicio(request):
-    return render(request, 'publicacion_servicio.html')
+def publicacion_servicio(request, id):
+    try:
+        servicio = Servicio.objects.get(id=id)
+    except Servicio.DoesNotExist:
+        return redirect('servicios_sin_login')  # Redirige o muestra una página de error si no se encuentra el servicio
+
+    imagenes = Imagenes_Servicios.objects.filter(servicio=servicio)
+    
+    return render(request, 'publicacion_servicio.html', {'servicio': servicio, 'imagenes': imagenes})
