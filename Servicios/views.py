@@ -25,8 +25,8 @@ def publicar_servicio(request):
             # Asigna como proveedor el usuario logueado
             nuevo_servicio.proveedor = request.user.proveedor
 
-            # Concatena los datos que conforman la direccion
-            direccion = f"{servicio_form.cleaned_data['calle']} {servicio_form.cleaned_data['numero_exterior']} {servicio_form.cleaned_data.get('numero_interior', '')} {servicio_form.cleaned_data['colonia']} {servicio_form.cleaned_data['codigo_postal']}"
+            # Concatena los datos que conforman la direccion en formato URL para google maps
+            direccion = f"{servicio_form.cleaned_data['calle']}%20{servicio_form.cleaned_data['numero_exterior']}%20{servicio_form.cleaned_data.get('numero_interior', '')},%20{servicio_form.cleaned_data['colonia']},%20{servicio_form.cleaned_data['codigo_postal']}%20Juárez,%20Chih."
             nuevo_servicio.direccion = direccion
 
             # Obtenemos una lista de los archivos cargados

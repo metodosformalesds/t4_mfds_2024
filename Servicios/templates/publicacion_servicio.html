@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,12 +16,15 @@
   <!-- Fuentes de Google -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
   <!-- Barra de navegación -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'index' %}"><img class=logo src="{% static 'images/logoDR.png' %}" alt="Logo" width="100" height="auto"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand" href="{% url 'index' %}"><img class=logo src="{% static 'images/logoDR.png' %}" alt="Logo"
+          width="100" height="auto"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -42,7 +46,8 @@
           </li>
           <li class="nav-item">
             <button class="btn btn-notifications ms-2" onclick="toggleNotifications()">
-              <img src="{% static 'images/icono_notificacion.jpg' %}" style="width: 25px; height: auto;"> <!-- Icono del botón -->
+              <img src="{% static 'images/icono_notificacion.jpg' %}" style="width: 25px; height: auto;">
+              <!-- Icono del botón -->
             </button>
           </li>
           {% else %}
@@ -57,60 +62,92 @@
       </div>
     </div>
   </nav>
+  <div class="container">
+    <div class="row">
+      <!-- Columna de Información -->
+      <div class="col-md-6">
+        <!-- Service Name and Rating -->
+        <div class="service-header">
+          <h1>{{ servicio.nombre }}</h1>
+          <div class="rating">
+            {% for i in "12345" %}
+            {% if forloop.counter <= servicio.promedio_calificacion %} <span class="estrella">★</span>
+              {% else %}
+              <span class="estrella">☆</span>
+              {% endif %}
+              {% endfor %}
+              <span> {{servicio.promedio_calificacion}} </span>
+              <a href="#"> Ver Reseñas</a>
+          </div>
+        </div>
 
-  <div class="container1">
-    <!-- Service Name and Rating -->
-    <div class="service-header">
-      <h1>Nombre del servicio</h1>
-      <div class="rating">
-        <span>★★★★★</span> 
-        <span>0.0</span> 
-        <a href="#">Ver Reseñas</a>
+        <!-- Company Name and Price -->
+        <div class="company-details">
+          <h2>{{ servicio.proveedor.nombre_empresa }}</h2>
+          <p>Desde ${{ servicio.precio_minimo }}</p>
+          <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#rateServiceModal">Calificar
+            servicio</button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="buttons mt-3">
+          <button class="quote-btn" data-bs-toggle="modal" data-bs-target="#requestQuoteModal">Solicitar
+            presupuesto</button>
+          <button class="message-btn">Enviar mensaje</button>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="contact-info">
+          <p><strong>Contacto de la empresa</strong></p>
+          <p>📧 <a href="mailto:{{ servicio.proveedor.user.email }}">{{ servicio.proveedor.user.email }}</a></p>
+        </div>
       </div>
-    </div>
 
-    <!-- Company Name and Price -->
-    <div class="company-details">
-      <h2>Nombre de la empresa</h2>
-      <p>$$$ Precio</p>
-      <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#rateServiceModal">Calificar servicio</button>
-    </div>
-    
+      <!-- Columna de la Imagen -->
+      <!-- Carrusel de imagenes con Bootstrap -->
+      <div id="carouselServicio" class="carousel slide col-md-6 justify-content-center align-items-center"
+        data-bs-ride="carousel">
 
-    <!-- Action Buttons and Image Placeholder -->
-    <div class="action-section">
-      <div class="buttons">
-        <button class="quote-btn" data-bs-toggle="modal" data-bs-target="#requestQuoteModal">Solicitar presupuesto</button>
-        <button class="message-btn">Enviar mensaje</button>
+        <!-- Imágenes del Carrusel -->
+        <div class="carousel-inner">
+          {% for imagen in servicio.imagenes.all %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ imagen.imagen.url }}" class="d-block w-100 img-fluid" alt="{{ servicio.nombre }}">
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Controles de navegación -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselServicio" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselServicio" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
       </div>
 
-      <div class="image-placeholder">
-        <span>Image</span>
-      </div>
-    </div>
-
-    <!-- Contact Info -->
-    <div class="contact-info">
-      <p><strong>Contacto de la empresa</strong></p>
-      <p>📧 <a href="mailto:empresa@correo.com">empresa@correo.com</a></p>
-      <p>📞 656-1234567</p>
-    </div>
-
-    <!-- Description Section -->
-    <div class="main-content">
-      <div class="description">
-        <h3>Descripción del servicio</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie...</p>
-      </div>
     </div>
   </div>
 
-  <div class="container2">
-    <h1>Ubicación</h1>
+  <!-- Description Section -->
+  <div class="container">
+    <div class="description">
+      <h2>Descripción del servicio</h2>
+      <p>{{ servicio.informacion_detallada | linebreaksbr }}</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Ubicación</h2>
     <div class="map-container">
-      <div class="map">
-        <img src="{% static 'imagenes/map_placeholder.png' %}" alt="Map Location">
-      </div>
+
+      <iframe width="1000" height="600" style="border:0" loading="lazy" allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBHurZ4KsBAxkPEwveGc2-odDwscEXUsvY&q={{ servicio.direccion }}">
+      </iframe>
+
     </div>
   </div>
 
@@ -125,7 +162,8 @@
           <span>⭐⭐⭐⭐⭐</span>
           <span class="rating-value">0.0</span>
         </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
+          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
       </div>
 
       <!-- Review Card 2 -->
@@ -136,7 +174,8 @@
           <span>⭐⭐⭐⭐⭐</span>
           <span class="rating-value">0.0</span>
         </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
+          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
       </div>
 
       <!-- Review Card 3 -->
@@ -147,7 +186,8 @@
           <span>⭐⭐⭐⭐⭐</span>
           <span class="rating-value">0.0</span>
         </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
+          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
       </div>
 
       <!-- Review Card 4 -->
@@ -158,19 +198,37 @@
           <span>⭐⭐⭐⭐⭐</span>
           <span class="rating-value">0.0</span>
         </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
+        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
+          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
       </div>
     </div>
   </section>
 
-  <!-- Nuevos botones de Editar y Eliminar publicación alineados a la derecha -->
-  <div class="container d-flex justify-content-end mt-4">
-    <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#editPostModal">Editar publicación</button>
-    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal">Eliminar publicación</button>
-  </div>
+  {% if servicio.proveedor == user.proveedor %}
+    <!-- Nuevos botones de Editar y Eliminar publicación alineados a la derecha -->
+    <div class="container d-flex justify-content-end mt-4">
+      <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#editPostModal">Editar
+        publicación</button>
+      <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal">Eliminar
+        publicación</button>
+    </div>
+  {% endif %}
+
+  <!-- Pie de página -->
+  <footer>
+    <div class="containerfooter text-center">
+        <p>&copy; 2024 DecoRent. Todos los derechos reservados.</p>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="#terminos">Términos de Servicio</a></li>
+            <li class="list-inline-item"><a href="#privacidad">Política de Privacidad</a></li>
+            <li class="list-inline-item"><a href="#contacto">Contacto</a></li>
+        </ul>
+    </div>
+  </footer>
 
   <!-- Modal para calificar el servicio -->
-  <div class="modal fade" id="rateServiceModal" tabindex="-1" aria-labelledby="rateServiceModalLabel" aria-hidden="true">
+  <div class="modal fade" id="rateServiceModal" tabindex="-1" aria-labelledby="rateServiceModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -204,8 +262,8 @@
     </div>
   </div>
 
-   <!-- Modal para Editar publicación con imagen -->
-   <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
+  <!-- Modal para Editar publicación con imagen -->
+  <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -302,76 +360,79 @@
     </div>
   </div>
 
- <!-- Modal para solicitar presupuesto -->
- <div class="modal fade" id="requestQuoteModal" tabindex="-1" aria-labelledby="requestQuoteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="requestQuoteModalLabel">Solicitud de servicio</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <h6>Nombre del servicio</h6>
-        <p>Nombre del proveedor</p>
-        <h5>Ingresa la información de tu evento:</h5>
-        <form>
-          <div class="row mb-3">
-            <div class="col-md-3">
-              <label for="guestCount" class="form-label">Cantidad de invitados:</label>
-              <input type="number" class="form-control" id="guestCount" required>
-            </div>
-            <div class="col-md-3">
-              <label for="eventDuration" class="form-label">Duración del evento (horas):</label>
-              <input type="number" class="form-control" id="eventDuration" required>
-            </div>
-            <div class="col-md-3">
-              <label for="eventDate" class="form-label">Fecha:</label>
-              <input type="date" class="form-control" id="eventDate" required>
-            </div>
-            <div class="col-md-3">
-              <label for="eventType" class="form-label">Tipo de evento:</label>
-              <select class="form-select" id="eventType" required>
-                <option value="" disabled selected>Seleccionar tipo</option>
-                <option value="cumpleaños">Cumpleaños</option>
-                <option value="evento corporativo">Evento Corporativo</option>
-              </select>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="street" class="form-label">Calle:</label>
-              <input type="text" class="form-control" id="street" required>
-            </div>
-            <div class="col-md-3">
-              <label for="exteriorNumber" class="form-label">Número exterior:</label>
-              <input type="text" class="form-control" id="exteriorNumber" required>
-            </div>
-            <div class="col-md-3">
-              <label for="interiorNumber" class="form-label">Número interior:</label>
-              <input type="text" class="form-control" id="interiorNumber">
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="colony" class="form-label">Colonia:</label>
-              <input type="text" class="form-control" id="colony" required>
-            </div>
-            <div class="col-md-6">
-              <label for="postalCode" class="form-label">Código Postal:</label>
-              <input type="text" class="form-control" id="postalCode" required>
-            </div>
-          <div class="d-flex justify-content-end"> <!-- Alineación a la derecha usando Flexbox -->
-          <button type="submit" class="btn btn-primary me-2">Enviar</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+  <!-- Modal para solicitar presupuesto -->
+  <div class="modal fade" id="requestQuoteModal" tabindex="-1" aria-labelledby="requestQuoteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="requestQuoteModalLabel">Solicitud de servicio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        </form>
+        <div class="modal-body">
+          <h6>Nombre del servicio</h6>
+          <p>Nombre del proveedor</p>
+          <h5>Ingresa la información de tu evento:</h5>
+          <form>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label for="guestCount" class="form-label">Cantidad de invitados:</label>
+                <input type="number" class="form-control" id="guestCount" required>
+              </div>
+              <div class="col-md-3">
+                <label for="eventDuration" class="form-label">Duración del evento (horas):</label>
+                <input type="number" class="form-control" id="eventDuration" required>
+              </div>
+              <div class="col-md-3">
+                <label for="eventDate" class="form-label">Fecha:</label>
+                <input type="date" class="form-control" id="eventDate" required>
+              </div>
+              <div class="col-md-3">
+                <label for="eventType" class="form-label">Tipo de evento:</label>
+                <select class="form-select" id="eventType" required>
+                  <option value="" disabled selected>Seleccionar tipo</option>
+                  <option value="cumpleaños">Cumpleaños</option>
+                  <option value="evento corporativo">Evento Corporativo</option>
+                </select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="street" class="form-label">Calle:</label>
+                <input type="text" class="form-control" id="street" required>
+              </div>
+              <div class="col-md-3">
+                <label for="exteriorNumber" class="form-label">Número exterior:</label>
+                <input type="text" class="form-control" id="exteriorNumber" required>
+              </div>
+              <div class="col-md-3">
+                <label for="interiorNumber" class="form-label">Número interior:</label>
+                <input type="text" class="form-control" id="interiorNumber">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="colony" class="form-label">Colonia:</label>
+                <input type="text" class="form-control" id="colony" required>
+              </div>
+              <div class="col-md-6">
+                <label for="postalCode" class="form-label">Código Postal:</label>
+                <input type="text" class="form-control" id="postalCode" required>
+              </div>
+              <div class="d-flex justify-content-end"> <!-- Alineación a la derecha usando Flexbox -->
+                <button type="submit" class="btn btn-primary me-2">Enviar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Para usar las flechas -->
 
 </body>
+
 </html>

@@ -58,6 +58,7 @@ footer {
     width: 100%; /* Ancho completo */
     max-height: 80px; /* Limita la altura máxima */
     overflow: hidden; /* Oculta el contenido que excede el max-height */
+    margin-top: 40px;
 }
 
 footer p {
