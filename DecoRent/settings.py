@@ -89,8 +89,12 @@ WSGI_APPLICATION = 'DecoRent.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'decorent_bd',
+        'USER': 'root',
+        'PASSWORD': 'metodosformales',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
