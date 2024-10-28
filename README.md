@@ -1,6 +1,8 @@
 # t4_mfds_2024
 MFDS 2024 T4
 
+Proyecto en Amazon Lightsail: http://35.163.44.46/
+
 Proyecto en PythonAnywhere: https://mfdsteam4.pythonanywhere.com/
 
 Carpeta de Google Drive: https://drive.google.com/drive/folders/1zWAXeLhsWTypfJTDUn1468sWCBe3SZux?usp=drive_link
