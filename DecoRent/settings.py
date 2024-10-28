@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-uz7))qty0ah^7744lcdxg7)0b=9rwo&kvq3g^k#65*55_f-g(5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://mfdsteam4.pythonanywhere.com/'] 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://mfdsteam4.pythonanywhere.com/','35.163.44.46'] 
 
 
 # Application definition
@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': 'decorent_bd',
         'USER': 'root',
         'PASSWORD': 'metodosformales',
-        'HOST': 'localhost',
+        'HOST': 'ls-e6ed3ee4a78219076dbfd973c1a20316966b96b6.c54wosoyoygd.us-west-2.rds.amazonaws.com',
         'PORT': '3306',
     }
 }
