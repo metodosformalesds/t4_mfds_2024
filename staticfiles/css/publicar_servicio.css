@@ -1,0 +1,93 @@
+body {
+    font-size: 16px; /* Tamaño de fuente reducido */
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+    min-height: 100vh; /* Asegura que el cuerpo ocupe toda la altura de la ventana */
+    margin: 0; /* Elimina el margen por defecto */
+  }
+
+  /* Estilo para el formulario */
+  .add-services {
+    display: flex;
+    flex-direction: column;
+    padding: 20px; /* Reducción en el padding */
+    gap: 20px; /* Reducción en el gap */
+    flex: 1; /* Permite que esta sección ocupe el espacio restante */
+  }
+
+  /* Estilo para la sección "Información de la publicación" */
+  .sec-1 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  h2 {
+    font-size: 32px; /* Tamaño de fuente reducido */
+    display: flex;
+  }
+
+  .buttons-containers {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px; /* Espaciado reducido entre botones */
+  }
+
+  .add-btn {
+    font-size: 24px; /* Tamaño de fuente reducido para los botones */
+    width: 250px; /* Reducción en el ancho */
+  }
+
+  /* Estilos para la sección "Ingresar datos" */
+  .sec-2 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px; /* Espaciado reducido */
+  }
+
+  .text-label {
+    grid-column: span 1;
+    margin-bottom: 5px;
+  }
+
+  .config-input, .select-service {
+    width: 100%;
+    padding: 4px; /* Reducción en el padding */
+    box-sizing: border-box;
+  }
+
+  .select-service {
+    background-color: #ccc;
+    border: transparent;
+  }
+
+  .sel-label {
+    margin-bottom: 5px; /* Reducción en el margen */
+  }
+
+  /* Estilos para la sección "Información detallada de tu producto" */
+  .sec-3 {
+    display: grid;
+    grid-template-columns: 2;
+  }
+
+  .lab-sec-3 {
+    margin-bottom: 5px;
+  }
+
+  .area-sec-3 {
+    width: 100%;
+    height: 200px; /* Altura reducida */
+    padding: 8px; /* Reducción en el padding */
+    box-sizing: border-box;
+  }
+
+  /* Estilos para la sección "Publicar foto de tu producto" */
+  .upload-container {
+    border: 2px dashed #ccc;
+    padding: 15px; /* Reducción en el padding */
+    text-align: center;
+  }
+
+  .lab-sec-4 {
+    margin-bottom: 5px;
+  }

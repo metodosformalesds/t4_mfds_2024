@@ -1,0 +1,146 @@
+
+/*Estilos propios de pantalla de inicio de sesion. Alan*/
+.container {
+    height: auto; /* Asegúrate de que se ajuste al contenido */
+    min-height: 100vh; /* Asegúrate de que al menos ocupe la altura completa de la ventana */
+  }
+  
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-form {
+    background-color: #eaeaea;
+    padding: 40px;
+    border-radius: 40px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 800px;
+}
+
+.login-form h2 {
+    color: #1d1d1d;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    width: 70%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 16px;
+    margin: 0 auto;
+    display: block;
+}
+
+.login-form input[type="email"] {
+    margin-top: 50px
+}
+
+.login-form input[type="password"] {
+    margin: 30px auto
+}
+
+.login-form label {
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: block;
+    color: #333;
+    text-align: center;
+}
+
+.login-form button.login-btn {
+    background-color: #962b6b;
+    color: #fff;
+    padding: 10px;
+    width: 60%;
+    max-width: 200px;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 60px auto 0 auto;
+    display: block;
+}
+
+.login-form .google-login {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.google-btn {
+    background-color: #fff;
+    color: #000000;
+    padding: 10px;
+    width: 60%;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+.google-logo{
+    width: 30px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+    margin-top: 80px; /* Espacio superior para bajar la sección */
+    margin-bottom: 40px; /* Aumentar el margen inferior para separar del footer */
+    background-color: #f8f9fa; /* Fondo claro para el contraste */
+}
+.login-form {
+    width: 100%; /* Asegura que el formulario ocupe todo el ancho */
+    max-width: 700px; /* Cambiado a 600px para mayor ancho del formulario */
+}
+.login-btn {
+    width: 100%; /* Asegura que el botón ocupe todo el ancho */
+    max-width: 150px; /* Cambiado para hacer el botón menos ancho */
+    padding: 10px; /* Espaciado interno */
+    margin-top: 10px; /* Espacio encima del botón */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente */
+    transition: background-color 0.3s; /* Transición suave para el cambio de color */
+}
+.login-btn:hover {
+    background-color: #e9ecef; /* Color de fondo al pasar el mouse */
+}
+.google-login, .apple-login, .facebook-login {
+    margin-top: 10px; /* Espacio encima del botón de Google */
+    padding-left: 110px; /* Espacio para mover los botones hacia la derecha */
+}
+.social-btn {
+    margin: 10px 0; /* Espacio vertical entre los botones */
+    width: 80%; /* Asegura que los botones ocupen el ancho completo del contenedor */
+}
+.google-btn, .apple-btn, .facebook-btn {
+  display: flex; /* Usar flexbox para alinear el contenido */
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  padding: 10px; /* Espaciado interno */
+  margin-top: 10px; /* Espacio encima de los botones */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 16px; /* Tamaño de fuente */
+  max-width: 400px; /* Cambiado a 150px para hacer los botones menos anchos */
+  width: 100%; /* Asegura que el botón ocupe todo el ancho */
+  transition: background-color 0.3s, box-shadow 0.3s; /* Transición suave para el cambio de color y sombra */
+}
+.google-btn:hover, .apple-btn:hover, .facebook-btn:hover {
+    background-color: #e9ecef; /* Color de fondo al pasar el mouse */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra al pasar el mouse */
+}

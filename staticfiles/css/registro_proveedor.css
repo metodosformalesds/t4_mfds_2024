@@ -1,0 +1,143 @@
+/*Estilos propios de pantalla de Registro proveedor. Saul*/
+.container {
+    height: auto; /* Asegúrate de que se ajuste al contenido */
+    min-height: 100vh; /* Asegúrate de que al menos ocupe la altura completa de la ventana */
+  }
+  
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.register-form {
+    background-color: #eaeaea;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 600px;
+    margin-top: 250px;
+}
+
+.register-form h2 {
+    color: #1d1d1d;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.register-form label {
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: block;
+    color: #333;
+    text-align: center;
+}
+
+.register-form button.register-btn {
+    background-color: #6a008a;
+    color: #fff;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.register-form .google-register {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.google-btn {
+    background-color: #fff;
+    color: #000000;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+.google-logo{
+    width: 20px; /* Adjust the size as needed */
+    height: auto;
+    margin-right: 10px; /* Space between the logo and the text */
+}
+
+.register-form p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.register-form a {
+    color: #6a008a;
+    text-decoration: none;
+}
+
+body {
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+    min-height: 100vh; /* Asegura que el cuerpo ocupe toda la altura de la ventana */
+    margin: 0; /* Elimina el margen por defecto */
+}
+
+.register-container {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+    height: 100vh; /* Ocupar toda la altura de la ventana */
+    margin-top: -200px; /* Mover hacia arriba el formulario */
+    background-color: #f8f9fa; /* Fondo claro para el contraste */
+    flex: 1; /* Permite que esta sección ocupe el espacio restante */
+}
+
+.social-register {
+    display: flex;
+    flex-direction: column; /* Cambiado a columna para apilar los botones */
+    align-items: center; /* Centrar los botones horizontalmente */
+    width: 100%; /* Asegura que el contenedor de botones ocupe todo el ancho */
+    max-width: 400px; /* Limita el ancho máximo del contenedor de botones */
+    margin: 15px 0; /* Espacio vertical entre el contenedor de botones y el resto */
+    padding-left: 110px; /* Espacio para mover los botones hacia la derecha */
+}
+
+.social-btn {
+    margin: 10px 0; /* Espacio vertical entre los botones */
+    width: 100%; /* Asegura que los botones ocupen el ancho completo del contenedor */
+}
+
+.google-btn, .apple-btn, .facebook-btn {
+    display: flex; /* Usar flexbox para alinear el contenido */
+    align-items: center; /* Centrar verticalmente */
+    justify-content: center; /* Centrar horizontalmente */
+    padding: 10px; /* Espaciado interno */
+    margin-top: 10px; /* Espacio encima de los botones */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente */
+    max-width: 800px; /* Cambiado a 150px para hacer los botones menos anchos */
+    width: 100%; /* Asegura que el botón ocupe todo el ancho */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Transición suave para el cambio de color y sombra */
+}
+
+.google-btn:hover {
+    background-color: #e9ecef; /* Color de fondo al pasar el mouse */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra al pasar el mouse */
+}

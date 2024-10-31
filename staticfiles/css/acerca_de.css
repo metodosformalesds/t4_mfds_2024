@@ -1,0 +1,33 @@
+/*Estilos propios de pantalla de Acerca de. Emiliano*/
+
+.text-area{
+    display: flex;
+    justify-content: center;
+    padding-bottom: 50px;
+}
+
+.aside-about-us{
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+.first-about-us{
+    display: flex;
+    flex-direction: row;
+}
+.second-about-us{
+    display: flex;
+    flex-direction: row;
+}
+.first-about-us p{
+    padding-right: 30px;
+    font-size: 30px;
+}
+.second-about-us p{
+    padding-left: 30px;
+    font-size: 30px;
+}
+.image-item{
+    width: 250px;
+    border-radius: 20px;
+}

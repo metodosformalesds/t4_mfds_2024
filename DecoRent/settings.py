@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-uz7))qty0ah^7744lcdxg7)0b=9rwo&kvq3g^k#65*55_f-g(5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://mfdsteam4.pythonanywhere.com/','35.163.44.46'] 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://mfdsteam4.pythonanywhere.com/','35.163.44.46','deco-rent.com', 'www.deco-rent.com',] 
 
 
 # Application definition
@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'DecoRent.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'decorent_bd',
+        'NAME': 'decorent_db',
         'USER': 'root',
         'PASSWORD': 'metodosformales',
         'HOST': 'ls-e6ed3ee4a78219076dbfd973c1a20316966b96b6.c54wosoyoygd.us-west-2.rds.amazonaws.com',
@@ -137,8 +137,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # Agrega la carpeta estática global del proyecto
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Default primary key field type
+
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -157,7 +158,7 @@ AUTHENTICATION_BACKENDS = [
 # Define el campo email como el identificador para la autenticación
 AUTH_USER_MODEL = 'Usuarios.User'  # Asegúrate de que apunte a tu modelo personalizado
 
-SITE_ID = 3 #Se movio el ID
+SITE_ID = 4 #Se movio el ID
 
 
 SOCIALACCOUNT_PROVIDERS = {
