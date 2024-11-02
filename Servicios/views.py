@@ -86,8 +86,26 @@ def publicacion_servicio(request, id):
     try:
         servicio = Servicio.objects.get(id=id)
     except Servicio.DoesNotExist:
-        return redirect('servicios_sin_login')  # Redirige o muestra una página de error si no se encuentra el servicio
+        return redirect('servicios_sin_login')  # Redirige si no se encuentra el servicio
 
     imagenes = Imagenes_Servicios.objects.filter(servicio=servicio)
     
     return render(request, 'publicacion_servicio.html', {'servicio': servicio, 'imagenes': imagenes})
+
+def eliminar_publicacion(request, id):
+    try:
+        servicio = Servicio.objects.get(id=id)
+    except Servicio.DoesNotExist:
+        return redirect('servicios_sin_login')  # Redirige si no se encuentra el servicio
+
+    imagenes = Imagenes_Servicios.objects.filter(servicio=servicio)
+    
+    if request.method == 'POST':
+        
+        for imagen in imagenes: #Recorre todas las imagenes del servicio
+            if imagen.imagen and os.path.isfile(imagen.imagen.path):
+                os.remove(imagen.imagen.path) #Elimina la imagen de la carpeta media
+            imagen.delete() #Elimina la imagen de la base de datos
+            
+        servicio.delete() # Elimina el servicio de la base de datos
+        return redirect('servicios_sin_login')
