@@ -168,9 +168,12 @@
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
           </li>
+          {% if user.is_authenticated %}
           <li class="nav-item">
             <button class="btn btn-notifications ms-2" onclick="toggleNotifications()">
               <img src="{% static 'images/icono_notificacion.jpg' %}" style="width: 25px; height: auto;">
+              {% endif %}
+
               <!-- Icono del botón -->
             </button>
           </li>
@@ -192,6 +195,7 @@
   <div id="notificationDropdown" class="notification-dropdown">
     <button class="btn-close" onclick="toggleNotifications()">&times;</button>
     <h5>Notificaciones</h5>
+
     <div class="notification">
       <h5>Solicitud de presupuesto</h5>
       <p>(Nombre del servicio)</p>
@@ -215,7 +219,7 @@
     </div>
   </div>
 
- <!-- Modal para Ver Detalles de la Solicitud -->
+<!-- Modal para Ver Detalles de la Solicitud -->
 <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -223,76 +227,141 @@
         <h5 class="modal-title" id="detailsModalLabel">Solicitud de servicio</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      
       <div class="modal-body">
-        <h3>Nombre del servicio</h3>
-        <p>Solicitado por: Nombre del cliente</p>
+        {% if user.es_proveedor %}
+          <!-- Contenido del modal para proveedores -->
+          <h3>Nombre del servicio</h3>
+          <p>Solicitado por: Nombre del cliente</p>
+          <h6>Información del evento:</h6>
+          <form>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label for="guestCount" class="form-label">Cantidad de invitados:</label>
+                <input type="number" class="form-control" id="guestCount" readonly>
+              </div>
+              <div class="col-md-3">
+                <label for="eventDuration" class="form-label">Duración del evento (horas):</label>
+                <input type="number" class="form-control" id="eventDuration" readonly>
+              </div>
+              <div class="col-md-3">
+                <label for="eventDate" class="form-label">Fecha:</label>
+                <input type="date" class="form-control" id="eventDate" readonly>
+              </div>
+              <div class="col-md-3">
+                <label for="eventType" class="form-label">Tipo de evento:</label>
+                <input type="text" class="form-control" id="eventType" readonly>
+              </div>
+            </div>
 
-        <h6>Información del evento:</h6>
-        <form>
-          <div class="row mb-3">
-            <div class="col-md-3">
-              <label for="guestCount" class="form-label">Cantidad de invitados:</label>
-              <input type="number" class="form-control" id="guestCount" readonly>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="street" class="form-label">Calle:</label>
+                <input type="text" class="form-control" id="street" readonly>
+              </div>
+              <div class="col-md-3">
+                <label for="exteriorNumber" class="form-label">Número exterior:</label>
+                <input type="text" class="form-control" id="exteriorNumber" readonly>
+              </div>
+              <div class="col-md-3">
+                <label for="interiorNumber" class="form-label">Número interior:</label>
+                <input type="text" class="form-control" id="interiorNumber" readonly>
+              </div>
             </div>
-            <div class="col-md-3">
-              <label for="eventDuration" class="form-label">Duración del evento (horas):</label>
-              <input type="number" class="form-control" id="eventDuration" readonly>
-            </div>
-            <div class="col-md-3">
-              <label for="eventDate" class="form-label">Fecha:</label>
-              <input type="date" class="form-control" id="eventDate" readonly>
-            </div>
-            <div class="col-md-3">
-              <label for="eventType" class="form-label">Tipo de evento:</label>
-              <input type="text" class="form-control" id="eventType" readonly>
-            </div>
-          </div>
 
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="street" class="form-label">Calle:</label>
-              <input type="text" class="form-control" id="street" readonly>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="colony" class="form-label">Colonia:</label>
+                <input type="text" class="form-control" id="colony" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="postalCode" class="form-label">Código Postal:</label>
+                <input type="text" class="form-control" id="postalCode" readonly>
+              </div>
             </div>
-            <div class="col-md-3">
-              <label for="exteriorNumber" class="form-label">Número exterior:</label>
-              <input type="text" class="form-control" id="exteriorNumber" readonly>
-            </div>
-            <div class="col-md-3">
-              <label for="interiorNumber" class="form-label">Número interior:</label>
-              <input type="text" class="form-control" id="interiorNumber" readonly>
-            </div>
-          </div>
 
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="colony" class="form-label">Colonia:</label>
-              <input type="text" class="form-control" id="colony" readonly>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="contractPrice" class="form-label">Precio de contratación:</label>
+                <input type="number" class="form-control" id="contractPrice" required>
+              </div>
             </div>
-            <div class="col-md-6">
-              <label for="postalCode" class="form-label">Código Postal:</label>
-              <input type="text" class="form-control" id="postalCode" readonly>
-            </div>
-          </div>
 
-          <h6>Precio de contratación del servicio:</h6>
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="contractPrice" class="form-label">Precio de contratación:</label>
-              <input type="number" class="form-control" id="contractPrice" required>
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-primary me-2 ">Aceptar</button>
+              <button type="button" class="btn btn-primary me-2 ">Rechazar</button>
             </div>
-          </div>
+          </form>
+        
+        {% else %}
+          <!-- Contenido del modal para clientes -->
+          <h3>Nombre del servicio</h3>
+          <p>Nombre del proveedor</p>
+          <h6>Información del evento:</h6>
+          <form>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label class="form-label">Cantidad de invitados:</label>
+                <input type="number" class="form-control" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Duración del evento (horas):</label>
+                <input type="number" class="form-control" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Fecha:</label>
+                <input type="date" class="form-control" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Tipo de evento:</label>
+                <input type="text" class="form-control" readonly>
+              </div>
+            </div>
 
-          <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-primary me-2">Aceptar</button>
-            <button type="button" class="btn btn-secondary">Rechazar</button>
-          </div>
-        </form>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Calle:</label>
+                <input type="text" class="form-control" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Número exterior:</label>
+                <input type="text" class="form-control" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Número interior:</label>
+                <input type="text" class="form-control" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Colonia:</label>
+                <input type="text" class="form-control" readonly>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Código Postal:</label>
+                <input type="text" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Precio de contratación:</label>
+                <input type="number" class="form-control" readonly>
+              </div>
+    
+            </div>
+            <p>Estado: Pendiente</p>
+
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-primary ">Contratar</button>
+              <button type="button" class="btn btn-primary ">Rechazar</button>
+            </div>
+          </form>
+        {% endif %}
       </div>
     </div>
   </div>
 </div>
-
-
 
   <!-- Título de servicios -->
   <div class="container mt-5">
@@ -448,11 +517,16 @@
       dropdown.style.display = dropdown.style.display === 'none' || dropdown.style.display === '' ? 'block' : 'none';
     }
 
-    function updateModalContent(serviceName, providerName) {
-      document.getElementById("modalServiceName").textContent = serviceName;
-      document.getElementById("modalProviderName").textContent = providerName;
+    function updateClientModalContent(serviceName, providerName) {
+      document.getElementById("clientDetailsModalLabel").textContent = serviceName;
+      // Código para actualizar el modal del cliente
+    }
+
+    function updateModalContent(serviceName, clientName) {
+      document.getElementById("detailsModalLabel").textContent = serviceName;
+      // Código para actualizar el modal del proveedor
     }
   </script>
-</body>
+</body>s
 
 </html>
