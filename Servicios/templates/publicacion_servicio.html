@@ -44,12 +44,6 @@
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
           </li>
-          <li class="nav-item">
-            <button class="btn btn-notifications ms-2" onclick="toggleNotifications()">
-              <img src="{% static 'images/icono_notificacion.jpg' %}" style="width: 25px; height: auto;">
-              <!-- Icono del botón -->
-            </button>
-          </li>
           {% else %}
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'inicio_sesion' %}">Iniciar sesión</a>
@@ -91,9 +85,18 @@
 
         <!-- Action Buttons -->
         <div class="buttons mt-3">
-          <button class="quote-btn" data-bs-toggle="modal" data-bs-target="#requestQuoteModal">Solicitar
-            presupuesto</button>
-          <button class="message-btn">Enviar mensaje</button>
+          {% if user.is_authenticated %}
+            {% if user.es_cliente %}
+              <button class="quote-btn" data-bs-toggle="modal" data-bs-target="#requestQuoteModal">Solicitar
+                presupuesto</button>
+            {% else %}
+              <button class="quote-btn not-client">Solicitar
+                presupuesto</button>
+            {% endif %}
+          {% else %}
+            <a href="{% url 'registro_cliente' %}" class="quote-btn" style="text-decoration: none;">Solicitar
+              presupuesto</a>
+          {% endif %}
         </div>
 
         <!-- Contact Info -->
@@ -205,24 +208,24 @@
   </section>
 
   {% if servicio.proveedor == user.proveedor %}
-    <!-- Nuevos botones de Editar y Eliminar publicación alineados a la derecha -->
-    <div class="container d-flex justify-content-end mt-4">
-      <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#editPostModal">Editar
-        publicación</button>
-      <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal">Eliminar
-        publicación</button>
-    </div>
+  <!-- Nuevos botones de Editar y Eliminar publicación alineados a la derecha -->
+  <div class="container d-flex justify-content-end mt-4">
+    <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#editPostModal">Editar
+      publicación</button>
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal">Eliminar
+      publicación</button>
+  </div>
   {% endif %}
 
   <!-- Pie de página -->
   <footer>
     <div class="containerfooter text-center">
-        <p>&copy; 2024 DecoRent. Todos los derechos reservados.</p>
-        <ul class="list-inline">
-            <li class="list-inline-item"><a href="#terminos">Términos de Servicio</a></li>
-            <li class="list-inline-item"><a href="#privacidad">Política de Privacidad</a></li>
-            <li class="list-inline-item"><a href="#contacto">Contacto</a></li>
-        </ul>
+      <p>&copy; 2024 DecoRent. Todos los derechos reservados.</p>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href="#terminos">Términos de Servicio</a></li>
+        <li class="list-inline-item"><a href="#privacidad">Política de Privacidad</a></li>
+        <li class="list-inline-item"><a href="#contacto">Contacto</a></li>
+      </ul>
     </div>
   </footer>
 
@@ -373,57 +376,63 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <h6>Nombre del servicio</h6>
-          <p>Nombre del proveedor</p>
+          <h3>{{ servicio.nombre }}</h3>
+          <p> {{ servicio.proveedor.nombre_empresa }} </p>
           <h5>Ingresa la información de tu evento:</h5>
-          <form>
+          <form id="solicitudPresupuestoForm" method="post" action="{% url 'solicitar_presupuesto' servicio.id %}">
+            {% csrf_token %}
             <div class="row mb-3">
               <div class="col-md-3">
-                <label for="guestCount" class="form-label">Cantidad de invitados:</label>
-                <input type="number" class="form-control" id="guestCount" required>
+                <label for="id_personas" class="form-label">Cantidad de invitados:</label>
+                <input type="number" name="personas" class="form-control" id="id_personas" required>
               </div>
               <div class="col-md-3">
-                <label for="eventDuration" class="form-label">Duración del evento (horas):</label>
-                <input type="number" class="form-control" id="eventDuration" required>
+                <label for="id_duracion" class="form-label">Duración del evento (horas):</label>
+                <input type="number" name="duracion" class="form-control" step="any" id="id_duracion" required>
               </div>
               <div class="col-md-3">
-                <label for="eventDate" class="form-label">Fecha:</label>
-                <input type="date" class="form-control" id="eventDate" required>
+                <label for="id_fecha" class="form-label">Fecha:</label>
+                <input type="date" name="fecha" class="form-control" id="id_fecha" required>
               </div>
               <div class="col-md-3">
-                <label for="eventType" class="form-label">Tipo de evento:</label>
-                <select class="form-select" id="eventType" required>
-                  <option value="" disabled selected>Seleccionar tipo</option>
-                  <option value="cumpleaños">Cumpleaños</option>
-                  <option value="evento corporativo">Evento Corporativo</option>
+                <label for="id_tipo_evento" class="form-label">Tipo de evento:</label>
+                <select name="tipo_evento" class="form-select" maxlength="100" id="id_tipo_evento" required>
+                  <option value="Cumpleaños">Cumpleaños</option>
+                  <option value="Quinceañera">Quinceañera</option>
+                  <option value="Boda">Boda</option>
+                  <option value="Aniversario">Aniversario</option>
+                  <option value="Graduación">Graduación</option>
+                  <option value="Reunión">Reunión</option>
+                  <option value="Corporativo">Corporativo</option>
+                  <option value="Otro">Otro</option>
                 </select>
               </div>
             </div>
             <div class="row mb-3">
               <div class="col-md-6">
-                <label for="street" class="form-label">Calle:</label>
-                <input type="text" class="form-control" id="street" required>
+                <label for="id_calle" class="form-label">Calle:</label>
+                <input type="text" name="calle" class="form-control" maxlength="255" id="id_calle" required>
               </div>
               <div class="col-md-3">
-                <label for="exteriorNumber" class="form-label">Número exterior:</label>
-                <input type="text" class="form-control" id="exteriorNumber" required>
+                <label for="id_numero_exterior" class="form-label">Número exterior:</label>
+                <input type="text" name="numero_exterior" class="form-control" maxlength="10" id="id_numero_exterior" required>
               </div>
               <div class="col-md-3">
-                <label for="interiorNumber" class="form-label">Número interior:</label>
-                <input type="text" class="form-control" id="interiorNumber">
+                <label for="id_numero_interior" class="form-label">Número interior:</label>
+                <input type="text" name="numero_interior" class="form-control" maxlength="10" id="id_numero_interior">
               </div>
             </div>
             <div class="row mb-3">
               <div class="col-md-6">
-                <label for="colony" class="form-label">Colonia:</label>
-                <input type="text" class="form-control" id="colony" required>
+                <label for="id_colonia" class="form-label">Colonia:</label>
+                <input type="text" name="colonia" class="form-control"  maxlength="255" id="id_colonia" required>
               </div>
               <div class="col-md-6">
-                <label for="postalCode" class="form-label">Código Postal:</label>
-                <input type="text" class="form-control" id="postalCode" required>
+                <label for="id_codigo_postal" class="form-label">Código Postal:</label>
+                <input type="text" name="codigo_postal" class="form-control" maxlength="10" id="id_codigo_postal" required>
               </div>
               <div class="d-flex justify-content-end"> <!-- Alineación a la derecha usando Flexbox -->
-                <button type="submit" class="btn btn-primary me-2">Enviar</button>
+                <button type="submit" id="submitSolicitud" class="btn btn-primary me-2">Enviar</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
               </div>
           </form>
@@ -435,6 +444,62 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Para usar las flechas -->
+
+  <script>
+    // Script para manejar las solicitudes de presupuesto
+    document.getElementById('submitSolicitud').addEventListener('click', function (event) {
+      event.preventDefault();
+
+      // Obtener el formulario
+      const form = document.getElementById('solicitudPresupuestoForm');
+
+      // Crear el FormData del formulario
+      const formData = new FormData(form);
+
+      // Enviar la solicitud AJAX
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',  // Indicamos que es una solicitud AJAX
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            // Mostrar mensaje de éxito y cerrar el modal
+            alert(data.message);
+            const modal = bootstrap.Modal.getInstance(document.getElementById('requestQuoteModal'));
+            modal.hide();
+          } else {
+            // Mostrar errores en el formulario
+            let errors = '';
+            for (const [field, messages] of Object.entries(data.errors)) {
+              errors += `${field}: ${messages.join(', ')}\n`;
+            }
+            alert('Errores en el formulario:\n' + errors);
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+  </script>
+
+<script>
+  // Script para mostrar un mensaje a los usuarios proveedores al hacer clic en el botón 'Solicitar presupuesto'
+  document.addEventListener('DOMContentLoaded', function () {
+      // Selecciona el botón solo para usuarios que no son clientes
+      const notClientButton = document.querySelector('.not-client');
+      
+      if (notClientButton) {
+          notClientButton.addEventListener('click', function (event) {
+              event.preventDefault();  // Evita cualquier acción predeterminada
+              
+              // Muestra un mensaje de advertencia
+              alert("Solo los clientes pueden realizar una solicitud de presupuesto. Por favor, crea una cuenta como cliente.");
+          });
+      }
+  });
+  </script>
 
 </body>
 

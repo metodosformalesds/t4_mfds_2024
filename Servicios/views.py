@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import PublicarServicioForm, MultipleImagenesServiciosForm
+from Solicitudes.forms import SolicitudPresupuestoClienteForm  # Importa el formulario desde la aplicación 'Solicitudes'
 from .models import Imagenes_Servicios, Servicio
 from PIL import Image
 import os
@@ -90,7 +91,14 @@ def publicacion_servicio(request, id):
 
     imagenes = Imagenes_Servicios.objects.filter(servicio=servicio)
     
-    return render(request, 'publicacion_servicio.html', {'servicio': servicio, 'imagenes': imagenes})
+    # Crea una instancia vacía del formulario para pasar al contexto
+    form = SolicitudPresupuestoClienteForm()
+    
+    return render(request, 'publicacion_servicio.html', {
+        'servicio': servicio, 
+        'imagenes': imagenes,
+        'form': form
+    })
 
 def eliminar_publicacion(request, id):
     try:
