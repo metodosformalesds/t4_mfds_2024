@@ -208,8 +208,16 @@
       <button class="btn-details" data-bs-toggle="modal" data-bs-target="#detailsModal"
         onclick="loadSolicitudDetails('{{ notificacion.solicitud.id }}')">Ver detalles</button>
     </div>
+    {% elif notificacion.tipo_notificacion == 'Respuesta de Solicitud' %}
+    <div class="notification">
+      <p>{{ notificacion.tipo_notificacion }}</p>
+      <h5> {{ notificacion.solicitud.servicio.nombre }} </h5>
+      <h6> {{ notificacion.solicitud.proveedor.nombre_empresa }} </h6>
+      <br>
+      <button class="btn-details" data-bs-toggle="modal" data-bs-target="#answerModal"
+        onclick="loadSolicitudDetails('{{ notificacion.solicitud.id }}', true)">Ver detalles</button>
+    </div>
     {% endif %}
-
     {% endfor %}
   </div>
 
@@ -223,8 +231,6 @@
         </div>
 
         <div class="modal-body">
-          {% if user.es_proveedor %}
-          <!-- Contenido del modal para proveedores -->
           <h3 id="serviceName">Nombre del servicio</h3>
           <div>
             <span style="font-size: 20px;">Solicitado por:</span>
@@ -271,54 +277,65 @@
               <button type="button" class="btn btn-primary me-2 " onclick="rechazarSolicitud()">Rechazar</button>
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-          {% else %}
-          <!-- Contenido del modal para clientes -->
-          <h3></h3>
-          <p></p>
+  <!-- Modal para Ver la Respuesta de Solicitud -->
+  <div class="modal fade" id="answerModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailsModalLabel">Solicitud de servicio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <h3 id="serviceNameAnswer">Nombre del servicio</h3>
+          <p id="providerNameAnswer" >Nombre del proveedor</p>
           <h6>Información del evento:</h6>
           <form>
             <div class="row mb-3">
               <div class="col-md-3">
                 <label class="form-label">Cantidad de invitados:</label>
-                <input type="number" class="form-control" readonly>
+                <input type="number" class="form-control" id="guestCountAnswer" readonly>
               </div>
               <div class="col-md-3">
                 <label class="form-label">Duración del evento (horas):</label>
-                <input type="number" class="form-control" readonly>
+                <input type="number" class="form-control" id="eventDurationAnswer" readonly>
               </div>
               <div class="col-md-3">
                 <label class="form-label">Fecha:</label>
-                <input type="date" class="form-control" readonly>
+                <input type="date" class="form-control" id="eventDateAnswer" readonly>
               </div>
               <div class="col-md-3">
                 <label class="form-label">Tipo de evento:</label>
-                <input type="text" class="form-control" readonly>
+                <input type="text" class="form-control" id="eventTypeAnswer" readonly>
               </div>
             </div>
 
             <div class="row mb-3">
               <div class="col-md-12">
                 <label class="form-label">Dirección:</label>
-                <input type="text" class="form-control" readonly>
+                <input type="text" class="form-control" id="eventAddressAnswer" readonly>
               </div>
             </div>
 
             <div class="row mb-3">
               <div class="col-md-6">
                 <label class="form-label">Precio de contratación:</label>
-                <input type="number" class="form-control" readonly>
+                <input type="number" class="form-control" id="contractPriceAnswer" readonly>
               </div>
 
             </div>
             <p>Estado: Pendiente</p>
 
             <div class="d-flex justify-content-end">
-              <button type="button" class="btn btn-primary ">Contratar</button>
+              <button type="button" class="btn btn-primary " style="margin-right: 20px;">Contratar</button>
               <button type="button" class="btn btn-primary ">Rechazar</button>
             </div>
           </form>
-          {% endif %}
         </div>
       </div>
     </div>
@@ -486,20 +503,30 @@
       // Código para actualizar el modal del proveedor
     }
 
-    function loadSolicitudDetails(solicitudId) {
-      document.getElementById("detailsModal").setAttribute("data-solicitud-id", solicitudId); // Asigna el ID de la solicitud para que se pueda acceder en la funcion responderSolicitud()
+    function loadSolicitudDetails(solicitudId, isAnswerModal = false) {
+      // Define el prefijo para diferenciar los IDs de los modales
+      const modalPrefix = isAnswerModal ? 'Answer' : '';
+
+      // Asigna el ID de la solicitud para que se pueda acceder en la funcion responderSolicitud()
+      document.getElementById("detailsModal").setAttribute("data-solicitud-id", solicitudId);
+
       // Realiza una solicitud AJAX para obtener los detalles de la solicitud
       fetch(`/Solicitudes/obtener_solicitud/${solicitudId}/`)
         .then(response => response.json())
         .then(data => {
-          // Actualiza el contenido del modal con los datos recibidos
-          document.getElementById("serviceName").textContent = data.servicio;
+          console.log(data);
+          // Asigna los valores a los elementos correctos, usando el prefijo si es el segundo modal
+          document.getElementById("serviceName" + modalPrefix).textContent = data.servicio;
+          document.getElementById("providerNameAnswer").textContent = data.proveedor;
           document.getElementById("clientName").textContent = data.cliente;
-          document.getElementById("guestCount").value = data.personas;
-          document.getElementById("eventDuration").value = data.duracion;
-          document.getElementById("eventDate").value = data.fecha;
-          document.getElementById("eventType").value = data.tipo_evento;
-          document.getElementById("eventAddress").value = data.direccion;
+          document.getElementById("guestCount" + modalPrefix).value = data.personas;
+          document.getElementById("eventDuration" + modalPrefix).value = data.duracion;
+          document.getElementById("eventDate" + modalPrefix).value = data.fecha;
+          document.getElementById("eventType" + modalPrefix).value = data.tipo_evento;
+          document.getElementById("eventAddress" + modalPrefix).value = data.direccion;
+
+          // Actualiza el precio si existe
+          document.getElementById("contractPrice" + modalPrefix).value = data.precio ? data.precio : '';
         })
         .catch(error => console.error('Error al cargar los detalles de la solicitud:', error));
     }

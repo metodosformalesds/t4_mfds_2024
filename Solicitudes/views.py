@@ -42,13 +42,15 @@ def obtener_solicitud(request, solicitud_id):
     solicitud = get_object_or_404(Solicitud_Presupuesto, id=solicitud_id)
     data = {
         'servicio': solicitud.servicio.nombre,
+        'proveedor': solicitud.proveedor.nombre_empresa,
         'cliente': solicitud.cliente.nombre_completo,
         'personas': solicitud.personas,
         'duracion': solicitud.duracion,
         'status': solicitud.status,
         'fecha': solicitud.fecha.strftime('%Y-%m-%d'),
         'tipo_evento': solicitud.tipo_evento,
-        'direccion': solicitud.direccion
+        'direccion': solicitud.direccion,
+        'precio': solicitud.precio
     }
     return JsonResponse(data)
 
