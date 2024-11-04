@@ -196,43 +196,41 @@
     <button class="btn-close" onclick="toggleNotifications()">&times;</button>
     <h5>Notificaciones</h5>
 
+    {% for notificacion in notificaciones %}
+    
+    {% if notificacion.tipo_notificacion == 'Solicitud de Presupuesto' %}
     <div class="notification">
-      <h5>Solicitud de presupuesto</h5>
-      <p>(Nombre del servicio)</p>
-      <p>(Nombre del proveedor)</p>
+      <p>{{ notificacion.tipo_notificacion }}</p>
+      <h5>{{ notificacion.solicitud.cliente.nombre_completo }}</h5>
+      <h5>Solicita:</h5>
+      <h5> {{ notificacion.solicitud.servicio.nombre }} </h5>
+      <br>
       <button class="btn-details" data-bs-toggle="modal" data-bs-target="#detailsModal"
-        onclick="updateModalContent('(Nombre del servicio)', '(Nombre del proveedor)')">Ver detalles</button>
+        onclick="loadSolicitudDetails('{{ notificacion.solicitud.id }}')">Ver detalles</button>
     </div>
-    <div class="notification">
-      <h5>Solicitud de presupuesto</h5>
-      <p>(Nombre del servicio)</p>
-      <p>(Nombre del proveedor)</p>
-      <button class="btn-details" data-bs-toggle="modal" data-bs-target="#detailsModal"
-        onclick="updateModalContent('(Nombre del servicio)', '(Nombre del proveedor)')">Ver detalles</button>
-    </div>
-    <div class="notification">
-      <h5>Solicitud de presupuesto</h5>
-      <p>(Nombre del servicio)</p>
-      <p>(Nombre del proveedor)</p>
-      <button class="btn-details" data-bs-toggle="modal" data-bs-target="#detailsModal"
-        onclick="updateModalContent('(Nombre del servicio)', '(Nombre del proveedor)')">Ver detalles</button>
-    </div>
+    {% endif %}
+
+    {% endfor %}
   </div>
 
-<!-- Modal para Ver Detalles de la Solicitud -->
-<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="detailsModalLabel">Solicitud de servicio</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      
-      <div class="modal-body">
-        {% if user.es_proveedor %}
+  <!-- Modal para Ver Detalles de la Solicitud -->
+  <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailsModalLabel">Solicitud de servicio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          {% if user.es_proveedor %}
           <!-- Contenido del modal para proveedores -->
-          <h3>Nombre del servicio</h3>
-          <p>Solicitado por: Nombre del cliente</p>
+          <h3 id="serviceName">Nombre del servicio</h3>
+          <div>
+            <span style="font-size: 20px;">Solicitado por:</span>
+            <span id="clientName" style="font-size: 20px;">Nombre del cliente</span>
+          </div>
+          <br>
           <h6>Información del evento:</h6>
           <form>
             <div class="row mb-3">
@@ -255,28 +253,9 @@
             </div>
 
             <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="street" class="form-label">Calle:</label>
-                <input type="text" class="form-control" id="street" readonly>
-              </div>
-              <div class="col-md-3">
-                <label for="exteriorNumber" class="form-label">Número exterior:</label>
-                <input type="text" class="form-control" id="exteriorNumber" readonly>
-              </div>
-              <div class="col-md-3">
-                <label for="interiorNumber" class="form-label">Número interior:</label>
-                <input type="text" class="form-control" id="interiorNumber" readonly>
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="colony" class="form-label">Colonia:</label>
-                <input type="text" class="form-control" id="colony" readonly>
-              </div>
-              <div class="col-md-6">
-                <label for="postalCode" class="form-label">Código Postal:</label>
-                <input type="text" class="form-control" id="postalCode" readonly>
+              <div class="col-md-12">
+                <label for="eventAddress" class="form-label">Dirección:</label>
+                <input type="text" class="form-control" id="eventAddress" readonly>
               </div>
             </div>
 
@@ -288,15 +267,15 @@
             </div>
 
             <div class="d-flex justify-content-end">
-              <button type="button" class="btn btn-primary me-2 ">Aceptar</button>
-              <button type="button" class="btn btn-primary me-2 ">Rechazar</button>
+              <button type="button" class="btn btn-primary me-2 " onclick="responderSolicitud()">Aceptar</button>
+              <button type="button" class="btn btn-primary me-2 " onclick="rechazarSolicitud()">Rechazar</button>
             </div>
           </form>
-        
-        {% else %}
+
+          {% else %}
           <!-- Contenido del modal para clientes -->
-          <h3>Nombre del servicio</h3>
-          <p>Nombre del proveedor</p>
+          <h3></h3>
+          <p></p>
           <h6>Información del evento:</h6>
           <form>
             <div class="row mb-3">
@@ -319,36 +298,18 @@
             </div>
 
             <div class="row mb-3">
-              <div class="col-md-6">
-                <label class="form-label">Calle:</label>
-                <input type="text" class="form-control" readonly>
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">Número exterior:</label>
-                <input type="text" class="form-control" readonly>
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">Número interior:</label>
+              <div class="col-md-12">
+                <label class="form-label">Dirección:</label>
                 <input type="text" class="form-control" readonly>
               </div>
             </div>
 
             <div class="row mb-3">
               <div class="col-md-6">
-                <label class="form-label">Colonia:</label>
-                <input type="text" class="form-control" readonly>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Código Postal:</label>
-                <input type="text" class="form-control" readonly>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-md-6">
                 <label class="form-label">Precio de contratación:</label>
                 <input type="number" class="form-control" readonly>
               </div>
-    
+
             </div>
             <p>Estado: Pendiente</p>
 
@@ -357,11 +318,11 @@
               <button type="button" class="btn btn-primary ">Rechazar</button>
             </div>
           </form>
-        {% endif %}
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <!-- Título de servicios -->
   <div class="container mt-5">
@@ -409,13 +370,12 @@
                     <div class="rating">
                       <div class="rating">
                         {% for i in "12345" %}
-                          {% if forloop.counter <= servicio.promedio_calificacion %} 
-                            <span class="estrella">★</span>
+                        {% if forloop.counter <= servicio.promedio_calificacion %} <span class="estrella">★</span>
                           {% else %}
-                            <span class="estrella">☆</span>
+                          <span class="estrella">☆</span>
                           {% endif %}
-                        {% endfor %}
-                        <span> {{servicio.promedio_calificacion}} </span>
+                          {% endfor %}
+                          <span> {{servicio.promedio_calificacion}} </span>
                       </div>
                     </div>
                     <div class="price">Desde ${{ servicio.precio_minimo }}</div>
@@ -471,13 +431,12 @@
                     <div class="service-info">
                       <div class="rating">
                         {% for i in "12345" %}
-                          {% if forloop.counter <= servicio.promedio_calificacion %} 
-                            <span class="estrella">★</span>
+                        {% if forloop.counter <= servicio.promedio_calificacion %} <span class="estrella">★</span>
                           {% else %}
-                            <span class="estrella">☆</span>
+                          <span class="estrella">☆</span>
                           {% endif %}
-                        {% endfor %}
-                        <span> {{servicio.promedio_calificacion}} </span>
+                          {% endfor %}
+                          <span> {{servicio.promedio_calificacion}} </span>
                       </div>
                       <div class="price">Desde ${{ servicio.precio_minimo }}</div>
                     </div>
@@ -498,12 +457,12 @@
   <!-- Pie de página -->
   <footer>
     <div class="container text-center">
-        <p>&copy; 2024 DecoRent. Todos los derechos reservados.</p>
-        <ul class="list-inline">
-            <li class="list-inline-item"><a href="#terminos">Términos de Servicio</a></li>
-            <li class="list-inline-item"><a href="#privacidad">Política de Privacidad</a></li>
-            <li class="list-inline-item"><a href="#contacto">Contacto</a></li>
-        </ul>
+      <p>&copy; 2024 DecoRent. Todos los derechos reservados.</p>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href="#terminos">Términos de Servicio</a></li>
+        <li class="list-inline-item"><a href="#privacidad">Política de Privacidad</a></li>
+        <li class="list-inline-item"><a href="#contacto">Contacto</a></li>
+      </ul>
     </div>
   </footer>
 
@@ -526,7 +485,87 @@
       document.getElementById("detailsModalLabel").textContent = serviceName;
       // Código para actualizar el modal del proveedor
     }
+
+    function loadSolicitudDetails(solicitudId) {
+      document.getElementById("detailsModal").setAttribute("data-solicitud-id", solicitudId); // Asigna el ID de la solicitud para que se pueda acceder en la funcion responderSolicitud()
+      // Realiza una solicitud AJAX para obtener los detalles de la solicitud
+      fetch(`/Solicitudes/obtener_solicitud/${solicitudId}/`)
+        .then(response => response.json())
+        .then(data => {
+          // Actualiza el contenido del modal con los datos recibidos
+          document.getElementById("serviceName").textContent = data.servicio;
+          document.getElementById("clientName").textContent = data.cliente;
+          document.getElementById("guestCount").value = data.personas;
+          document.getElementById("eventDuration").value = data.duracion;
+          document.getElementById("eventDate").value = data.fecha;
+          document.getElementById("eventType").value = data.tipo_evento;
+          document.getElementById("eventAddress").value = data.direccion;
+        })
+        .catch(error => console.error('Error al cargar los detalles de la solicitud:', error));
+    }
+
+    function responderSolicitud() {
+      const solicitudId = document.getElementById("detailsModal").getAttribute("data-solicitud-id");
+      const precio = document.getElementById("contractPrice").value;
+
+      fetch(`/Solicitudes/responder_solicitud/${solicitudId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')  // Para enviar el token CSRF
+        },
+        body: JSON.stringify({ precio: precio })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            alert('Solicitud respondida exitosamente');
+            location.reload();  // Recarga la página para actualizar las notificaciones
+          } else {
+            alert('Error al responder la solicitud');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function rechazarSolicitud() {
+      const solicitudId = document.getElementById("detailsModal").getAttribute("data-solicitud-id");
+
+      fetch(`/Solicitudes/rechazar_solicitud/${solicitudId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')  // Para enviar el token CSRF
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            alert('Solicitud rechazada exitosamente');
+            location.reload();  // Recarga la página para actualizar las notificaciones
+          } else {
+            alert('Error al rechazar la solicitud');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Función para obtener el token CSRF
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
   </script>
-</body>s
+</body>
 
 </html>

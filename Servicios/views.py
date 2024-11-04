@@ -2,14 +2,26 @@ from django.shortcuts import render, redirect
 from .forms import PublicarServicioForm, MultipleImagenesServiciosForm
 from Solicitudes.forms import SolicitudPresupuestoClienteForm  # Importa el formulario desde la aplicación 'Solicitudes'
 from .models import Imagenes_Servicios, Servicio
+from Notificaciones.models import Notificacion
 from PIL import Image
 import os
 
 def servicios_sin_login(request):
     # Obtener todos los servicios de la base de datos
-    print("Template cargado correctamente")
     servicios = Servicio.objects.all()
-    return render(request, 'servicios_sin_login.html', {'servicios': servicios})
+    
+    # Verificar si el usuario ha iniciado sesión
+    if request.user.is_authenticated:
+        # Obtener todas las notificaciones del usuario
+        notificaciones = Notificacion.objects.filter(user=request.user, leido=False)
+    else:
+        # Si no está autenticado, no se cargan notificaciones
+        notificaciones = None
+    
+    return render(request, 'servicios_sin_login.html', {
+        'servicios': servicios,
+        'notificaciones': notificaciones
+    })
 
 
 def publicar_servicio(request):
