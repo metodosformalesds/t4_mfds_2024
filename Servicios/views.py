@@ -1,14 +1,52 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import PublicarServicioForm, MultipleImagenesServiciosForm
+from Solicitudes.forms import SolicitudPresupuestoClienteForm  # Importa el formulario desde la aplicación 'Solicitudes'
 from .models import Imagenes_Servicios, Servicio
+from Notificaciones.models import Notificacion
 from PIL import Image
 import os
+from django.contrib.auth.decorators import login_required
+from .models import Servicio
+from .forms import PublicarServicioForm
+from django.http import JsonResponse
+from django.contrib import messages
+
+def service_list(request):    
+    categoria_seleccionada = request.GET.get('categoria')  # Captura la categoría seleccionada de la URL
+    
+    # Obtén todos los servicios
+    services = Servicio.objects.all()
+
+    # Filtra los servicios por categoría si se selecciona una
+    if categoria_seleccionada:
+        services = services.filter(categoria=categoria_seleccionada)
+
+    # Obtén todas las categorías únicas para el combobox
+    categorias = Servicio.objects.values_list('categoria', flat=True).distinct()
+
+    return render(request, 'service_list.html', {
+        'servicios': services,
+        'categorias': categorias,
+        'categoria_seleccionada': categoria_seleccionada
+    })
+
 
 def servicios_sin_login(request):
     # Obtener todos los servicios de la base de datos
-    print("Template cargado correctamente")
     servicios = Servicio.objects.all()
-    return render(request, 'servicios_sin_login.html', {'servicios': servicios})
+    
+    # Verificar si el usuario ha iniciado sesión
+    if request.user.is_authenticated:
+        # Obtener todas las notificaciones del usuario
+        notificaciones = Notificacion.objects.filter(user=request.user, leido=False)
+    else:
+        # Si no está autenticado, no se cargan notificaciones
+        notificaciones = None
+    
+    return render(request, 'servicios_sin_login.html', {
+        'servicios': servicios,
+        'notificaciones': notificaciones
+    })
 
 
 def publicar_servicio(request):
@@ -86,8 +124,58 @@ def publicacion_servicio(request, id):
     try:
         servicio = Servicio.objects.get(id=id)
     except Servicio.DoesNotExist:
-        return redirect('servicios_sin_login')  # Redirige o muestra una página de error si no se encuentra el servicio
+        return redirect('servicios_sin_login')  # Redirige si no se encuentra el servicio
 
     imagenes = Imagenes_Servicios.objects.filter(servicio=servicio)
     
-    return render(request, 'publicacion_servicio.html', {'servicio': servicio, 'imagenes': imagenes})
+    # Crea una instancia vacía del formulario para pasar al contexto
+    form = SolicitudPresupuestoClienteForm()
+    
+    return render(request, 'publicacion_servicio.html', {
+        'servicio': servicio, 
+        'imagenes': imagenes,
+        'form': form
+    })
+
+def eliminar_publicacion(request, id):
+    try:
+        servicio = Servicio.objects.get(id=id)
+    except Servicio.DoesNotExist:
+        return redirect('servicios_sin_login')  # Redirige si no se encuentra el servicio
+
+    imagenes = Imagenes_Servicios.objects.filter(servicio=servicio)
+    
+    if request.method == 'POST':
+        
+        for imagen in imagenes: #Recorre todas las imagenes del servicio
+            if imagen.imagen and os.path.isfile(imagen.imagen.path):
+                os.remove(imagen.imagen.path) #Elimina la imagen de la carpeta media
+            imagen.delete() #Elimina la imagen de la base de datos
+            
+        servicio.delete() # Elimina el servicio de la base de datos
+        return redirect('servicios_sin_login')
+    
+    
+# codigo para editar publicacion 
+def editar_servicio(request, servicio_id):
+    servicio = get_object_or_404(Servicio, id=servicio_id)
+    
+    if request.method == 'POST':
+        form = PublicarServicioForm(request.POST, request.FILES, instance=servicio)
+        if form.is_valid():
+            servicio = form.save(commit=False)
+            
+            # Procesa las imágenes nuevas
+            nuevas_imagenes = request.FILES.getlist('serviceImage')
+            if nuevas_imagenes:
+                # Borra las imágenes antiguas
+                Imagenes_Servicios.objects.filter(servicio=servicio).delete()
+                
+                # Guarda las nuevas imágenes
+                for imagen in nuevas_imagenes:
+                    Imagenes_Servicios.objects.create(servicio=servicio, imagen=imagen)
+
+            servicio.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})

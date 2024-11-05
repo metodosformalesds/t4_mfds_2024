@@ -9,7 +9,8 @@ __pycache__/
 # Django stuff
 *.sqlite3
 media/
-**/migrations/
+#Esta linea evita las migraciones
+**/migrations/ 
 
 # Environment variables
 .env

@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-uz7))qty0ah^7744lcdxg7)0b=9rwo&kvq3g^k#65*55_f-g(5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://mfdsteam4.pythonanywhere.com/','35.163.44.46','deco-rent.com', 'www.deco-rent.com',] 
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://mfdsteam4.pythonanywhere.com/','35.163.44.46','deco-rent.com', 'www.deco-rent.com'] 
 
 # Application definition
 
@@ -134,11 +133,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # Agrega la carpeta estática global del proyecto
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
 
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

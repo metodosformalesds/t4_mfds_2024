@@ -44,3 +44,39 @@ class MultipleImagenesServiciosForm(forms.Form):
     class Meta:
         model = Imagenes_Servicios
         fields = ['imagen']
+        
+# codigo para editar publicacion 
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Servicio, Imagenes_Servicios
+from .forms import PublicarServicioForm, MultipleImagenesServiciosForm
+
+@login_required
+def publicar_servicio(request):
+    if request.method == 'POST':
+        # Procesa el formulario del servicio
+        servicio_form = PublicarServicioForm(request.POST)
+        imagenes_form = MultipleImagenesServiciosForm(request.FILES or None)
+        
+        if servicio_form.is_valid() and imagenes_form.is_valid():
+            # Guardar el servicio
+            servicio = servicio_form.save(commit=False)
+            servicio.proveedor = request.user.proveedor  # Asigna el proveedor actual
+            servicio.direccion = f"{servicio_form.cleaned_data['calle']} {servicio_form.cleaned_data['numero_exterior']} {servicio_form.cleaned_data.get('numero_interior', '')}, {servicio_form.cleaned_data['colonia']}, {servicio_form.cleaned_data['codigo_postal']}"
+            servicio.save()
+
+            # Guardar las imágenes
+            for imagen in request.FILES.getlist('imagen'):
+                Imagenes_Servicios.objects.create(servicio=servicio, imagen=imagen)
+
+            return redirect('detalle_servicio', servicio_id=servicio.id)  # Redirige a la página de detalles del servicio después de guardar
+
+    else:
+        servicio_form = PublicarServicioForm()
+        imagenes_form = MultipleImagenesServiciosForm()
+
+    context = {
+        'servicio_form': servicio_form,
+        'imagenes_form': imagenes_form,
+    }
+    return render(request, 'publicar_servicio.html', context)
