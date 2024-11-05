@@ -11,7 +11,7 @@ from .forms import PublicarServicioForm
 from django.http import JsonResponse
 from django.contrib import messages
 
-def service_list(request):
+def service_list(request):    
     categoria_seleccionada = request.GET.get('categoria')  # Captura la categoría seleccionada de la URL
     
     # Obtén todos los servicios
