@@ -37,3 +37,27 @@
     max-width: 250px;
     border-radius: 20px;
 }
+
+.carousel-inner img {
+    max-height: 400px; /* Ajusta según tus necesidades */
+    object-fit: cover; /* Para que las imágenes se ajusten sin distorsionarse */
+  }
+
+  #carouselExample {
+    width: 150px; /* Ajusta el ancho para la forma del carrusel */
+    max-height: 500px; /* Controla la altura visible del carrusel */
+    overflow: hidden;
+}
+
+.carousel-inner {
+    display: flex;
+    flex-direction: column; /* Alinea las imágenes en una columna para el formato vertical */
+}
+
+.custom-img {
+    width: 100%; /* Ajusta las imágenes para que ocupen todo el ancho del carrusel */
+    height: 120px; /* Controla la altura de cada imagen */
+    object-fit: cover; /* Ajusta la imagen sin distorsión */
+    border-radius: 10px;
+    margin-bottom: 10px; /* Espacio entre imágenes */
+}

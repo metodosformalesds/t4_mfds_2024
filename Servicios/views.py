@@ -11,6 +11,26 @@ from .forms import PublicarServicioForm
 from django.http import JsonResponse
 from django.contrib import messages
 
+def service_list(request):
+    categoria_seleccionada = request.GET.get('categoria')  # Captura la categoría seleccionada de la URL
+    
+    # Obtén todos los servicios
+    services = Servicio.objects.all()
+
+    # Filtra los servicios por categoría si se selecciona una
+    if categoria_seleccionada:
+        services = services.filter(categoria=categoria_seleccionada)
+
+    # Obtén todas las categorías únicas para el combobox
+    categorias = Servicio.objects.values_list('categoria', flat=True).distinct()
+
+    return render(request, 'service_list.html', {
+        'servicios': services,
+        'categorias': categorias,
+        'categoria_seleccionada': categoria_seleccionada
+    })
+
+
 def servicios_sin_login(request):
     # Obtener todos los servicios de la base de datos
     servicios = Servicio.objects.all()

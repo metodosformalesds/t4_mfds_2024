@@ -139,6 +139,7 @@
       /* Color más claro al pasar el mouse */
     }
   </style>
+
 </head>
 
 <body>
@@ -345,18 +346,23 @@
   <div class="container mt-5">
     <h2 class="text-center">Nuestros Servicios</h2>
 
+    
+
     <!-- Combobox de categorías -->
-    <div class="mb-3">
-      <select class="form-select" aria-label="Selecciona una categoría" style="width: 270px; margin: 10px 0;">
-        <option selected>Selecciona una categoría</option>
-        <option value="Entretenmiento">Entretenmiento</option>
-        <option value="Equipamiento_Mobiliario">Equipamiento y mobiliario</option>
-        <option value="Espacios_Eventos">Espacios para eventos</option>
-        <option value="Catering">Catering</option>
-        <option value="Fotografia">Fotografía</option>
-        <option value="Decoracion">Decoración</option>
-      </select>
-    </div>
+<div class="mb-3">
+  <form method="get" action="{% url 'service_list' %}">
+    <label for="categoria">Filtrar por categoría:</label>
+    <select name="categoria" id="categoria" class="form-select" aria-label="Selecciona una categoría" style="width: 270px; margin: 10px 0;" onchange="this.form.submit()">
+      <option value="">Todas las categorías</option>
+      {% for categoria in categorias %}
+        <option value="{{ categoria }}" {% if categoria == categoria_seleccionada %}selected{% endif %}>
+          {{ categoria }}
+        </option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
 
     <!-- Acordeón para categorías -->
     <div class="accordion" id="accordionCategorias">

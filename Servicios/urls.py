@@ -6,5 +6,10 @@ urlpatterns = [
     path('publicar_servicio/', views.publicar_servicio, name='publicar_servicio'),
     path('publicacion_servicio/<int:id>/', views.publicacion_servicio, name='publicacion_servicio'), 
     path('publicacion_servicio/<int:id>/delete', views.eliminar_publicacion, name='eliminar_publicacion'), 
+<<<<<<< HEAD
     path('editar_servicio/<int:servicio_id>/', views.editar_servicio, name='editar_servicio'),
    ]
+=======
+     path('servicios/', views.service_list, name='service_list'),
+]
+>>>>>>> 139f8c3dba4993aa4028b712f1f39833829f402d
