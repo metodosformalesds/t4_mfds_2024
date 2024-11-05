@@ -1,10 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import PublicarServicioForm, MultipleImagenesServiciosForm
 from Solicitudes.forms import SolicitudPresupuestoClienteForm  # Importa el formulario desde la aplicación 'Solicitudes'
 from .models import Imagenes_Servicios, Servicio
 from Notificaciones.models import Notificacion
 from PIL import Image
 import os
+from django.contrib.auth.decorators import login_required
+from .models import Servicio
+from .forms import PublicarServicioForm
+from django.http import JsonResponse
+from django.contrib import messages
 
 def servicios_sin_login(request):
     # Obtener todos los servicios de la base de datos
@@ -129,3 +134,28 @@ def eliminar_publicacion(request, id):
             
         servicio.delete() # Elimina el servicio de la base de datos
         return redirect('servicios_sin_login')
+    
+    
+# codigo para editar publicacion 
+def editar_servicio(request, servicio_id):
+    servicio = get_object_or_404(Servicio, id=servicio_id)
+    
+    if request.method == 'POST':
+        form = PublicarServicioForm(request.POST, request.FILES, instance=servicio)
+        if form.is_valid():
+            servicio = form.save(commit=False)
+            
+            # Procesa las imágenes nuevas
+            nuevas_imagenes = request.FILES.getlist('serviceImage')
+            if nuevas_imagenes:
+                # Borra las imágenes antiguas
+                Imagenes_Servicios.objects.filter(servicio=servicio).delete()
+                
+                # Guarda las nuevas imágenes
+                for imagen in nuevas_imagenes:
+                    Imagenes_Servicios.objects.create(servicio=servicio, imagen=imagen)
+
+            servicio.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})

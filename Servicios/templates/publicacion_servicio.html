@@ -146,7 +146,7 @@
     <h2>Ubicación</h2>
     <div class="map-container">
 
-      <iframe width="1000" height="600" style="border:0" loading="lazy" allowfullscreen
+      <iframe id="googleMapIframe"width="1000" height="600" style="border:0" loading="lazy" allowfullscreen
         referrerpolicy="no-referrer-when-downgrade"
         src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBHurZ4KsBAxkPEwveGc2-odDwscEXUsvY&q={{ servicio.direccion }}">
       </iframe>
@@ -264,107 +264,88 @@
       </div>
     </div>
   </div>
-
-  <!-- Modal para Editar publicación con imagen -->
-  <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editPostModalLabel">Editar publicación</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form enctype="multipart/form-data" method="POST">
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="serviceName" class="form-label">Nombre del servicio:</label>
-                <input type="text" class="form-control" id="serviceName" name="serviceName" value="" required>
-              </div>
-              <div class="col-md-6">
-                <label for="serviceType" class="form-label">Tipo de servicio:</label>
-                <select class="form-select" id="serviceType" name="serviceType" required>
-                  <option value="" disabled selected>Tipo de servicio</option>
-                  <option value="cumpleaños">Cumpleaños</option>
-                  <option value="evento corporativo">Evento Corporativo</option>
-                </select>
-              </div>
+<!-- Modal para Editar publicación con imagen -->
+<div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editPostModalLabel">Editar publicación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form enctype="multipart/form-data" method="POST" action="{% url 'editar_servicio' servicio.id %}">
+          {% csrf_token %}
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="nombre" class="form-label">Nombre del servicio:</label>
+              <input type="text" class="form-control" id="nombre" name="nombre" value="{{ servicio.nombre }}" required>
             </div>
-            <div class="row mb-3">
-              <div class="col-md-3">
-                <label for="street" class="form-label">Calle:</label>
-                <input type="text" class="form-control" id="street" name="street" value="" required>
-              </div>
-              <div class="col-md-3">
-                <label for="exteriorNumber" class="form-label">Número exterior:</label>
-                <input type="text" class="form-control" id="exteriorNumber" name="exteriorNumber" value="" required>
-              </div>
-              <div class="col-md-3">
-                <label for="interiorNumber" class="form-label">Número interior:</label>
-                <input type="text" class="form-control" id="interiorNumber" name="interiorNumber" value="">
-              </div>
-              <div class="col-md-3">
-                <label for="colony" class="form-label">Colonia:</label>
-                <input type="text" class="form-control" id="colony" name="colony" value="" required>
-              </div>
+            <div class="col-md-6">
+              <label for="categoria" class="form-label">Tipo de servicio:</label>
+              <select class="form-select" id="categoria" name="categoria" required>
+                <option value="" disabled>Tipo de servicio</option>
+                <option value="cumpleaños" {% if servicio.categoria == "cumpleaños" %}selected{% endif %}>Cumpleaños</option>
+                <option value="evento corporativo" {% if servicio.categoria == "evento corporativo" %}selected{% endif %}>Evento Corporativo</option>
+              </select>
             </div>
-            <div class="row mb-3">
-              <div class="col-md-3">
-                <label for="postalCode" class="form-label">Código Postal:</label>
-                <input type="text" class="form-control" id="postalCode" name="postalCode" value="" required>
-              </div>
-              <div class="col-md-3">
-                <label for="minPrice" class="form-label">Precio mínimo:</label>
-                <input type="number" class="form-control" id="minPrice" name="minPrice" value="" required>
-              </div>
-              <div class="col-md-3">
-                <label for="maxPrice" class="form-label">Precio máximo:</label>
-                <input type="number" class="form-control" id="maxPrice" name="maxPrice" value="" required>
-              </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label for="calle" class="form-label">Calle:</label>
+              <input type="text" class="form-control" id="calle" name="calle" value="{{ servicio.direccion_calle }}" required>
             </div>
-            <div class="row mb-3">
-              <div class="col-md-12">
-                <label for="description" class="form-label">Información detallada:</label>
-                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-              </div>
+            <div class="col-md-3">
+              <label for="numero_exterior" class="form-label">Número exterior:</label>
+              <input type="text" class="form-control" id="numero_exterior" name="numero_exterior" value="{{ servicio.direccion_numero_exterior }}" required>
             </div>
-            <!-- Campo para agregar la imagen, ahora debajo de Información detallada -->
-            <div class="row mb-3">
-              <div class="col-md-12">
-                <label for="serviceImage" class="form-label">Imagen del servicio:</label>
-                <input type="file" class="form-control" id="serviceImage" name="serviceImage" accept="image/*">
-              </div>
+            <div class="col-md-3">
+              <label for="numero_interior" class="form-label">Número interior:</label>
+              <input type="text" class="form-control" id="numero_interior" name="numero_interior" value="{{ servicio.direccion_numero_interior }}">
             </div>
-            <div class="d-flex justify-content-end">
-              <button type="submit" class="btn btn-primary me-2">Actualizar</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <div class="col-md-3">
+              <label for="colonia" class="form-label">Colonia:</label>
+              <input type="text" class="form-control" id="colonia" name="colonia" value="{{ servicio.direccion_colonia }}" required>
             </div>
-          </form>
-        </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label for="codigo_postal" class="form-label">Código Postal:</label>
+              <input type="text" class="form-control" id="codigo_postal" name="codigo_postal" value="{{ servicio.direccion_codigo_postal }}" required>
+            </div>
+            <div class="col-md-3">
+              <label for="precio_minimo" class="form-label">Precio mínimo:</label>
+              <input type="number" class="form-control" id="precio_minimo" name="precio_minimo" value="{{ servicio.precio_minimo }}" required>
+            </div>
+            <div class="col-md-3">
+              <label for="precio_maximo" class="form-label">Precio máximo:</label>
+              <input type="number" class="form-control" id="precio_maximo" name="precio_maximo" value="{{ servicio.precio_maximo }}" required>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="informacion_detallada" class="form-label">Información detallada:</label>
+              <textarea class="form-control" id="informacion_detallada" name="informacion_detallada" rows="3" required>{{ servicio.informacion_detallada }}</textarea>
+            </div>
+          </div>
+          <!-- Campo para agregar la imagen, ahora debajo de Información detallada -->
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="serviceImage" class="form-label">Imagen del servicio:</label>
+              <input type="file" class="form-control" id="serviceImage" name="serviceImage" accept="image/*">
+            </div>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary me-2">Actualizar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Modal para eliminar publicación -->
-  <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="deletePostModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deletePostModalLabel">Confirmar eliminación</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>¿Está seguro de que desea eliminar este servicio?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-          <form method="POST" action="{% url 'eliminar_publicacion' servicio.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Sí, eliminar</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+
+
 
   <!-- Modal para solicitar presupuesto -->
   <div class="modal fade" id="requestQuoteModal" tabindex="-1" aria-labelledby="requestQuoteModalLabel"
@@ -446,33 +427,29 @@
   <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Para usar las flechas -->
 
   <script>
-    // Script para manejar las solicitudes de presupuesto
+    // Manejo de la solicitud de presupuesto
     document.getElementById('submitSolicitud').addEventListener('click', function (event) {
       event.preventDefault();
-
+  
       // Obtener el formulario
       const form = document.getElementById('solicitudPresupuestoForm');
-
-      // Crear el FormData del formulario
       const formData = new FormData(form);
-
+  
       // Enviar la solicitud AJAX
       fetch(form.action, {
         method: 'POST',
         body: formData,
         headers: {
-          'X-Requested-With': 'XMLHttpRequest',  // Indicamos que es una solicitud AJAX
+          'X-Requested-With': 'XMLHttpRequest',
         },
       })
         .then(response => response.json())
         .then(data => {
           if (data.status === 'success') {
-            // Mostrar mensaje de éxito y cerrar el modal
             alert(data.message);
             const modal = bootstrap.Modal.getInstance(document.getElementById('requestQuoteModal'));
             modal.hide();
           } else {
-            // Mostrar errores en el formulario
             let errors = '';
             for (const [field, messages] of Object.entries(data.errors)) {
               errors += `${field}: ${messages.join(', ')}\n`;
@@ -482,25 +459,69 @@
         })
         .catch(error => console.error('Error:', error));
     });
-  </script>
-
-<script>
-  // Script para mostrar un mensaje a los usuarios proveedores al hacer clic en el botón 'Solicitar presupuesto'
-  document.addEventListener('DOMContentLoaded', function () {
-      // Selecciona el botón solo para usuarios que no son clientes
+  
+    // Mensaje para usuarios proveedores al hacer clic en "Solicitar presupuesto"
+    document.addEventListener('DOMContentLoaded', function () {
       const notClientButton = document.querySelector('.not-client');
-      
       if (notClientButton) {
-          notClientButton.addEventListener('click', function (event) {
-              event.preventDefault();  // Evita cualquier acción predeterminada
-              
-              // Muestra un mensaje de advertencia
-              alert("Solo los clientes pueden realizar una solicitud de presupuesto. Por favor, crea una cuenta como cliente.");
-          });
+        notClientButton.addEventListener('click', function (event) {
+          event.preventDefault();
+          alert("Solo los clientes pueden realizar una solicitud de presupuesto. Por favor, crea una cuenta como cliente.");
+        });
       }
+    });
+  // Manejo de la edición del servicio
+  document.querySelector("#editPostModal form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+ 
+    fetch(form.action, {
+        method: "POST",
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById("editPostModal"));
+        modal.hide();
+
+        // Construye la nueva dirección usando los datos del formulario
+        const calle = document.getElementById("calle").value;
+        const numero_exterior = document.getElementById("numero_exterior").value;
+        const colonia = document.getElementById("colonia").value;
+        const codigo_postal = document.getElementById("codigo_postal").value;
+
+        const nuevaDireccion = `${calle} ${numero_exterior}, ${colonia}, ${codigo_postal} Ciudad Juárez, Chihuahua`;
+
+        // Codifica la dirección para URL
+        const direccionCodificada = encodeURIComponent(nuevaDireccion);
+
+        // Actualiza el src del iframe de Google Maps con la nueva dirección
+        const googleMapIframe = document.getElementById("googleMapIframe");
+        if (googleMapIframe) {
+          googleMapIframe.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBHurZ4KsBAxkPEwveGc2-odDwscEXUsvY&q=${direccionCodificada}`;
+        } else {
+          console.error("No se encontró el iframe de Google Maps con el ID 'googleMapIframe'.");
+        }
+      } else {
+        let errorMsg = "Error al actualizar el servicio.";
+        if (data.errors) {
+          errorMsg += "\nDetalles del error:\n";
+          for (const [field, messages] of Object.entries(data.errors)) {
+            errorMsg += `${field}: ${messages.join(", ")}\n`;
+          }
+        }
+        alert(errorMsg);
+      }
+    })
+    .catch(error => {
+      console.error("Error en la solicitud:", error);
+      alert("Error en la solicitud: " + error.message);
+    });
   });
   </script>
-
+  
 </body>
 
 </html>
