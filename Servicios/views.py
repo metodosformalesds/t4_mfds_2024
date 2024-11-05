@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import PublicarServicioForm, MultipleImagenesServiciosForm
+from Solicitudes.forms import SolicitudPresupuestoClienteForm  # Importa el formulario desde la aplicación 'Solicitudes'
 from .models import Imagenes_Servicios, Servicio
+from Notificaciones.models import Notificacion
 from PIL import Image
 import os
 
@@ -26,9 +28,20 @@ def service_list(request):
 
 def servicios_sin_login(request):
     # Obtener todos los servicios de la base de datos
-    print("Template cargado correctamente")
     servicios = Servicio.objects.all()
-    return render(request, 'servicios_sin_login.html', {'servicios': servicios})
+    
+    # Verificar si el usuario ha iniciado sesión
+    if request.user.is_authenticated:
+        # Obtener todas las notificaciones del usuario
+        notificaciones = Notificacion.objects.filter(user=request.user, leido=False)
+    else:
+        # Si no está autenticado, no se cargan notificaciones
+        notificaciones = None
+    
+    return render(request, 'servicios_sin_login.html', {
+        'servicios': servicios,
+        'notificaciones': notificaciones
+    })
 
 
 def publicar_servicio(request):
@@ -106,8 +119,33 @@ def publicacion_servicio(request, id):
     try:
         servicio = Servicio.objects.get(id=id)
     except Servicio.DoesNotExist:
-        return redirect('servicios_sin_login')  # Redirige o muestra una página de error si no se encuentra el servicio
+        return redirect('servicios_sin_login')  # Redirige si no se encuentra el servicio
 
     imagenes = Imagenes_Servicios.objects.filter(servicio=servicio)
     
-    return render(request, 'publicacion_servicio.html', {'servicio': servicio, 'imagenes': imagenes})
+    # Crea una instancia vacía del formulario para pasar al contexto
+    form = SolicitudPresupuestoClienteForm()
+    
+    return render(request, 'publicacion_servicio.html', {
+        'servicio': servicio, 
+        'imagenes': imagenes,
+        'form': form
+    })
+
+def eliminar_publicacion(request, id):
+    try:
+        servicio = Servicio.objects.get(id=id)
+    except Servicio.DoesNotExist:
+        return redirect('servicios_sin_login')  # Redirige si no se encuentra el servicio
+
+    imagenes = Imagenes_Servicios.objects.filter(servicio=servicio)
+    
+    if request.method == 'POST':
+        
+        for imagen in imagenes: #Recorre todas las imagenes del servicio
+            if imagen.imagen and os.path.isfile(imagen.imagen.path):
+                os.remove(imagen.imagen.path) #Elimina la imagen de la carpeta media
+            imagen.delete() #Elimina la imagen de la base de datos
+            
+        servicio.delete() # Elimina el servicio de la base de datos
+        return redirect('servicios_sin_login')

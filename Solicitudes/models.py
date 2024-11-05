@@ -12,4 +12,4 @@ class Solicitud_Presupuesto(models.Model):
     personas = models.IntegerField()
     direccion = models.CharField(max_length=255)
     status = models.CharField(max_length=20, choices=[('pendiente', 'Pendiente'), ('aceptada', 'Aceptada'), ('rechazada', 'Rechazada')])
-    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    precio = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)

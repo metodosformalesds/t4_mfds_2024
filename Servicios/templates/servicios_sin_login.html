@@ -169,9 +169,12 @@
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
           </li>
+          {% if user.is_authenticated %}
           <li class="nav-item">
             <button class="btn btn-notifications ms-2" onclick="toggleNotifications()">
               <img src="{% static 'images/icono_notificacion.jpg' %}" style="width: 25px; height: auto;">
+              {% endif %}
+
               <!-- Icono del botón -->
             </button>
           </li>
@@ -193,23 +196,149 @@
   <div id="notificationDropdown" class="notification-dropdown">
     <button class="btn-close" onclick="toggleNotifications()">&times;</button>
     <h5>Notificaciones</h5>
+
+    {% for notificacion in notificaciones %}
+    
+    {% if notificacion.tipo_notificacion == 'Solicitud de Presupuesto' %}
     <div class="notification">
-      <h5>Solicitud de presupuesto</h5>
-      <p>(Nombre del servicio)</p>
-      <p>(Nombre del proveedor)</p>
-      <button class="btn-details">Ver detalles</button>
+      <p>{{ notificacion.tipo_notificacion }}</p>
+      <h5>{{ notificacion.solicitud.cliente.nombre_completo }}</h5>
+      <h5>Solicita:</h5>
+      <h5> {{ notificacion.solicitud.servicio.nombre }} </h5>
+      <br>
+      <button class="btn-details" data-bs-toggle="modal" data-bs-target="#detailsModal"
+        onclick="loadSolicitudDetails('{{ notificacion.solicitud.id }}')">Ver detalles</button>
     </div>
+    {% elif notificacion.tipo_notificacion == 'Respuesta de Solicitud' %}
     <div class="notification">
-      <h5>Solicitud de presupuesto</h5>
-      <p>(Nombre del servicio)</p>
-      <p>(Nombre del proveedor)</p>
-      <button class="btn-details">Ver detalles</button>
+      <p>{{ notificacion.tipo_notificacion }}</p>
+      <h5> {{ notificacion.solicitud.servicio.nombre }} </h5>
+      <h6> {{ notificacion.solicitud.proveedor.nombre_empresa }} </h6>
+      <br>
+      <button class="btn-details" data-bs-toggle="modal" data-bs-target="#answerModal"
+        onclick="loadSolicitudDetails('{{ notificacion.solicitud.id }}', true)">Ver detalles</button>
     </div>
-    <div class="notification">
-      <h5>Solicitud de presupuesto</h5>
-      <p>(Nombre del servicio)</p>
-      <p>(Nombre del proveedor)</p>
-      <button class="btn-details">Ver detalles</button>
+    {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Modal para Ver Detalles de la Solicitud -->
+  <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailsModalLabel">Solicitud de servicio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <h3 id="serviceName">Nombre del servicio</h3>
+          <div>
+            <span style="font-size: 20px;">Solicitado por:</span>
+            <span id="clientName" style="font-size: 20px;">Nombre del cliente</span>
+          </div>
+          <br>
+          <h6>Información del evento:</h6>
+          <form>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label for="guestCount" class="form-label">Cantidad de invitados:</label>
+                <input type="number" class="form-control" id="guestCount" readonly>
+              </div>
+              <div class="col-md-3">
+                <label for="eventDuration" class="form-label">Duración del evento (horas):</label>
+                <input type="number" class="form-control" id="eventDuration" readonly>
+              </div>
+              <div class="col-md-3">
+                <label for="eventDate" class="form-label">Fecha:</label>
+                <input type="date" class="form-control" id="eventDate" readonly>
+              </div>
+              <div class="col-md-3">
+                <label for="eventType" class="form-label">Tipo de evento:</label>
+                <input type="text" class="form-control" id="eventType" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <label for="eventAddress" class="form-label">Dirección:</label>
+                <input type="text" class="form-control" id="eventAddress" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="contractPrice" class="form-label">Precio de contratación:</label>
+                <input type="number" class="form-control" id="contractPrice" required>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-primary me-2 " onclick="responderSolicitud()">Aceptar</button>
+              <button type="button" class="btn btn-primary me-2 " onclick="rechazarSolicitud()">Rechazar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Ver la Respuesta de Solicitud -->
+  <div class="modal fade" id="answerModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailsModalLabel">Solicitud de servicio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <h3 id="serviceNameAnswer">Nombre del servicio</h3>
+          <p id="providerNameAnswer" >Nombre del proveedor</p>
+          <h6>Información del evento:</h6>
+          <form>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label class="form-label">Cantidad de invitados:</label>
+                <input type="number" class="form-control" id="guestCountAnswer" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Duración del evento (horas):</label>
+                <input type="number" class="form-control" id="eventDurationAnswer" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Fecha:</label>
+                <input type="date" class="form-control" id="eventDateAnswer" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Tipo de evento:</label>
+                <input type="text" class="form-control" id="eventTypeAnswer" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <label class="form-label">Dirección:</label>
+                <input type="text" class="form-control" id="eventAddressAnswer" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Precio de contratación:</label>
+                <input type="number" class="form-control" id="contractPriceAnswer" readonly>
+              </div>
+
+            </div>
+            <p>Estado: Pendiente</p>
+
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-primary " style="margin-right: 20px;">Contratar</button>
+              <button type="button" class="btn btn-primary ">Rechazar</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -264,13 +393,12 @@
                     <div class="rating">
                       <div class="rating">
                         {% for i in "12345" %}
-                          {% if forloop.counter <= servicio.promedio_calificacion %} 
-                            <span class="estrella">★</span>
+                        {% if forloop.counter <= servicio.promedio_calificacion %} <span class="estrella">★</span>
                           {% else %}
-                            <span class="estrella">☆</span>
+                          <span class="estrella">☆</span>
                           {% endif %}
-                        {% endfor %}
-                        <span> {{servicio.promedio_calificacion}} </span>
+                          {% endfor %}
+                          <span> {{servicio.promedio_calificacion}} </span>
                       </div>
                     </div>
                     <div class="price">Desde ${{ servicio.precio_minimo }}</div>
@@ -326,13 +454,12 @@
                     <div class="service-info">
                       <div class="rating">
                         {% for i in "12345" %}
-                          {% if forloop.counter <= servicio.promedio_calificacion %} 
-                            <span class="estrella">★</span>
+                        {% if forloop.counter <= servicio.promedio_calificacion %} <span class="estrella">★</span>
                           {% else %}
-                            <span class="estrella">☆</span>
+                          <span class="estrella">☆</span>
                           {% endif %}
-                        {% endfor %}
-                        <span> {{servicio.promedio_calificacion}} </span>
+                          {% endfor %}
+                          <span> {{servicio.promedio_calificacion}} </span>
                       </div>
                       <div class="price">Desde ${{ servicio.precio_minimo }}</div>
                     </div>
@@ -353,12 +480,12 @@
   <!-- Pie de página -->
   <footer>
     <div class="container text-center">
-        <p>&copy; 2024 DecoRent. Todos los derechos reservados.</p>
-        <ul class="list-inline">
-            <li class="list-inline-item"><a href="#terminos">Términos de Servicio</a></li>
-            <li class="list-inline-item"><a href="#privacidad">Política de Privacidad</a></li>
-            <li class="list-inline-item"><a href="#contacto">Contacto</a></li>
-        </ul>
+      <p>&copy; 2024 DecoRent. Todos los derechos reservados.</p>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href="#terminos">Términos de Servicio</a></li>
+        <li class="list-inline-item"><a href="#privacidad">Política de Privacidad</a></li>
+        <li class="list-inline-item"><a href="#contacto">Contacto</a></li>
+      </ul>
     </div>
   </footer>
 
@@ -370,6 +497,106 @@
     function toggleNotifications() {
       var dropdown = document.getElementById('notificationDropdown');
       dropdown.style.display = dropdown.style.display === 'none' || dropdown.style.display === '' ? 'block' : 'none';
+    }
+
+    function updateClientModalContent(serviceName, providerName) {
+      document.getElementById("clientDetailsModalLabel").textContent = serviceName;
+      // Código para actualizar el modal del cliente
+    }
+
+    function updateModalContent(serviceName, clientName) {
+      document.getElementById("detailsModalLabel").textContent = serviceName;
+      // Código para actualizar el modal del proveedor
+    }
+
+    function loadSolicitudDetails(solicitudId, isAnswerModal = false) {
+      // Define el prefijo para diferenciar los IDs de los modales
+      const modalPrefix = isAnswerModal ? 'Answer' : '';
+
+      // Asigna el ID de la solicitud para que se pueda acceder en la funcion responderSolicitud()
+      document.getElementById("detailsModal").setAttribute("data-solicitud-id", solicitudId);
+
+      // Realiza una solicitud AJAX para obtener los detalles de la solicitud
+      fetch(`/Solicitudes/obtener_solicitud/${solicitudId}/`)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // Asigna los valores a los elementos correctos, usando el prefijo si es el segundo modal
+          document.getElementById("serviceName" + modalPrefix).textContent = data.servicio;
+          document.getElementById("providerNameAnswer").textContent = data.proveedor;
+          document.getElementById("clientName").textContent = data.cliente;
+          document.getElementById("guestCount" + modalPrefix).value = data.personas;
+          document.getElementById("eventDuration" + modalPrefix).value = data.duracion;
+          document.getElementById("eventDate" + modalPrefix).value = data.fecha;
+          document.getElementById("eventType" + modalPrefix).value = data.tipo_evento;
+          document.getElementById("eventAddress" + modalPrefix).value = data.direccion;
+
+          // Actualiza el precio si existe
+          document.getElementById("contractPrice" + modalPrefix).value = data.precio ? data.precio : '';
+        })
+        .catch(error => console.error('Error al cargar los detalles de la solicitud:', error));
+    }
+
+    function responderSolicitud() {
+      const solicitudId = document.getElementById("detailsModal").getAttribute("data-solicitud-id");
+      const precio = document.getElementById("contractPrice").value;
+
+      fetch(`/Solicitudes/responder_solicitud/${solicitudId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')  // Para enviar el token CSRF
+        },
+        body: JSON.stringify({ precio: precio })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            alert('Solicitud respondida exitosamente');
+            location.reload();  // Recarga la página para actualizar las notificaciones
+          } else {
+            alert('Error al responder la solicitud');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function rechazarSolicitud() {
+      const solicitudId = document.getElementById("detailsModal").getAttribute("data-solicitud-id");
+
+      fetch(`/Solicitudes/rechazar_solicitud/${solicitudId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')  // Para enviar el token CSRF
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            alert('Solicitud rechazada exitosamente');
+            location.reload();  // Recarga la página para actualizar las notificaciones
+          } else {
+            alert('Error al rechazar la solicitud');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Función para obtener el token CSRF
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
     }
   </script>
 </body>
