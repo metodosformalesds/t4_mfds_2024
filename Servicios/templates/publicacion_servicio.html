@@ -283,9 +283,12 @@
             <div class="col-md-6">
               <label for="categoria" class="form-label">Tipo de servicio:</label>
               <select class="form-select" id="categoria" name="categoria" required>
-                <option value="" disabled>Tipo de servicio</option>
-                <option value="cumpleaños" {% if servicio.categoria == "cumpleaños" %}selected{% endif %}>Cumpleaños</option>
-                <option value="evento corporativo" {% if servicio.categoria == "evento corporativo" %}selected{% endif %}>Evento Corporativo</option>
+                <option value="Entretenimiento" {% if servicio.categoria == "Entretenimiento" %}selected{% endif %}>Entretenmiento</option>
+                <option value="Equipamiento_Mobiliario" {% if servicio.categoria == "Equipamiento_Mobiliario" %}selected{% endif %}>Equipamiento y mobiliario</option>
+                <option value="Espacios_Eventos" {% if servicio.categoria == "Espacios_Eventos" %}selected{% endif %}>Espacios para eventos</option>
+                <option value="Catering" {% if servicio.categoria == "Catering" %}selected{% endif %}>Catering</option>
+                <option value="Fotografia" {% if servicio.categoria == "Fotografia" %}selected{% endif %}>Fotografía</option>
+                <option value="Decoracion" {% if servicio.categoria == "Decoracion" %}selected{% endif %}>Decoración</option>
               </select>
             </div>
           </div>

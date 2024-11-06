@@ -11,29 +11,15 @@ from .forms import PublicarServicioForm
 from django.http import JsonResponse
 from django.contrib import messages
 
-def service_list(request):    
-    categoria_seleccionada = request.GET.get('categoria')  # Captura la categoría seleccionada de la URL
-    
-    # Obtén todos los servicios
-    services = Servicio.objects.all()
-
-    # Filtra los servicios por categoría si se selecciona una
-    if categoria_seleccionada:
-        services = services.filter(categoria=categoria_seleccionada)
-
-    # Obtén todas las categorías únicas para el combobox
-    categorias = Servicio.objects.values_list('categoria', flat=True).distinct()
-
-    return render(request, 'service_list.html', {
-        'servicios': services,
-        'categorias': categorias,
-        'categoria_seleccionada': categoria_seleccionada
-    })
-
-
 def servicios_sin_login(request):
-    # Obtener todos los servicios de la base de datos
-    servicios = Servicio.objects.all()
+    # Obtener la categoría seleccionada desde la solicitud GET
+    categoria_seleccionada = request.GET.get('categoria')
+    
+    # Filtrar servicios según la categoría seleccionada o mostrar todos si no se selecciona ninguna
+    if categoria_seleccionada and categoria_seleccionada != "Todas las categorias":
+        servicios = Servicio.objects.filter(categoria__iexact=categoria_seleccionada)
+    else:
+        servicios = Servicio.objects.all()
     
     # Verificar si el usuario ha iniciado sesión
     if request.user.is_authenticated:
@@ -45,7 +31,8 @@ def servicios_sin_login(request):
     
     return render(request, 'servicios_sin_login.html', {
         'servicios': servicios,
-        'notificaciones': notificaciones
+        'notificaciones': notificaciones,
+        'categoria_seleccionada': categoria_seleccionada
     })
 
 
