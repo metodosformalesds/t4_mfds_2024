@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from .views import service_list
+
 
 urlpatterns = [
     path('', views.servicios_sin_login, name='servicios_sin_login'),

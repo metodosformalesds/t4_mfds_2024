@@ -198,7 +198,7 @@
     <h5>Notificaciones</h5>
 
     {% for notificacion in notificaciones %}
-    
+
     {% if notificacion.tipo_notificacion == 'Solicitud de Presupuesto' %}
     <div class="notification">
       <p>{{ notificacion.tipo_notificacion }}</p>
@@ -294,7 +294,7 @@
 
         <div class="modal-body">
           <h3 id="serviceNameAnswer">Nombre del servicio</h3>
-          <p id="providerNameAnswer" >Nombre del proveedor</p>
+          <p id="providerNameAnswer">Nombre del proveedor</p>
           <h6>Información del evento:</h6>
           <form>
             <div class="row mb-3">
@@ -346,22 +346,21 @@
   <div class="container mt-5">
     <h2 class="text-center">Nuestros Servicios</h2>
 
-    
-
-    <!-- Combobox de categorías -->
-<div class="mb-3">
-  <form method="get" action="{% url 'service_list' %}">
-    <label for="categoria">Filtrar por categoría:</label>
-    <select name="categoria" id="categoria" class="form-select" aria-label="Selecciona una categoría" style="width: 270px; margin: 10px 0;" onchange="this.form.submit()">
-      <option value="">Todas las categorías</option>
-      {% for categoria in categorias %}
-        <option value="{{ categoria }}" {% if categoria == categoria_seleccionada %}selected{% endif %}>
-          {{ categoria }}
-        </option>
-      {% endfor %}
-    </select>
-  </form>
-</div>
+    <!-- Formulario para filtrar servicios por categoría -->
+    <form method="GET" action="{% url 'servicios_sin_login' %}">
+      <div class="mb-3">
+        <label for="categoria">Filtrar por categoría:</label>
+        <select name="categoria" class="form-select" aria-label="Selecciona una categoría" style="width: 270px; margin: 10px 0;" onchange="this.form.submit()">
+          <option {% if not categoria_seleccionada or categoria_seleccionada == 'Todas las categorias' %}selected{% endif %}>Todas las categorias</option>
+          <option value="Entretenimiento" {% if categoria_seleccionada == 'Entretenimiento' %}selected{% endif %}>Entretenimiento</option>
+          <option value="Equipamiento_Mobiliario" {% if categoria_seleccionada == 'Equipamiento_Mobiliario' %}selected{% endif %}>Equipamiento y mobiliario</option>
+          <option value="Espacios_Eventos" {% if categoria_seleccionada == 'Espacios_Eventos' %}selected{% endif %}>Espacios para eventos</option>
+          <option value="Catering" {% if categoria_seleccionada == 'Catering' %}selected{% endif %}>Catering</option>
+          <option value="Fotografia" {% if categoria_seleccionada == 'Fotografia' %}selected{% endif %}>Fotografía</option>
+          <option value="Decoracion" {% if categoria_seleccionada == 'Decoracion' %}selected{% endif %}>Decoración</option>
+        </select>
+      </div>
+    </form>
 
 
     <!-- Acordeón para categorías -->
