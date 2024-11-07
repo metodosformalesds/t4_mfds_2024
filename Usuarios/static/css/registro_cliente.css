@@ -22,7 +22,7 @@
 }
 
 .register-form h2 {
-    color: var(--font-family);
+    color: #1d1d1d;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -93,6 +93,13 @@
     text-decoration: none;
 }
 
+body {
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+    min-height: 100vh; /* Asegura que el cuerpo ocupe toda la altura de la ventana */
+    margin: 0; /* Elimina el margen por defecto */
+}
+
 .register-container {
     display: flex;
     justify-content: center; /* Centrar horizontalmente */
@@ -101,7 +108,7 @@
     height: calc(100vh - 100px); /* Ocupar toda la altura de la ventana menos un margen */
     margin-top: 80px; /* Espacio superior para bajar la sección */
     margin-bottom: 60px; /* Aumentar el margen inferior para separar del footer */
-    background-color: #f8f9fa; /* Fondo claro para el contraste */
+    background-color: #ffffff; /* Fondo claro para el contraste */
 }
 
 .register-btn {

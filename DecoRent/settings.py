@@ -155,7 +155,7 @@ AUTHENTICATION_BACKENDS = [
 # Define el campo email como el identificador para la autenticación
 AUTH_USER_MODEL = 'Usuarios.User'  # Asegúrate de que apunte a tu modelo personalizado
 
-SITE_ID = 3 #Se movio el ID
+SITE_ID = 4 #Se movio el ID
 
 
 SOCIALACCOUNT_PROVIDERS = {

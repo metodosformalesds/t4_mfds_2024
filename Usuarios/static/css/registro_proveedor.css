@@ -12,12 +12,12 @@
 }
 
 .register-form {
+    margin-top: 225px;
     background-color: #eaeaea;
     padding: 40px;
-    border-radius: 10px;
+    border-radius: 30px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     width: 600px;
-    margin-top: 250px;
 }
 
 .register-form h2 {
@@ -29,11 +29,13 @@
 .register-form input[type="text"],
 .register-form input[type="email"],
 .register-form input[type="password"] {
-    width: 100%;
+    display: block;
+    margin: 0 auto;
+    width: 75%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 90px;
     font-size: 16px;
 }
 
@@ -41,17 +43,19 @@
     font-size: 14px;
     margin-bottom: 10px;
     display: block;
-    color: #333;
+    color: #000000;
     text-align: center;
 }
 
 .register-form button.register-btn {
-    background-color: #6a008a;
+    display: block;
+    margin: 0 auto;
+    background-color: #B12A76;
     color: #fff;
     padding: 10px;
-    width: 100%;
+    width: 40%;
     border: none;
-    border-radius: 5px;
+    border-radius: 90px;
     font-size: 16px;
     cursor: pointer;
 }
@@ -86,7 +90,7 @@
 }
 
 .register-form a {
-    color: #6a008a;
+    color: #B12A76;
     text-decoration: none;
 }
 
@@ -104,7 +108,7 @@ body {
     flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
     height: 100vh; /* Ocupar toda la altura de la ventana */
     margin-top: -200px; /* Mover hacia arriba el formulario */
-    background-color: #f8f9fa; /* Fondo claro para el contraste */
+    background-color: #ffffff;/* Fondo claro para el contraste */
     flex: 1; /* Permite que esta sección ocupe el espacio restante */
 }
 
