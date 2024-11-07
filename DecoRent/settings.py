@@ -159,6 +159,7 @@ AUTHENTICATION_BACKENDS = [
 # Define el campo email como el identificador para la autenticación
 AUTH_USER_MODEL = 'Usuarios.User'  # Asegúrate de que apunte a tu modelo personalizado
 
+#En caso de cambiar el ID para pruebas locales, volverlo a cambiar antes de hacer push al repositorio
 SITE_ID = 4 #Se movio el ID
 
 #API aws reko
