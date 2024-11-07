@@ -134,7 +134,14 @@ def publicacion_servicio(request, id):
     return render(request, 'publicacion_servicio.html', {
         'servicio': servicio, 
         'imagenes': imagenes,
-        'form': form
+        'form': form,
+        'direccion': {
+            'calle': servicio.direccion.split("%20")[0],
+            'numero_exterior': servicio.direccion.split("%20")[1],
+            'numero_interior': servicio.direccion.split("%20")[2] if " " in servicio.direccion.split("%20")[2] else " ",
+            'colonia': servicio.direccion.split("%20")[3],
+            'codigo_postal': servicio.direccion.split("%20")[4],
+        },
     })
 
 def eliminar_publicacion(request, id):
@@ -168,6 +175,24 @@ def editar_servicio(request, servicio_id):
             # Procesa las imágenes nuevas
             nuevas_imagenes = request.FILES.getlist('serviceImage')
             if nuevas_imagenes:
+                # Valida que no sean más de 5 archivos
+                if len(nuevas_imagenes) > 5:
+                    return JsonResponse({'success': False, 'error': 'No puedes cargar más de 5 imágenes.'})
+
+                valid_extensions = ['jpg', 'jpeg', 'png', 'gif']  # Extensiones de imagen válidas
+                for file in nuevas_imagenes:
+                    # Validar la extensión
+                    extension = os.path.splitext(file.name)[1][1:].lower()
+                    if extension not in valid_extensions:
+                        return JsonResponse({'success': False, 'error': f"El archivo {file.name} no tiene una extensión válida. Las extensiones permitidas son: {', '.join(valid_extensions)}"})
+
+                    # Verificar si el archivo es realmente una imagen
+                    try:
+                        image = Image.open(file)
+                        image.verify()  # Verificar si el archivo realmente es una imagen
+                    except (IOError, SyntaxError):
+                        return JsonResponse({'success': False, 'error': f"El archivo {file.name} no es una imagen válida."})
+                
                 # Borra las imágenes antiguas
                 Imagenes_Servicios.objects.filter(servicio=servicio).delete()
                 
@@ -179,3 +204,5 @@ def editar_servicio(request, servicio_id):
             return JsonResponse({'success': True})
         else:
             return JsonResponse({'success': False, 'errors': form.errors})
+
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
