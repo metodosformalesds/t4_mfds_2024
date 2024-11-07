@@ -1,7 +1,19 @@
+import boto3
+from django.conf import settings
 from django.shortcuts import render, redirect
 from .forms import RegistroClienteForm, RegistroProveedorForm, InicioSesionForm
 from .models import Cliente, Proveedor
 from django.contrib.auth import login, logout, authenticate
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
+
+rekognition_client = boto3.client(
+    'rekognition',
+    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+    region_name=settings.AWS_REGION_NAME
+)
 
 def inicio(request):
     """Renderiza la página de inicio.
@@ -30,49 +42,96 @@ def acerca_de(request):
     return render(request, 'acerca_de.html')
 
 def registro_cliente(request):
-    # Si la solicitud es de tipo POST quiere decir que se recibieron datos
+ # Si la solicitud es de tipo POST quiere decir que se recibieron datos
     if request.method == 'POST':
-        form = RegistroClienteForm(request.POST)
+        form = RegistroClienteForm(request.POST, request.FILES)
         if form.is_valid():
-            # Obtener el nombre completo
-            nombre_completo = form.cleaned_data['nombre_completo']
+            # Guardar las imágenes temporalmente
+            foto_identificacion = form.cleaned_data['foto_identificacion']
+            foto_rostro = form.cleaned_data['foto_rostro']
+            identificacion_path = default_storage.save(f'temp/{foto_identificacion.name}', foto_identificacion)
+            rostro_path = default_storage.save(f'temp/{foto_rostro.name}', foto_rostro)
+
+            # Leer las imágenes en formato binario para Rekognition
+            with default_storage.open(identificacion_path, 'rb') as id_img, default_storage.open(rostro_path, 'rb') as rostro_img:
+                identificacion_bytes = id_img.read()
+                rostro_bytes = rostro_img.read()
                 
-            # Guarda el nuevo usuario en la tabla User
-            user = form.save()
-            
-            # Guarda el nuevo usuario en la tabla User Cliente
-            Cliente.objects.create(user=user, nombre_completo=nombre_completo)  # Crea el cliente asociado al usuario
-            
-            # Inicia sesión automáticamente usando el backend personalizado
-            login(request, user, backend='Usuarios.backends.EmailBackend')
-            
-            # Envia a la pantalla de servicios
-            return redirect('servicios_sin_login')
-    else: # En el caso contrario seria una solicitud GET en la que solo mostramos la pagina
+            # Comparación de rostros con Rekognition
+            try:
+                # Llamada a Rekognition para comparar las caras
+                response = rekognition_client.compare_faces(
+                    SourceImage={'Bytes': identificacion_bytes},
+                    TargetImage={'Bytes': rostro_bytes},
+                    SimilarityThreshold=90  # Establece el umbral de similitud deseado
+                )
+
+                # Verificar si se encontró una coincidencia
+                if response['FaceMatches']:
+                    # Coincidencia exitosa, continuar con el registro del usuario
+                    user = form.save()
+                    nombre_completo = form.cleaned_data['nombre_completo']
+                    Cliente.objects.create(user=user, nombre_completo=nombre_completo)
+                    login(request, user, backend='Usuarios.backends.EmailBackend')
+                    return redirect('servicios_sin_login')
+                else:
+                    form.add_error(None, "Las fotos no coinciden. Verifica que ambas fotos sean claras y correspondan a la misma persona.")
+                    
+                # Eliminar los archivos temporales después de usarlos
+                default_storage.delete(identificacion_path)
+                default_storage.delete(rostro_path)
+            except Exception as e:
+                form.add_error(None, f"Error al procesar las imágenes. Asegúrate de que las fotos sean claras y correspondan a la misma persona. Error")
+    else:
         form = RegistroClienteForm()
-        
+
     return render(request, 'registro_cliente.html', {'form': form})
 
 def registro_proveedor(request):
     # Si la solicitud es de tipo POST quiere decir que se recibieron datos
     if request.method == 'POST':
-        form = RegistroProveedorForm(request.POST)
+        form = RegistroProveedorForm(request.POST, request.FILES)
         if form.is_valid():
-            # Obtener el nombre de la empresa
             nombre_empresa = form.cleaned_data['nombre_empresa']
-                
-            # Guarda el nuevo usuario en la tabla User
-            user = form.save() 
             
-            # Crear una entrada en la tabla Proveedor
-            Proveedor.objects.create(user=user, nombre_empresa=nombre_empresa, clabe=form.cleaned_data['clabe'])  # Crea el proveedor asociado al usuario
-            
-            # Inicia sesión automáticamente usando el backend personalizado
-            login(request, user, backend='Usuarios.backends.EmailBackend')
-            
-            # Envia a la pantalla de servicios
-            return redirect('servicios_sin_login')
-    else: # En el caso contrario seria una solicitud GET en la que solo mostramos la pagina
+            # Obtener las fotos cargadas
+            foto_identificacion = request.FILES['foto_identificacion']
+            foto_rostro = request.FILES['foto_rostro']
+
+            # Leer el contenido de las imágenes para Rekognition
+            identificacion_bytes = foto_identificacion.read()
+            rostro_bytes = foto_rostro.read()
+
+            # Comparación de rostros con Rekognition
+            try:
+                response = rekognition_client.compare_faces(
+                    SourceImage={'Bytes': identificacion_bytes},
+                    TargetImage={'Bytes': rostro_bytes},
+                    SimilarityThreshold=90  # Puedes ajustar el umbral de similitud
+                )
+
+                # Verificar si se encontró una coincidencia
+                if response['FaceMatches']:
+                    # Guardar el usuario en la base de datos
+                    user = form.save()
+                    
+                    # Crear el proveedor asociado al usuario
+                    Proveedor.objects.create(
+                        user=user, 
+                        nombre_empresa=nombre_empresa, 
+                        clabe=form.cleaned_data['clabe']
+                    )
+                    
+                    # Iniciar sesión automáticamente
+                    login(request, user, backend='Usuarios.backends.EmailBackend')
+                    
+                    # Redirigir a la pantalla de servicios
+                    return redirect('servicios_sin_login')
+                else:
+                    form.add_error(None, "La verificación de identidad falló. Asegúrate de que las fotos coincidan.")
+            except Exception as e:
+                form.add_error(None, f"Error al procesar las imágenes. Asegúrate de que las fotos sean claras y correspondan a la misma persona. Error")
+    else:
         form = RegistroProveedorForm()
         
     return render(request, 'registro_proveedor.html', {'form': form})

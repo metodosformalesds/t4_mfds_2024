@@ -15,9 +15,9 @@
 .login-form {
     background-color: #eaeaea;
     padding: 40px;
-    border-radius: 40px;
+    border-radius: 30px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    width: 800px;
+    width: 600px;
 }
 
 .login-form h2 {
@@ -28,7 +28,7 @@
 
 .login-form input[type="email"],
 .login-form input[type="password"] {
-    width: 70%;
+    width: 75%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -51,12 +51,12 @@
     margin-bottom: 10px;
     margin-top: 10px;
     display: block;
-    color: #333;
+    color: #000000;
     text-align: center;
 }
 
 .login-form button.login-btn {
-    background-color: #962b6b;
+    background-color: #B12A76;
     color: #fff;
     padding: 10px;
     width: 60%;
@@ -72,6 +72,16 @@
 .login-form .google-login {
     text-align: center;
     margin-top: 50px;
+}
+
+.login-form p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.login-form a {
+    color: #B12A76;
+    text-decoration: none;
 }
 
 .google-btn {
@@ -93,18 +103,24 @@
     margin-right: 10px;
 }
 
+body {
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+    min-height: 100vh; /* Asegura que el cuerpo ocupe toda la altura de la ventana */
+    margin: 0; /* Elimina el margen por defecto */
+}
 .login-container {
     display: flex;
     justify-content: center; /* Centrar horizontalmente */
     align-items: center; /* Centrar verticalmente */
     flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
-    margin-top: 80px; /* Espacio superior para bajar la sección */
+    margin-top: -20px; /* Espacio superior para bajar la sección */
     margin-bottom: 40px; /* Aumentar el margen inferior para separar del footer */
-    background-color: #f8f9fa; /* Fondo claro para el contraste */
+    background-color: #ffffff; /* Fondo claro para el contraste */
 }
 .login-form {
     width: 100%; /* Asegura que el formulario ocupe todo el ancho */
-    max-width: 700px; /* Cambiado a 600px para mayor ancho del formulario */
+    max-width: 600px; /* Cambiado a 600px para mayor ancho del formulario */
 }
 .login-btn {
     width: 100%; /* Asegura que el botón ocupe todo el ancho */
@@ -121,7 +137,7 @@
 }
 .google-login, .apple-login, .facebook-login {
     margin-top: 10px; /* Espacio encima del botón de Google */
-    padding-left: 110px; /* Espacio para mover los botones hacia la derecha */
+    padding-left: 70px; /* Espacio para mover los botones hacia la derecha */
 }
 .social-btn {
     margin: 10px 0; /* Espacio vertical entre los botones */

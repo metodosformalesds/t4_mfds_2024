@@ -11,7 +11,7 @@ from .forms import PublicarServicioForm
 from django.http import JsonResponse
 from django.contrib import messages
 
-def service_list(request):    
+def service_list(request):
     categoria_seleccionada = request.GET.get('categoria')  # Captura la categoría seleccionada de la URL
     
     # Obtén todos los servicios
@@ -134,7 +134,14 @@ def publicacion_servicio(request, id):
     return render(request, 'publicacion_servicio.html', {
         'servicio': servicio, 
         'imagenes': imagenes,
-        'form': form
+        'form': form,
+        'direccion': {
+            'calle': servicio.direccion.split("%20")[0],
+            'numero_exterior': servicio.direccion.split("%20")[1],
+            'numero_interior': servicio.direccion.split("%20")[2] if " " in servicio.direccion.split("%20")[2] else " ",
+            'colonia': servicio.direccion.split("%20")[3],
+            'codigo_postal': servicio.direccion.split("%20")[4],
+        },
     })
 
 def eliminar_publicacion(request, id):
@@ -156,7 +163,7 @@ def eliminar_publicacion(request, id):
         return redirect('servicios_sin_login')
     
     
-# codigo para editar publicacion 
+# Código para editar publicación
 def editar_servicio(request, servicio_id):
     servicio = get_object_or_404(Servicio, id=servicio_id)
     
@@ -164,10 +171,46 @@ def editar_servicio(request, servicio_id):
         form = PublicarServicioForm(request.POST, request.FILES, instance=servicio)
         if form.is_valid():
             servicio = form.save(commit=False)
-            
-            # Procesa las imágenes nuevas
+
+            # Actualiza la dirección
+            servicio.calle = request.POST.get('calle')
+            servicio.numero_exterior = request.POST.get('numero_exterior')
+            servicio.numero_interior = request.POST.get('numero_interior')
+            servicio.colonia = request.POST.get('colonia')
+            servicio.codigo_postal = request.POST.get('codigo_postal')
+
+            # Construye la nueva dirección en formato URL para Google Maps
+            direccion = f"{servicio.calle}%20{servicio.numero_exterior}%20{servicio.numero_interior},%20{servicio.colonia},%20{servicio.codigo_postal}%20Ciudad%20Juárez,%20Chih."
+            servicio.direccion = direccion
+
+            # Procesa las nuevas imágenes si se cargaron
             nuevas_imagenes = request.FILES.getlist('serviceImage')
             if nuevas_imagenes:
+                # Valida que no sean más de 5 archivos
+                if len(nuevas_imagenes) > 5:
+                    return JsonResponse({'success': False, 'error': 'No puedes cargar más de 5 imágenes.'})
+
+                # Extensiones de imagen válidas
+                valid_extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
+                for file in nuevas_imagenes:
+                    # Validar la extensión
+                    extension = os.path.splitext(file.name)[1][1:].lower()
+                    if extension not in valid_extensions:
+                        return JsonResponse({
+                            'success': False, 
+                            'error': f"El archivo {file.name} no tiene una extensión válida. Las extensiones permitidas son: {', '.join(valid_extensions)}"
+                        })
+
+                    # Verificar si el archivo es realmente una imagen
+                    try:
+                        image = Image.open(file)
+                        image.verify()  # Verificar si el archivo realmente es una imagen
+                    except (IOError, SyntaxError):
+                        return JsonResponse({
+                            'success': False, 
+                            'error': f"El archivo {file.name} no es una imagen válida."
+                        })
+                
                 # Borra las imágenes antiguas
                 Imagenes_Servicios.objects.filter(servicio=servicio).delete()
                 
@@ -175,6 +218,7 @@ def editar_servicio(request, servicio_id):
                 for imagen in nuevas_imagenes:
                     Imagenes_Servicios.objects.create(servicio=servicio, imagen=imagen)
 
+            # Guarda los cambios en el servicio
             servicio.save()
             return JsonResponse({'success': True})
         else:

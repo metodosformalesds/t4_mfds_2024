@@ -10,12 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import environ
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -159,6 +163,10 @@ AUTH_USER_MODEL = 'Usuarios.User'  # Asegúrate de que apunte a tu modelo person
 
 SITE_ID = 4 #Se movio el ID
 
+#API aws reko
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_REGION_NAME = os.getenv('AWS_REGION_NAME', 'us-west-2')
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -180,5 +188,3 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'optional'  # O puede ser 'mandatory', dependiendo de lo que prefieras
 ACCOUNT_UNIQUE_EMAIL = True
 LOGIN_REDIRECT_URL = 'servicios_sin_login'  # Redirige a la página principal (solucion temporal)
-
-

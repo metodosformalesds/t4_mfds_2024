@@ -13,7 +13,8 @@
 {% block content %}
 
 <section class="register-container">
-    <form method="POST" class="register-form" id="registerForm">
+    <!-- enctype permite subir archivos -->
+    <form method="POST" enctype="multipart/form-data" class="register-form" id="registerForm">
         {% csrf_token %}
         <h2>Regístrate como cliente</h2>
 
@@ -33,10 +34,6 @@
                     <img src="{% static 'images/google_logo.png' %}" alt="Google logo" class="google-logo">
                     Registrarse con Google
                 </a>
-            \<!--
-            </div>
-        </div>
-        \-->  
         <label>¿Deseas publicar tus servicios? <a href="{% url 'registro_proveedor' %}">Registrarse como proveedor
                 aquí</a></label>
 
