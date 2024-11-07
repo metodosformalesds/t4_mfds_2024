@@ -275,6 +275,9 @@
       <div class="modal-body">
         <form enctype="multipart/form-data" method="POST" action="{% url 'editar_servicio' servicio.id %}">
           {% csrf_token %}
+
+                 
+      
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="nombre" class="form-label">Nombre del servicio:</label>
@@ -330,17 +333,26 @@
               <textarea class="form-control" id="informacion_detallada" name="informacion_detallada" rows="3" required>{{ servicio.informacion_detallada }}</textarea>
             </div>
           </div>
-          <!-- Campo para agregar la imagen, ahora debajo de Información detallada -->
+
+        
+
+          <!-- Campo para agregar la imagen -->
           <div class="row mb-3">
             <div class="col-md-12">
               <label for="serviceImage" class="form-label">Imagen del servicio:</label>
-              <input type="file" class="form-control" id="serviceImage" name="serviceImage" accept="image/*">
+              <input type="file" class="form-control" id="serviceImage" name="serviceImage" accept="image/*" multiple>
             </div>
           </div>
+            <!-- Mostrar la imagen actual del servicio antes del campo de selección de archivo -->
+            <div class="mb-3 text-center">
+              <label for="currentImagePreview" class="form-label d-block">Imagen actual del servicio:</label>
+            <img id="currentImagePreview" src="{{ servicio.imagenes.first.imagen.url }}" class="img-fluid mb-3" style="max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 8px;">
+           </div>
           <div class="d-flex justify-content-end">
             <button type="submit" class="btn btn-primary me-2">Actualizar</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           </div>
+          
         </form>
       </div>
     </div>
@@ -474,55 +486,61 @@
       }
     });
   // Manejo de la edición del servicio
-  document.querySelector("#editPostModal form").addEventListener("submit", function(event) {
-    event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(form);
- 
-    fetch(form.action, {
-        method: "POST",
-        body: formData,
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        const modal = bootstrap.Modal.getInstance(document.getElementById("editPostModal"));
-        modal.hide();
+document.querySelector("#editPostModal form").addEventListener("submit", function(event) {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData(form);
 
-        // Construye la nueva dirección usando los datos del formulario
-        const calle = document.getElementById("calle").value;
-        const numero_exterior = document.getElementById("numero_exterior").value;
-        const colonia = document.getElementById("colonia").value;
-        const codigo_postal = document.getElementById("codigo_postal").value;
+  fetch(form.action, {
+      method: "POST",
+      body: formData,
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const modal = bootstrap.Modal.getInstance(document.getElementById("editPostModal"));
+      modal.hide();
 
-        const nuevaDireccion = `${calle} ${numero_exterior}, ${colonia}, ${codigo_postal} Ciudad Juárez, Chihuahua`;
+      // Construye la nueva dirección usando los datos del formulario
+      const calle = document.getElementById("calle").value;
+      const numero_exterior = document.getElementById("numero_exterior").value;
+      const colonia = document.getElementById("colonia").value;
+      const codigo_postal = document.getElementById("codigo_postal").value;
 
-        // Codifica la dirección para URL
-        const direccionCodificada = encodeURIComponent(nuevaDireccion);
+      const nuevaDireccion = `${calle} ${numero_exterior}, ${colonia}, ${codigo_postal} Ciudad Juárez, Chihuahua`;
 
-        // Actualiza el src del iframe de Google Maps con la nueva dirección
-        const googleMapIframe = document.getElementById("googleMapIframe");
-        if (googleMapIframe) {
-          googleMapIframe.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBHurZ4KsBAxkPEwveGc2-odDwscEXUsvY&q=${direccionCodificada}`;
-        } else {
-          console.error("No se encontró el iframe de Google Maps con el ID 'googleMapIframe'.");
-        }
+      // Codifica la dirección para URL
+      const direccionCodificada = encodeURIComponent(nuevaDireccion);
+
+      // Actualiza el src del iframe de Google Maps con la nueva dirección
+      const googleMapIframe = document.getElementById("googleMapIframe");
+      if (googleMapIframe) {
+        googleMapIframe.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBHurZ4KsBAxkPEwveGc2-odDwscEXUsvY&q=${direccionCodificada}`;
       } else {
-        let errorMsg = "Error al actualizar el servicio.";
-        if (data.errors) {
-          errorMsg += "\nDetalles del error:\n";
-          for (const [field, messages] of Object.entries(data.errors)) {
-            errorMsg += `${field}: ${messages.join(", ")}\n`;
-          }
-        }
-        alert(errorMsg);
+        console.error("No se encontró el iframe de Google Maps con el ID 'googleMapIframe'.");
       }
-    })
-    .catch(error => {
-      console.error("Error en la solicitud:", error);
-      alert("Error en la solicitud: " + error.message);
-    });
+
+      // Recarga la página después de actualizar el iframe de Google Maps
+      setTimeout(() => {
+        window.location.reload(); // Recarga la página para reflejar los cambios
+      }, 500); // Espera medio segundo para asegurar el cierre del modal y la actualización del iframe
+    } else {
+      let errorMsg = "Error al actualizar el servicio.";
+      if (data.errors) {
+        errorMsg += "\nDetalles del error:\n";
+        for (const [field, messages] of Object.entries(data.errors)) {
+          errorMsg += `${field}: ${messages.join(", ")}\n`;
+        }
+      }
+      alert(errorMsg);
+    }
+  })
+  .catch(error => {
+    console.error("Error en la solicitud:", error);
+    alert("Error en la solicitud: " + error.message);
   });
+});
+
   </script>
   
 </body>
