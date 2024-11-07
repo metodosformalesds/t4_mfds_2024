@@ -56,29 +56,32 @@ def registro_cliente(request):
             with default_storage.open(identificacion_path, 'rb') as id_img, default_storage.open(rostro_path, 'rb') as rostro_img:
                 identificacion_bytes = id_img.read()
                 rostro_bytes = rostro_img.read()
-
-            # Llamada a Rekognition para comparar las caras
-            response = rekognition_client.compare_faces(
-                SourceImage={'Bytes': identificacion_bytes},
-                TargetImage={'Bytes': rostro_bytes},
-                SimilarityThreshold=90  # Establece el umbral de similitud deseado
-            )
-
-            # Verificar si se encontró una coincidencia
-            if response['FaceMatches']:
-                # Coincidencia exitosa, continuar con el registro del usuario
-                user = form.save()
-                nombre_completo = form.cleaned_data['nombre_completo']
-                Cliente.objects.create(user=user, nombre_completo=nombre_completo)
-                login(request, user, backend='Usuarios.backends.EmailBackend')
-                return redirect('servicios_sin_login')
-            else:
-                form.add_error(None, "Las fotos no coinciden. Verifica que ambas fotos sean claras y correspondan a la misma persona.")
                 
-            # Eliminar los archivos temporales después de usarlos
-            default_storage.delete(identificacion_path)
-            default_storage.delete(rostro_path)
+            # Comparación de rostros con Rekognition
+            try:
+                # Llamada a Rekognition para comparar las caras
+                response = rekognition_client.compare_faces(
+                    SourceImage={'Bytes': identificacion_bytes},
+                    TargetImage={'Bytes': rostro_bytes},
+                    SimilarityThreshold=90  # Establece el umbral de similitud deseado
+                )
 
+                # Verificar si se encontró una coincidencia
+                if response['FaceMatches']:
+                    # Coincidencia exitosa, continuar con el registro del usuario
+                    user = form.save()
+                    nombre_completo = form.cleaned_data['nombre_completo']
+                    Cliente.objects.create(user=user, nombre_completo=nombre_completo)
+                    login(request, user, backend='Usuarios.backends.EmailBackend')
+                    return redirect('servicios_sin_login')
+                else:
+                    form.add_error(None, "Las fotos no coinciden. Verifica que ambas fotos sean claras y correspondan a la misma persona.")
+                    
+                # Eliminar los archivos temporales después de usarlos
+                default_storage.delete(identificacion_path)
+                default_storage.delete(rostro_path)
+            except Exception as e:
+                form.add_error(None, f"Error al procesar las imágenes. Asegúrate de que las fotos sean claras y correspondan a la misma persona. Error")
     else:
         form = RegistroClienteForm()
 
@@ -127,7 +130,7 @@ def registro_proveedor(request):
                 else:
                     form.add_error(None, "La verificación de identidad falló. Asegúrate de que las fotos coincidan.")
             except Exception as e:
-                form.add_error(None, f"Error al procesar las imágenes: {str(e)}")
+                form.add_error(None, f"Error al procesar las imágenes. Asegúrate de que las fotos sean claras y correspondan a la misma persona. Error")
     else:
         form = RegistroProveedorForm()
         
