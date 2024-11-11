@@ -20,6 +20,10 @@
         <!-- Esto generará los campos del formulario y los mensajes de error automáticamente -->
         {{ form.as_p }}
 
+        <label for="fotoRostro">Captura de Rostro:</label>
+        <input type="hidden" id="fotoRostro" name="foto_rostro">
+        <button type="button" onclick="mostrarModal()" class="register-btn">Activar cámara</button>
+
         <button type="submit" class="register-btn">Registrarse</button>
 
         <label>¿Ya tienes una cuenta? <a href="{% url 'inicio_sesion' %}">Da clic aquí</a></label>
@@ -39,5 +43,116 @@
         <label>¿Deseas contratar servicios? <a href="{% url 'registro_cliente' %}">Registrarse como cliente aquí</a></label>
     </form>
 </section>
+
+
+<!-- Modal para la cámara -->
+<div id="cameraModal" class="modal">
+    <div class="modal-content">
+        <h3>Captura tu rostro</h3>
+        <video id="video" autoplay playsinline></video>
+        <div class="modal-buttons">
+            <button type="button" onclick="capturarFoto()" class="register-btn">Capturar Foto</button>
+            <button type="button" onclick="cerrarModal()" class="register-btn">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para aviso de dispositivo sin cámara -->
+<div id="noCameraModal" class="modal">
+    <div class="modal-content">
+        <h3>Registro Obligatorio con Cámara</h3>
+        <p>No se detectó una cámara en este dispositivo o el acceso a la cámara fue denegado. Para completar el registro, escanea el siguiente código QR desde un dispositivo con cámara</p>
+        <div id="qrCode"></div> <!-- Aquí se generará el código QR -->
+        <div class="modal-buttons">  
+            <button type="button" onclick="cerrarNoCameraModal()" class="register-btn">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script> <!-- Librería para generar QR -->
+
+<script>
+    let video = document.getElementById("video");
+    let cameraModal = document.getElementById("cameraModal");
+    let noCameraModal = document.getElementById("noCameraModal");
+
+    function mostrarModal() {
+        activarCamara();
+    }
+
+    function cerrarModal() {
+        cameraModal.style.display = "none"; // Oculta el modal
+        detenerCamara(); // Detiene la cámara cuando se cierra el modal
+    }
+
+    function activarCamara() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+                cameraModal.style.display = "flex"; // Muestra el modal de la cámara
+            })
+            .catch(function(error) {
+                console.error("Error al acceder a la cámara: ", error);
+                mostrarNoCameraModal(); // Muestra el modal con el QR en caso de error
+            });
+    }
+
+    function capturarFoto() {
+        let canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+        let fotoCapturada = canvas.toDataURL("image/png");
+        document.getElementById("fotoRostro").value = fotoCapturada;
+
+        alert("Foto capturada exitosamente.");
+        cerrarModal(); // Cierra el modal después de capturar la foto
+    }
+
+    function detenerCamara() {
+        let stream = video.srcObject;
+        if (stream) {
+            let tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            video.srcObject = null; // Libera la cámara
+        }
+    }
+
+    function mostrarNoCameraModal() {
+        console.log("Intentando mostrar el modal sin cámara");
+        noCameraModal.style.display = "flex"; // Muestra el modal de aviso
+        setTimeout(() => {
+            generarQRCode('https://deco-rent.com/'); // Genera el QR con la URL especificada
+        }, 100); // Espera 100ms para asegurarse de que el modal se haya mostrado
+    }
+
+    function cerrarNoCameraModal() {
+        noCameraModal.style.display = "none"; // Oculta el modal de aviso
+    }
+
+    function generarQRCode(url) {
+        const qrElement = document.getElementById("qrCode");
+    
+        // Verifica que el elemento #qrCode existe
+        if (!qrElement) {
+            console.error("El elemento #qrCode no se encontró.");
+            return;
+        }
+    
+        // Limpia el contenido de #qrCode
+        qrElement.innerHTML = ""; 
+    
+        // Crea el código QR
+        const qr = new QRious({
+            element: qrElement.appendChild(document.createElement('canvas')),
+            value: url,
+            size: 200 // Tamaño del código QR
+        });
+    
+        console.log("QR generado para:", url); // Para verificar en la consola
+    }
+    
+</script>
 
 {% endblock content %}

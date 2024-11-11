@@ -160,7 +160,7 @@ AUTHENTICATION_BACKENDS = [
 AUTH_USER_MODEL = 'Usuarios.User'  # Asegúrate de que apunte a tu modelo personalizado
 
 #En caso de cambiar el ID para pruebas locales, volverlo a cambiar antes de hacer push al repositorio
-SITE_ID = 3 #Se movio el ID
+SITE_ID = 4 #Se movio el ID
 
 #API aws reko
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
@@ -186,4 +186,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'optional'  # O puede ser 'mandatory', dependiendo de lo que prefieras
 ACCOUNT_UNIQUE_EMAIL = True
+#Inhabilita la plantilla HTML y pasa directamente a la seleccion de cuentas de Google
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
 LOGIN_REDIRECT_URL = 'servicios_sin_login'  # Redirige a la página principal (solucion temporal)

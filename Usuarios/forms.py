@@ -25,8 +25,15 @@ class RegistroClienteForm(UserCreationForm):
         label='',
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirma tu contraseña'})
     )
-    foto_identificacion = forms.ImageField(required=True, label='Foto de Identificación')
-    foto_rostro = forms.ImageField(required=True, label='Foto del Rostro')
+    foto_identificacion = forms.ImageField(
+        required=True, 
+        label='Foto de Identificación'
+    )
+    foto_rostro = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput(),
+        label='Foto del Rostro (capturada desde la cámara)'
+    )
 
     class Meta:
         model = User  # Se define el modelo a utilizar
@@ -66,9 +73,15 @@ class RegistroProveedorForm(UserCreationForm):
         widget=forms.TextInput(attrs={'placeholder': 'CLABE'}),
         label='Ingresa la CLABE interbancaria de la cuenta donde deseas recibir los pagos'
     )
-    foto_identificacion = forms.ImageField(required=True, label='Foto de Identificación')
-    foto_rostro = forms.ImageField(required=True, label='Foto del Rostro')
-
+    foto_identificacion = forms.ImageField(
+        required=True, 
+        label='Foto de Identificación'
+    )
+    foto_rostro = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput(),
+        label='Foto del Rostro (capturada desde la cámara)'
+    )
     class Meta:
         model = User  # Se define el modelo a utilizar
         fields = ['nombre_empresa', 'email', 'password1', 'password2', 'clabe', 'foto_identificacion', 'foto_rostro']
