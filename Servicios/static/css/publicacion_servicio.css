@@ -88,23 +88,19 @@
 
 .reviews-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Cambia a 'center' para que las reseñas estén alineadas en el centro */
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 15px; /* Ajusta el espacio entre las reseñas si es necesario */
+    margin: 0 auto;
 }
 
 .review-card {
+    width: 300px; /* Ajusta el ancho de cada tarjeta según tu preferencia */
     border: 1px solid #ddd;
-    padding: 20px;
-    width: 23%;
+    padding: 15px;
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.review-card h3 {
-    font-size: 18px;
-    margin-bottom: 5px;
 }
 
 .review-date {
@@ -116,7 +112,7 @@
 .rating {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px; /* Reduce el espacio inferior si quieres las estrellas más cerca del texto */
 }
 
 .rating span {
@@ -128,6 +124,14 @@ span.estrella {
     margin: 0;
 }
 
+.estrella {
+    color: gray; /* Color de las estrellas vacías */
+}
+
+.rating .estrella.full {
+    color: gold; /* Cambia a amarillo para las estrellas llenas */
+}
+
 .rating-value {
     margin-left: 10px;
     font-size: 18px;
@@ -137,5 +141,13 @@ span.estrella {
 .review-text {
     font-size: 14px;
     color: #555;
-    line-height: 1.5;
+    line-height: 1.4; /* Reduce el espacio entre líneas */
+}
+
+/* Ajusta la disposición en pantallas pequeñas para asegurar que se vean bien */
+@media (max-width: 768px) {
+    .review-card {
+        width: 100%; /* En pantallas pequeñas, ocupa el 100% del ancho */
+        margin-bottom: 15px;
+    }
 }

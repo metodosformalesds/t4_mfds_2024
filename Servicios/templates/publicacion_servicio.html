@@ -79,9 +79,14 @@
         <div class="company-details">
           <h2>{{ servicio.proveedor.nombre_empresa }}</h2>
           <p>Desde ${{ servicio.precio_minimo }}</p>
-          <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#rateServiceModal">Calificar
-            servicio</button>
-        </div>
+          {% if user.is_authenticated and not user_has_rated %}
+          <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#rateServiceModal">Calificar servicio</button>
+      {% else %}
+          <p class="mt-3 text-success">Ya has calificado este servicio.</p>
+      {% endif %}
+    
+      </div>
+      
 
         <!-- Action Buttons -->
         <div class="buttons mt-3">
@@ -154,58 +159,29 @@
     </div>
   </div>
 
-  <section class="reviews-section">
-    <h2>Reseñas</h2>
-    <div class="reviews-container">
-      <!-- Review Card 1 -->
-      <div class="review-card">
-        <h3>Nombre del usuario</h3>
-        <p class="review-date">12/12/24</p>
-        <div class="rating">
-          <span>⭐⭐⭐⭐⭐</span>
-          <span class="rating-value">0.0</span>
+  <!-- Reseñas -->
+  <div class="reviews-container">
+    {% for reseña in reseñas %}
+        <div class="review-card">
+          <h3>{{ reseña.usuario.email }}</h3> 
+          <p class="review-date">{{ reseña.fecha|date:"d/m/Y" }}</p>
+          <div class="rating">
+            {% for i in "12345" %}
+                {% if forloop.counter <= reseña.calificacion %}
+                    <span class="estrella" style="color: gold;">★</span> <!-- Color forzado en línea -->
+                {% else %}
+                    <span class="estrella" style="color: gray;">☆</span>
+                {% endif %}
+            {% endfor %}
         </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
-          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
-      </div>
+              
+            <p class="review-text">{{ reseña.comentario }}</p>
+        </div>
+    {% empty %}
+        <p>No hay reseñas disponibles.</p>
+    {% endfor %}
+</div>
 
-      <!-- Review Card 2 -->
-      <div class="review-card">
-        <h3>Nombre del usuario</h3>
-        <p class="review-date">12/12/24</p>
-        <div class="rating">
-          <span>⭐⭐⭐⭐⭐</span>
-          <span class="rating-value">0.0</span>
-        </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
-          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
-      </div>
-
-      <!-- Review Card 3 -->
-      <div class="review-card">
-        <h3>Nombre del usuario</h3>
-        <p class="review-date">12/12/24</p>
-        <div class="rating">
-          <span>⭐⭐⭐⭐⭐</span>
-          <span class="rating-value">0.0</span>
-        </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
-          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
-      </div>
-
-      <!-- Review Card 4 -->
-      <div class="review-card">
-        <h3>Nombre del usuario</h3>
-        <p class="review-date">12/12/24</p>
-        <div class="rating">
-          <span>⭐⭐⭐⭐⭐</span>
-          <span class="rating-value">0.0</span>
-        </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
-          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
-      </div>
-    </div>
-  </section>
 
   {% if servicio.proveedor == user.proveedor %}
   <!-- Nuevos botones de Editar y Eliminar publicación alineados a la derecha -->
@@ -229,41 +205,44 @@
     </div>
   </footer>
 
-  <!-- Modal para calificar el servicio -->
-  <div class="modal fade" id="rateServiceModal" tabindex="-1" aria-labelledby="rateServiceModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="rateServiceModalLabel">Calificar servicio</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form method="POST">
-            <div class="mb-3">
+<!-- Modal para calificar el servicio -->
+<div class="modal fade" id="rateServiceModal" tabindex="-1" aria-labelledby="rateServiceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rateServiceModalLabel">Dejar una reseña</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="reviewForm" method="POST" action="{% url 'agregar_reseña' servicio.id %}">
+          {% csrf_token %}
+          <div class="mb-3">
               <label for="ratingStars" class="form-label">Calificación (1 a 5 estrellas):</label>
               <select class="form-select" id="ratingStars" name="ratingStars" required>
-                <option value="" disabled selected>Seleccionar estrellas</option>
-                <option value="1">1 estrella</option>
-                <option value="2">2 estrellas</option>
-                <option value="3">3 estrellas</option>
-                <option value="4">4 estrellas</option>
-                <option value="5">5 estrellas</option>
+                  <option value="" disabled selected>Seleccionar estrellas</option>
+                  <option value="1">1 estrella</option>
+                  <option value="2">2 estrellas</option>
+                  <option value="3">3 estrellas</option>
+                  <option value="4">4 estrellas</option>
+                  <option value="5">5 estrellas</option>
               </select>
-            </div>
-            <div class="mb-3">
+          </div>
+          <div class="mb-3">
               <label for="comment" class="form-label">Comentario (opcional):</label>
               <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
-            </div>
-            <div class="d-flex justify-content-end">
-              <button type="submit" class="btn btn-primary me-2">Enviar calificación</button>
+          </div>
+          <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-primary me-2" onclick="submitReview()">Enviar reseña</button>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            </div>
-          </form>
-        </div>
+          </div>
+      </form>
+      
       </div>
     </div>
   </div>
+</div>
+
+
   <!-- Modal para Editar publicación con imagen -->
   <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -571,6 +550,56 @@
         });
     });
 
+/// Función para enviar la reseña
+  function submitReview() {
+      const submitReviewButton = document.querySelector('#rateServiceModal .btn-primary');
+      submitReviewButton.disabled = true;  // Deshabilitar el botón al hacer clic
+  
+      const ratingStars = document.getElementById('ratingStars').value;
+      const comment = document.getElementById('comment').value;
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      const url = "{% url 'agregar_reseña' servicio.id %}";
+  
+      fetch(url, {
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': csrfToken,
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              ratingStars: ratingStars,
+              comment: comment,
+          }),
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.error) {
+              alert("Error: " + data.error);
+              submitReviewButton.disabled = false;  // Habilitar el botón si hay error
+          } else {
+              // Añadir la reseña al DOM si la respuesta es exitosa
+              const reviewContainer = document.querySelector('.reviews-container');
+              const reviewCard = document.createElement('div');
+              reviewCard.classList.add('review-card');
+              reviewCard.innerHTML = `
+                  <h3>${data.usuario || "Usuario desconocido"}</h3>
+                  <p class="review-date">${data.fecha || "Fecha desconocida"}</p>
+                  <div class="rating">${"★".repeat(data.calificacion) + "☆".repeat(5 - data.calificacion)}</div>
+                  <p class="review-text">${data.comentario || ""}</p>
+              `;
+              reviewContainer.prepend(reviewCard);  // Añadir la reseña al DOM
+              const modal = bootstrap.Modal.getInstance(document.getElementById('rateServiceModal'));
+              modal.hide();  // Cierra el modal
+              document.getElementById('reviewForm').reset();  // Limpia el formulario
+              window.location.reload();  // Recargar la página para ver promedio actualizado
+          }
+      })
+      .catch(error => {
+          console.error('Error en la solicitud:', error);
+          alert("Hubo un problema al enviar la reseña. Detalles: " + error.message);
+          submitReviewButton.disabled = false; // Habilitar el botón si hay error
+      });
+  }
   </script>
 
 </body>
