@@ -8,11 +8,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 1c4b4bcd0b223d523f426c4edf56f7ab69d91e20
 rekognition_client = boto3.client(
     'rekognition',
     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -122,38 +118,6 @@ def registro_proveedor(request):
             with default_storage.open(identificacion_path, 'rb') as id_img:
                 identificacion_bytes = id_img.read()
 
-<<<<<<< HEAD
-            # Comparación de rostros con Rekognition
-            try:
-                response = rekognition_client.compare_faces(
-                    SourceImage={'Bytes': identificacion_bytes},
-                    TargetImage={'Bytes': rostro_bytes},
-                    SimilarityThreshold=90  # Puedes ajustar el umbral de similitud
-                )
-
-                # Verificar si se encontró una coincidencia
-                if response['FaceMatches']:
-                    # Guardar el usuario en la base de datos
-                    user = form.save()
-                    
-                    # Crear el proveedor asociado al usuario
-                    Proveedor.objects.create(
-                        user=user, 
-                        nombre_empresa=nombre_empresa
-                    )
-                    
-                    # Iniciar sesión automáticamente
-                    login(request, user, backend='Usuarios.backends.EmailBackend')
-                    
-                    # Redirigir a la pantalla de servicios
-                    return redirect('servicios_sin_login')
-                else:
-                    form.add_error(None, "La verificación de identidad falló. Asegúrate de que las fotos coincidan.")
-            except Exception as e:
-                form.add_error(None, f"Error al procesar las imágenes. Asegúrate de que las fotos sean claras y correspondan a la misma persona. Error")
-        else:
-            return render(request, 'registro_proveedor.html', {'form': form})
-=======
             # Comparación de rostros con Rekognition solo si se ha capturado el rostro
             if foto_rostro_bytes:
                 try:
@@ -185,7 +149,6 @@ def registro_proveedor(request):
                 form.add_error(None, "No se capturó una foto para el rostro. Por favor, toma una foto.")
         else:
             form.add_error(None, "Error al procesar el formulario. Asegúrate de que los datos sean correctos.")
->>>>>>> 1c4b4bcd0b223d523f426c4edf56f7ab69d91e20
     else:
         form = RegistroProveedorForm()
 
