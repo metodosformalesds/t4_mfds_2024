@@ -1,0 +1,73 @@
+[33m64ff930[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m cambio en index y acerca de
+[33m8b5f2e7[m Se fusionaron los cambios del commit "Modificacion a la pantalla Acerca de"
+[33mbf85ab9[m Se corrigieron detalles esteticos
+[33m9cd9fdd[m Modificacion a la pantalla Acerca de
+[33m2ab6cf7[m Se resolvieron los conflictos en el archivo Usuarios/views.py
+[33m0819a10[m Se hizo merge con los cambios de la validacion biometrica y correcion de google
+[33ma628e00[m Se implemento el API de stripe para realizar pagos y la funcion de Contratar servicio
+[33m1c4b4bc[m Se modifica registro para pedir foto del usuario y correccion de Google
+[33mb2c42db[m Se actualizo la funcion de filtrar por categoria
+[33m783fe80[m Se corrigio el manejo de errores al validar la identidad
+[33m5a023cb[m cambio en site_id
+[33m99f8e0a[m Reconocimiento de imagen de rostro y credenciales
+[33m6d5da33[m Homologar formularios de registro e inicio de sesion
+[33mf8dbf6c[m Se corrigio la opcion de borrar publicaciones de servicios
+[33mb36c553[m Funcion para editar servicio corregida en imagenes, ubicacion y detalles
+[33m625bcf9[m En Editar servicio aparcenen los datos anteriores
+[33mecac196[m En Editar servicio aparcenen los datos anteriores
+[33mb9998e9[m Se corrigio la funcion para filtrar los servicios
+[33m3d1fc82[m Se eliminaron las carpetas migrations de todas las aplicaciones del control de versiones para evitar posibles conflictos
+[33mae31070[m Se integraron los cambios realizados para subirlos a produccion
+[33m6f6d6f2[m Resuelto el confloicto en urls.py
+[33m31d76f7[m actualizacion de servicio F_PS_017
+[33m139f8c3[m Filtro de categorias
+[33m077d7fa[m Filtro de categorias
+[33md82bca0[m Los clientes podran recibir notificaciones con la respuesta de la solicitud de presupuesto
+[33m055b5d3[m Se agregaron las funciones para que los proveedores reciban solicitudes de presupuesto mediante notificaciones y puedan responderlas
+[33m2652b1f[m Se agrego la funcion Solicitud de presupuesto
+[33mbe239c3[m Aceptar o rechazar el presupuesto del proveedor por parte del cliente
+[33m3d3c4e4[m Se eliminaron los botones de Facebook y Apple
+[33ma69d196[m Se agrego la funcion de eliminar publicacion de servicio
+[33m748e830[m Aceptar o rechazar solicitud de servicio de cliente con envio de presuspuesto
+[33m7986398[m Actualizacion requirements.txt
+[33mb7db35f[m Se migro la base de datos a MySQL
+[33md4db770[m Se agrego la funcion de mostrar informacion detallada de un servicio
+[33m0ba12e3[m Mostrar los servicios registrados en la BD
+[33m8ed1ed1[m Actualizacion de contenido de pop ups
+[33mba70746[m Se agrego la funcion de publicar servicios
+[33m6fb6cf5[m Merge branch 'master' of https://github.com/metodosformalesds/t4_mfds_2024
+[33m0b4c433[m Se agrego la funcion de cerrar sesion
+[33m7d93a65[m Actualizacion de pop ups
+[33m9fbf5a2[m Actualización de ALLOWED_HOSTS y revisión general
+[33m1abee1a[m Cambio en la direccion url
+[33m60477d8[m Base de datos a python everyhwere
+[33m8905cbe[m Edicion de solicitud de prespuesto
+[33m25dbeb0[m Implementación de API de Google OAuth y actualización de dependencias
+[33m3662c6b[m Se agrego la funcion de inicio de sesion
+[33m346595e[m Se agrego la funcion de registro de proveedores
+[33mac353f0[m Merge branch 'master' of https://github.com/metodosformalesds/t4_mfds_2024
+[33m273b29e[m reseñas y ubicacion en pagina publicación servicio
+[33m997bcdd[m Se fusionaron los cambios en Usuarios.views
+[33m8c00c69[m Se agrego la funcion de registro de clientes
+[33med49ff1[m correccion publicacion servicio
+[33m39b1f81[m Merge branch 'master' of https://github.com/metodosformalesds/t4_mfds_2024
+[33mc79a204[m pagina publicacion servicio
+[33m8a60c2e[m Actualizacion del menu lateral de notificaciones
+[33mffa1b2f[m Se creo un archivo base.html y se distribuyeron los archivos css
+[33m43a221d[m Se crearon los modelos para la base de datos
+[33m8a741cf[m Actualizacion de footers
+[33m0718e45[m Actualizacion de notificaciones y botones para las apis
+[33m2eb9894[m Se agregó una funcionalidad para limpiar los datos del formulario.
+[33m9e737ab[m Se cambió la ubicación de los archivos
+[33m2e66a3f[m Se agregó un template que muestra el formulario de servicios (publicar servicio). Además, se agregó un css que estiliza el formulario de servicios. Se conectó las urls a publicar servicio, como se agregó la vista de la misma.
+[33m723ca1b[m Se agregaron archivos y nuevas rutas para los mis.
+[33ma40d990[m Pantalla estatica servicios actualizada
+[33m81a99a1[m Se iniciaron las principales aplicaciones del proyecto
+[33m3be7a3e[m Se agrego la carpeta global de archivos estaticos
+[33m477f6df[m Se movieron los archivos estaticos globales y se actualizo el archivo registro_cliente.html
+[33mbc56bb7[m Add files via upload
+[33mf37781d[m Add files via upload
+[33ma85ffe3[m Pagina de registro y sus estilos
+[33m8bc56aa[m estilos css para registro de proveedor
+[33m0a4b468[m estructura html para registro de proveedor
+[33m98a4f0a[m Creacion del codigo base de django
