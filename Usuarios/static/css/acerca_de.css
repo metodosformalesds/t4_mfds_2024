@@ -10,7 +10,29 @@
 .header-section {
     text-align: center;
     padding: 60px 20px;
+    position: relative;
+    color: #fff; /* Asegura que el texto sea visible sobre el fondo */
     background-color: #f5f5f5;
+    overflow: hidden;
+}
+
+.header-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5; 
+    z-index: 1;
+}
+
+.header-section h1, 
+.header-section p {
+    position: relative;
+    z-index: 2; /* Asegura que el texto esté sobre la imagen de fondo */
 }
 
 .header-section h1 {
@@ -20,8 +42,9 @@
 
 .header-section p {
     font-size: 1.2em;
-    color: #666;
+    color: #ffffff;
 }
+
 
 /* Sección de Historia */
 .history-section {

@@ -11,22 +11,120 @@
 {% endblock css %}
 
 {% block content %}
+<div class="main-container"> <!-- Contenedor principal para mantener el footer al final -->
+    <div class="container main-content">
+      <div class="text-area">
+        <h1>Crea momentos inolvidables</h1>
+        <h3>Servicios para todo tipo de eventos</h3>
+        <a type="button" class="btn btn-secondary" href="{% url 'servicios_sin_login' %}">Explorar</a>
+      </div>
+      <section class="carousel-section">
+        <div class="carousel-container">
+          <div class="carousel-grid">
+              <div class="carousel-panel panel1 active"><img src="{% static 'images/img1.jpg' %}" alt="Imagen 1"></div>
+              <div class="carousel-panel panel4"><img src="{% static 'images/img2.jpg' %}" alt="Imagen 2"></div>
+          </div>
+        </div>
+        <div class="carousel-container">
+          <div class="carousel-grid">
+              <div class="carousel-panel panel2 active"><img src="{% static 'images/img1.jpg' %}" alt="Imagen 1"></div>
+              <div class="carousel-panel panel5"><img src="{% static 'images/img2.jpg' %}" alt="Imagen 2"></div>
+          </div>
+        </div>
+        <div class="carousel-container">
+          <div class="carousel-grid">
+              <div class="carousel-panel panel3 active"><img src="{% static 'images/img1.jpg' %}" alt="Imagen 1"></div>
+              <div class="carousel-panel panel6"><img src="{% static 'images/img2.jpg' %}" alt="Imagen 2"></div>
+          </div>
+        </div>
+      </section>
+    </div>
 
-<div class="container main-content">
-  <div class="text-area">
-    <h1>Crea momentos inolvidables</h1>
-    <p><small>Servicios para todo tipo de eventos</small></p>
-    <a type="button" class="btn btn-secondary" href="{% url 'servicios_sin_login' %}">Explorar</a>
-  </div>
-  <div class="image-gallery">
-    <div class="image-item"><img src="{% static 'images/img1.jpg' %}" alt="imagen 1"></div>
-    <div class="image-item"><img src="{% static 'images/img2.jpg' %}" alt="imagen 2"></div>
-    <div class="image-item"><img src="{% static 'images/img3.jpg' %}" alt="imagen 3"></div>
-    <div class="image-item"><img src="{% static 'images/img4.jpg' %}" alt="imagen 4"></div>
-    <div class="image-item"><img src="{% static 'images/img5.jpg' %}" alt="imagen 5"></div>
-    <div class="image-item"><img src="{% static 'images/img6.jpg' %}" alt="imagen 6"></div>
-  </div>
+    <!-- Secciones adicionales alineadas en la parte superior de la pantalla -->
+    <div class="additional-sections">
+      <section class="testimonials">
+        <h2>Lo que nuestros clientes dicen</h2>
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Mariana S.</h5>
+            <p class="card-text">"Reservar con DecoRent fue la mejor decisión. Todo estuvo perfecto, desde la comunicación hasta el servicio el día del evento. ¡Recomiendo esta plataforma a todos!"</p>
+          </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Carlos P.</h5>
+            <p class="card-text">"Gracias a DecoRent, nuestra fiesta fue un éxito total. La plataforma es fácil de usar y cuenta con excelentes proveedores. ¡Sin duda los recomendaré!"</p>
+          </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Ana L.</h5>
+            <p class="card-text">"DecoRent hizo que la planificación de nuestro evento fuera sencilla y rápida. Los servicios son variados y de alta calidad. ¡Fue una experiencia increíble!"</p>
+          </div>
+        </div>
+      </section>
+      <section class="how-it-works">
+        <h2>Cómo funciona DecoRent</h2>
+        <div class="steps-container">
+          <div class="step">
+            <img src="{% static 'images/reg.png' %}" alt="Registro" width="150px" height="150px">
+            <h3>Regístrate</h3>
+            <p>Crea una cuenta y accede a todos nuestros servicios.</p>
+          </div>
+          <div class="step">
+            <img src="{% static 'images/buscar.png' %}" alt="Buscar Servicio" width="150px" height="150px">
+            <h3>Encuentra el servicio</h3>
+            <p>Elige entre múltiples proveedores para eventos.</p>
+          </div>
+          <div class="step">
+            <img src="{% static 'images/reserva.png' %}" alt="Reservar" width="150px" height="150px">
+            <h3>Reserva</h3>
+            <p>Haz tu reserva y disfruta de un evento inolvidable.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="benefits">
+        <h2>Beneficios de Usar DecoRent</h2>
+        <div class="benefit-list">
+          <div class="benefit">
+            <img src="{% static 'images/variedad.png' %}" alt="Variedad" width="150px" height="150px">
+            <h3>Variedad de Servicios</h3>
+            <p>Encuentra todo lo que necesitas en un solo lugar.</p>
+          </div>
+          <div class="benefit">
+            <img src="{% static 'images/supp.png' %}" alt="Soporte" width="150px" height="150px">
+            <h3>Soporte Personalizado</h3>
+            <p>Te ayudamos en cada paso del proceso.</p>
+          </div>
+          <div class="benefit">
+            <img src="{% static 'images/seg.png' %}" alt="Seguridad" width="150px" height="150px">
+            <h3>Plataforma Segura</h3>
+            <p>Tus transacciones están protegidas.</p>
+          </div>
+        </div>
+      </section>
+    </div>
 </div>
-
 {% endblock content %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      const columns = document.querySelectorAll(".carousel-grid");
+
+      columns.forEach(column => {
+          let currentIndex = 0;
+          const panels = column.querySelectorAll(".carousel-panel");
+
+          // Función para mostrar la siguiente imagen
+          function showNextImage() {
+              panels[currentIndex].classList.remove("active");
+              currentIndex = (currentIndex + 1) % panels.length;
+              panels[currentIndex].classList.add("active");
+          }
+
+          // Inicia el cambio de imágenes cada 3 segundos
+          setInterval(showNextImage, 3000);
+      });
+  });
+</script>
 
