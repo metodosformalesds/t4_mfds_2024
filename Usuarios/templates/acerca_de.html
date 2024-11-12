@@ -12,21 +12,53 @@
 
 {% block content %}
 
-<div class="container main-content">
-  <div class="text-area">
-    <h1>Conócenos un poco</h1>
-  </div>
+<div class="about-page">
+  <!-- Encabezado Visual -->
+  <section class="header-section">
+      <h1>Conoce DecoRent</h1>
+      <p>Servicios innovadores para organizar eventos inolvidables</p>
+  </section>
 
-  <div class="aside-about-us">
-    <aside class="first-about-us">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam perferendis repellendus ex minima veniam nihil esse ipsum, magnam fuga.</p>
-      <img class="image-item" src="{% static 'images/img1.jpg' %}" alt="Imagen 1">
-    </aside>
-    <aside class="second-about-us">
-      <img class="image-item" src="{% static 'images/img2.jpg' %}" alt="Imagen 2">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam perferendis repellendus ex minima veniam nihil esse ipsum, magnam fuga.</p>
-    </aside>
-  </div>
+  <!-- Sección de Historia -->
+  <section class="history-section">
+      <h2>Nuestra Historia</h2>
+      <p>
+          DecoRent nació con la visión de facilitar la organización de eventos para todos. Creemos en hacer que cada celebración sea memorable, proporcionando acceso fácil y confiable a una variedad de proveedores de servicios de calidad. Con años de experiencia en la industria, nos enorgullece ofrecer soluciones de organización de eventos que se adaptan a todas las necesidades.
+      </p>
+  </section>
+
+      <!-- Sección de Misión y Visión -->
+      <section class="mission-vision-section">
+        <div class="mission">
+            <h2>Misión</h2>
+            <p>Nuestra misión es transformar la manera en que las personas planifican y organizan eventos, conectándolos con servicios de alta calidad que se ajusten a sus necesidades, ayudando a crear momentos inolvidables con facilidad y confianza.</p>
+        </div>
+        <div class="vision">
+            <h2>Visión</h2>
+            <p>Aspiramos a ser la plataforma líder en organización de eventos, reconocida por nuestra innovación, confiabilidad y compromiso con la satisfacción de nuestros clientes y proveedores, haciendo de cada celebración una experiencia excepcional.</p>
+        </div>
+    </section>
+
+  <!-- Sección del Equipo (imagenes temporales)-->
+  <section class="team-section">
+      <h2>Conoce a Nuestro Equipo</h2>
+      <div class="team-members">
+          <div class="member">
+              <img src="{% static 'images/google_logo.png' %}" alt="Foto de miembro 1">
+              <h3>Alan Reynaldo Robles Soto</h3>
+          </div>
+          <div class="member">
+              <img src="{% static 'images/google_logo.png' %}" alt="Foto de miembro 2">
+              <h3>Manuel Ivan Silva Contreras</h3>
+          </div>
+          <div class="member">
+              <img src="{% static 'images/google_logo.png' %}" alt="Foto de miembro 3">
+              <h3>Luis Angel Hernandez Vargas</h3>    
+          </div>
+          <!-- Puedes agregar más miembros del equipo aquí -->
+      </div>
+  </section>
 </div>
+
 
 {% endblock content %}
