@@ -1,5 +1,5 @@
 from django import forms
-from .models import Servicio, Imagenes_Servicios
+from .models import Servicio, Imagenes_Servicios, Reseña
 from django.forms.utils import flatatt
 
 #Formulario para la publicacion de servicios
@@ -80,3 +80,15 @@ def publicar_servicio(request):
         'imagenes_form': imagenes_form,
     }
     return render(request, 'publicar_servicio.html', context)
+
+from django import forms
+from .models import Reseña
+
+class ReseñaForm(forms.ModelForm):
+    class Meta:
+        model = Reseña
+        fields = ['calificacion', 'comentario']
+        widgets = {
+            'calificacion': forms.Select(choices=[(i, f"{i} estrellas") for i in range(1, 6)]),
+            'comentario': forms.Textarea(attrs={'rows': 3}),
+        }
