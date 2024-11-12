@@ -133,8 +133,7 @@ def registro_proveedor(request):
                         user = form.save()
                         Proveedor.objects.create(
                             user=user, 
-                            nombre_empresa=nombre_empresa, 
-                            clabe=form.cleaned_data['clabe']
+                            nombre_empresa=nombre_empresa
                         )
                         login(request, user, backend='Usuarios.backends.EmailBackend')
                         return redirect('servicios_sin_login')

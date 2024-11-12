@@ -169,12 +169,12 @@
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
           </li>
-          {% if user.proveedor.stripe_account_id == None %}
+          {% if user.es_proveedor and user.proveedor.stripe_account_id == None %}
           <li>
             <!-- Boton para crear cuenta en Stripe -->
             <button type="button" id="create-stripe-account-button" class="btn btn-primary">Crear cuenta de Stripe</button>
           </li>
-          {% else %}
+          {% elif user.es_proveedor %}
           <li>
             <!-- Boton para ir al Stripe Dashboard -->
             <a href="{% url 'stripe_dashboard_link' %}" class="btn btn-primary">Ir a mi Stripe Dashboard</a>
@@ -444,7 +444,7 @@
 
     <!-- Acordeón para categorías -->
     <div class="accordion" id="accordionCategorias">
-      {% if user.proveedor.stripe_account_id == None %}
+      {% if user.is_authenticated and user.es_proveedor and user.proveedor.stripe_account_id == None %}
       <p style="text-align: center;">Aviso: Para publicar un servicio, crea una cuenta en stripe con el boton de arriba</p>
       {% endif %}
       {% if user.es_proveedor and user.proveedor and user.proveedor.stripe_account_id %}

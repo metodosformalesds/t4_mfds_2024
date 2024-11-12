@@ -21,7 +21,7 @@
         <input type="hidden" id="fotoRostro" name="foto_rostro">
         <button type="button" onclick="mostrarModal()" class="register-btn">Activar cámara</button>
 
-        <button type="submit" class="register-btn">Registrarse</button>
+        <button type="submit" class="register-btn" style="margin-top: 20px;">Registrarse</button>
 
         <label>¿Ya tienes una cuenta? <a href="{% url 'inicio_sesion' %}">Da clic aquí</a></label>
 
@@ -104,6 +104,10 @@
 
         alert("Foto capturada exitosamente.");
         cerrarModal(); // Cierra el modal después de capturar la foto
+
+        // Oculta el botón "Activar cámara" y el label "Captura de Rostro"
+        document.querySelector('label[for="fotoRostro"]').classList.add("hidden");
+        document.querySelector('button[onclick="mostrarModal()"]').classList.add("hidden");
     }
 
     function detenerCamara() {

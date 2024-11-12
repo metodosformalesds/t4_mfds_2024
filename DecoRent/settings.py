@@ -160,7 +160,7 @@ AUTHENTICATION_BACKENDS = [
 AUTH_USER_MODEL = 'Usuarios.User'  # Asegúrate de que apunte a tu modelo personalizado
 
 #En caso de cambiar el ID para pruebas locales, volverlo a cambiar antes de hacer push al repositorio
-SITE_ID = 4 #Se movio el ID
+SITE_ID = 3 #Se movio el ID
 
 #API aws reko
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
@@ -190,9 +190,9 @@ ACCOUNT_UNIQUE_EMAIL = True
 LOGIN_REDIRECT_URL = 'servicios_sin_login'  # Redirige a la página principal (solucion temporal)
 
 #Stripe
-STRIPE_PUBLIC_KEY = "pk_test_51QGkF0JKY0SMcSOI46sdDpDtPLyIcQfaUR0xYL8Kube9u1OFDRKbTUfBFnLYaDt4XbxIygOrQwHBpxOwP2oNqqQi00Uoi259Ek"
-STRIPE_SECRET_KEY = "sk_test_51QGkF0JKY0SMcSOI5faKG4gNZgzrOjRx2oHbfi0hE8080IDJVEoTItJSMDYiZZ1ypHsNurTLkXxqqkr7NTqlGBUl00oKbk6bCi"
-STRIPE_WEBHOOK_SECRET = ""
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+
 #Inhabilita la plantilla HTML y pasa directamente a la seleccion de cuentas de Google
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_LOGIN_ON_GET = True

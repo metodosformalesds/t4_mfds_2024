@@ -67,12 +67,6 @@ class RegistroProveedorForm(UserCreationForm):
         label='',
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirma tu contraseña'})
     )
-    clabe = forms.CharField(
-        max_length=18,
-        required=True,
-        widget=forms.TextInput(attrs={'placeholder': 'CLABE'}),
-        label='Ingresa la CLABE interbancaria de la cuenta donde deseas recibir los pagos'
-    )
     foto_identificacion = forms.ImageField(
         required=True, 
         label='Foto de Identificación'

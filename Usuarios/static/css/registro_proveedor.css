@@ -199,9 +199,14 @@ body {
     transition: background-color 0.3s ease;
     width: 40%;
     text-align: center;
+    margin-top: 20px;
 }
 
 /* Cambia el color al pasar el cursor */
 .modal-buttons .register-btn:hover {
     background-color: #9A2467;
+}
+
+.hidden {
+    display: none;
 }
