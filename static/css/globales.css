@@ -85,3 +85,7 @@ footer .list-inline-item {
     display: inline; /* Alinea los elementos de la lista en línea */
     margin: 0 5px; /* Espaciado entre los enlaces ajustado */
 }
+
+.hidden {
+    display: none !important;
+}

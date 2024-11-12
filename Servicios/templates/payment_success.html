@@ -1,0 +1,53 @@
+<!-- Hereda del archivo html base que incluye el navbar y footer -->
+{% extends 'base.html' %}
+
+<!-- Carga los archivos estaticos -->
+{% load static %}
+
+{% block title %} Pago exitoso {% endblock title %}
+
+{% block css %}
+<style>
+    /* Hacer que el contenedor principal llene la altura de la pantalla */
+    body, html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Contenedor que abarque el contenido */
+    main {
+        flex: 1;
+        padding: 50px 50px 0px 50px; /* Agregar margen interno para que el texto no esté pegado a los bordes */
+        box-sizing: border-box;
+    }
+
+    /* Footer al final de la página */
+    footer {
+        background-color: #962b6b; /* Color de fondo del footer */
+        color: #ffffff;
+        padding: 10px;
+        text-align: center;
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+
+<main>
+    <h1>¡Pago realizado con éxito!</h1>
+    <p>Gracias por tu compra. Tu pago ha sido procesado correctamente.</p>
+    <p>Enviaremos una notificación de confirmación de pago al proveedor del servicio.</p>
+    <br>
+    <h2>Detalles del servicio</h2>
+    <p><strong>Nombre del servicio:</strong> {{ solicitud.servicio.nombre }}</p>
+    <p><strong>Proveedor:</strong> {{ solicitud.proveedor.nombre_empresa }}</p>
+    <p><strong>Contacto del proveedor:</strong> {{ solicitud.proveedor.user.email }}</p>
+    <p><strong>Precio:</strong> ${{ solicitud.precio }} MXN</p>
+    <p><strong>Fecha del evento:</strong> {{ solicitud.fecha }}</p>
+    <p><strong>Dirección del evento:</strong> {{ solicitud.direccion }}</p>
+</main>
+
+{% endblock content %}

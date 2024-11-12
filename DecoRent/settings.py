@@ -187,3 +187,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'optional'  # O puede ser 'mandatory', dependiendo de lo que prefieras
 ACCOUNT_UNIQUE_EMAIL = True
 LOGIN_REDIRECT_URL = 'servicios_sin_login'  # Redirige a la página principal (solucion temporal)
+
+#Stripe
+STRIPE_PUBLIC_KEY = "pk_test_51QGkF0JKY0SMcSOI46sdDpDtPLyIcQfaUR0xYL8Kube9u1OFDRKbTUfBFnLYaDt4XbxIygOrQwHBpxOwP2oNqqQi00Uoi259Ek"
+STRIPE_SECRET_KEY = "sk_test_51QGkF0JKY0SMcSOI5faKG4gNZgzrOjRx2oHbfi0hE8080IDJVEoTItJSMDYiZZ1ypHsNurTLkXxqqkr7NTqlGBUl00oKbk6bCi"
+STRIPE_WEBHOOK_SECRET = ""

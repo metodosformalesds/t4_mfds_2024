@@ -65,4 +65,4 @@ class Cliente(models.Model):
 class Proveedor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nombre_empresa = models.CharField(max_length=255)
-    clabe = models.CharField(max_length=18)
+    stripe_account_id = models.CharField(max_length=255, null=True, blank=True)

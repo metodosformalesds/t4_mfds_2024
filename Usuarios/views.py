@@ -7,7 +7,6 @@ from django.contrib.auth import login, logout, authenticate
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-
 rekognition_client = boto3.client(
     'rekognition',
     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -118,8 +117,7 @@ def registro_proveedor(request):
                     # Crear el proveedor asociado al usuario
                     Proveedor.objects.create(
                         user=user, 
-                        nombre_empresa=nombre_empresa, 
-                        clabe=form.cleaned_data['clabe']
+                        nombre_empresa=nombre_empresa
                     )
                     
                     # Iniciar sesión automáticamente
@@ -131,6 +129,8 @@ def registro_proveedor(request):
                     form.add_error(None, "La verificación de identidad falló. Asegúrate de que las fotos coincidan.")
             except Exception as e:
                 form.add_error(None, f"Error al procesar las imágenes. Asegúrate de que las fotos sean claras y correspondan a la misma persona. Error")
+        else:
+            return render(request, 'registro_proveedor.html', {'form': form})
     else:
         form = RegistroProveedorForm()
         

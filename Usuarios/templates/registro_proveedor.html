@@ -20,7 +20,7 @@
         <!-- Esto generará los campos del formulario y los mensajes de error automáticamente -->
         {{ form.as_p }}
 
-        <button type="submit" class="register-btn">Registrarse</button>
+        <button type="submit" class="register-btn" id="register-button">Registrarse</button>
 
         <label>¿Ya tienes una cuenta? <a href="{% url 'inicio_sesion' %}">Da clic aquí</a></label>
 
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <label>¿Deseas contratar servicios? <a href="{% url 'registro_cliente' %}">Registrarse como cliente aquí</a></label>
+        <label>¿Deseas contratar servicios? <a href="{% url 'registro_cliente' %}">Registrarse como cliente aquí</a><label>
     </form>
 </section>
 
