@@ -169,12 +169,20 @@
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
           </li>
-          {% if user.is_authenticated %}
+          {% if user.es_proveedor and user.proveedor.stripe_account_id == None %}
+          <li>
+            <!-- Boton para crear cuenta en Stripe -->
+            <button type="button" id="create-stripe-account-button" class="btn btn-primary">Crear cuenta de Stripe</button>
+          </li>
+          {% elif user.es_proveedor %}
+          <li>
+            <!-- Boton para ir al Stripe Dashboard -->
+            <a href="{% url 'stripe_dashboard_link' %}" class="btn btn-primary">Ir a mi Stripe Dashboard</a>
+          </li>
+          {% endif %}
           <li class="nav-item">
             <button class="btn btn-notifications ms-2" onclick="toggleNotifications()">
               <img src="{% static 'images/icono_notificacion.jpg' %}" style="width: 25px; height: auto;">
-              {% endif %}
-
               <!-- Icono del botón -->
             </button>
           </li>
@@ -207,7 +215,7 @@
       <h5> {{ notificacion.solicitud.servicio.nombre }} </h5>
       <br>
       <button class="btn-details" data-bs-toggle="modal" data-bs-target="#detailsModal"
-        onclick="loadSolicitudDetails('{{ notificacion.solicitud.id }}')">Ver detalles</button>
+        onclick="loadSolicitudDetails('{{ notificacion.solicitud.id }}', false, false)">Ver detalles</button>
     </div>
     {% elif notificacion.tipo_notificacion == 'Respuesta de Solicitud' %}
     <div class="notification">
@@ -217,6 +225,16 @@
       <br>
       <button class="btn-details" data-bs-toggle="modal" data-bs-target="#answerModal"
         onclick="loadSolicitudDetails('{{ notificacion.solicitud.id }}', true)">Ver detalles</button>
+    </div>
+    {% elif notificacion.tipo_notificacion == 'Confirmacion de Pago' %}
+    <div class="notification">
+      <p>{{ notificacion.tipo_notificacion }}</p>
+      <h5>{{ notificacion.solicitud.cliente.nombre_completo }}</h5>
+      <h5>Contrató:</h5>
+      <h5> {{ notificacion.solicitud.servicio.nombre }} </h5>
+      <br>
+      <button class="btn-details" data-bs-toggle="modal" data-bs-target="#confirmModal"
+        onclick="loadSolicitudDetails('{{ notificacion.solicitud.id }}', false, true)">Ver detalles</button>
     </div>
     {% endif %}
     {% endfor %}
@@ -295,6 +313,7 @@
         <div class="modal-body">
           <h3 id="serviceNameAnswer">Nombre del servicio</h3>
           <p id="providerNameAnswer">Nombre del proveedor</p>
+          <p id="clientNameAnswer" class="hidden">Nombre del cliente oculto</p>
           <h6>Información del evento:</h6>
           <form>
             <div class="row mb-3">
@@ -333,7 +352,7 @@
             <p>Estado: Pendiente</p>
 
             <div class="d-flex justify-content-end">
-              <button type="button" class="btn btn-primary " style="margin-right: 20px;">Contratar</button>
+              <button type="button" class="btn btn-primary " style="margin-right: 20px;" id="checkout-button">Contratar</button>
               <button type="button" class="btn btn-primary ">Rechazar</button>
             </div>
           </form>
@@ -342,15 +361,75 @@
     </div>
   </div>
 
+  <!-- Modal para Ver la Confirmacion de un pago -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailsModalLabel">Solicitud de servicio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <h3 id="serviceNameConfirm">Nombre del servicio</h3>
+          <div>
+            <span style="font-size: 20px;">Solicitado por:</span>
+            <span id="clientNameConfirm" style="font-size: 20px;">Nombre del cliente</span>
+          </div>
+          <br>
+          <h6>Información del evento:</h6>
+          <form>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label class="form-label">Cantidad de invitados:</label>
+                <input type="number" class="form-control" id="guestCountConfirm" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Duración del evento (horas):</label>
+                <input type="number" class="form-control" id="eventDurationConfirm" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Fecha:</label>
+                <input type="date" class="form-control" id="eventDateConfirm" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Tipo de evento:</label>
+                <input type="text" class="form-control" id="eventTypeConfirm" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <label class="form-label">Dirección:</label>
+                <input type="text" class="form-control" id="eventAddressConfirm" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Precio de contratación:</label>
+                <input type="number" class="form-control" id="contractPriceConfirm" readonly>
+              </div>
+
+            </div>
+            <p>Estado: Pagado</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Título de servicios -->
   <div class="container mt-5">
+    <p id="error" class="error hidden">Algo salió mal</p>
     <h2 class="text-center">Nuestros Servicios</h2>
 
     <!-- Formulario para filtrar servicios por categoría -->
     <form method="GET" action="{% url 'servicios_sin_login' %}">
       <div class="mb-3">
         <label for="categoria">Filtrar por categoría:</label>
-        <select name="categoria" class="form-select" aria-label="Selecciona una categoría" style="width: 270px; margin: 10px 0;" onchange="this.form.submit()">
+        <select name="categoria" class="form-select" aria-label="Selecciona una categoría"
+          style="width: 270px; margin: 10px 0;" onchange="this.form.submit()">
           <option {% if not categoria_seleccionada or categoria_seleccionada == 'Todas las categorias' %}selected{% endif %}>Todas las categorias</option>
           <option value="Entretenimiento" {% if categoria_seleccionada == 'Entretenimiento' %}selected{% endif %}>Entretenimiento</option>
           <option value="Equipamiento_Mobiliario" {% if categoria_seleccionada == 'Equipamiento_Mobiliario' %}selected{% endif %}>Equipamiento y mobiliario</option>
@@ -365,7 +444,10 @@
 
     <!-- Acordeón para categorías -->
     <div class="accordion" id="accordionCategorias">
-      {% if user.es_proveedor %}
+      {% if user.is_authenticated and user.es_proveedor and user.proveedor.stripe_account_id == None %}
+      <p style="text-align: center;">Aviso: Para publicar un servicio, crea una cuenta en stripe con el boton de arriba</p>
+      {% endif %}
+      {% if user.es_proveedor and user.proveedor and user.proveedor.stripe_account_id %}
       <!-- Seccion de servicios para usuario proveedor -->
       <div class="accordion-item">
         <h2 class="accordion-header" id="categoriaHeading1">
@@ -491,8 +573,92 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Para usar las flechas -->
+  <!-- Stripe JS -->
+  <script src="https://js.stripe.com/v3/"></script>
+
+  {% if notificaciones %}
+  <script>
+    var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
+
+    document.getElementById("checkout-button").addEventListener("click", function () {
+        const solicitudId = this.getAttribute("data-solicitud-id");
+        fetch(`/Servicios/create_checkout_session/${solicitudId}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            // Redirige a Stripe para completar el pago
+            return stripe.redirectToCheckout({ sessionId: data.id });
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+    });
+  </script>
+  {% endif %}
 
   <script>
+    let connectedAccountId = null;
+    const stripeButton = document.getElementById("create-stripe-account-button");
+    if (stripeButton) { // Verifica si el botón existe
+      stripeButton.onclick = async function () {
+      document.getElementById("error").classList.add("hidden");
+
+      // Llama a la vista de Django para crear la cuenta conectada en Stripe
+      fetch("{% url 'create_account' %}", {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+          "Content-Type": "application/json",
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            document.getElementById("error").classList.remove("hidden");
+            document.getElementById("error").innerText = data.error;
+            return;
+          }
+
+          connectedAccountId = data.account;
+
+          document.getElementById("create-stripe-account-button").classList.add("hidden");
+
+          createAccountLinkAndRedirect(connectedAccountId);
+        });
+    };
+    }
+
+    // Función para crear el enlace de la cuenta y redirigir al usuario
+    function createAccountLinkAndRedirect(accountId) {
+      fetch("{% url 'create_account_link' %}", {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ account: accountId }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            document.getElementById("error").classList.remove("hidden");
+            document.getElementById("error").innerText = data.error;
+            return;
+          }
+
+          // Redirige al usuario a la URL de Stripe para completar la información de su cuenta
+          window.location.href = data.url;
+        });
+    }
+
     function toggleNotifications() {
       var dropdown = document.getElementById('notificationDropdown');
       dropdown.style.display = dropdown.style.display === 'none' || dropdown.style.display === '' ? 'block' : 'none';
@@ -508,9 +674,10 @@
       // Código para actualizar el modal del proveedor
     }
 
-    function loadSolicitudDetails(solicitudId, isAnswerModal = false) {
+    function loadSolicitudDetails(solicitudId, isAnswerModal = false, isConfirmModal = false) {
       // Define el prefijo para diferenciar los IDs de los modales
-      const modalPrefix = isAnswerModal ? 'Answer' : '';
+      const modalPrefix = (isAnswerModal ? 'Answer' : '') + (isConfirmModal ? 'Confirm' : '');
+      console.log("modalPrefix: " + modalPrefix);
 
       // Asigna el ID de la solicitud para que se pueda acceder en la funcion responderSolicitud()
       document.getElementById("detailsModal").setAttribute("data-solicitud-id", solicitudId);
@@ -523,7 +690,7 @@
           // Asigna los valores a los elementos correctos, usando el prefijo si es el segundo modal
           document.getElementById("serviceName" + modalPrefix).textContent = data.servicio;
           document.getElementById("providerNameAnswer").textContent = data.proveedor;
-          document.getElementById("clientName").textContent = data.cliente;
+          document.getElementById("clientName" + modalPrefix).textContent = data.cliente;
           document.getElementById("guestCount" + modalPrefix).value = data.personas;
           document.getElementById("eventDuration" + modalPrefix).value = data.duracion;
           document.getElementById("eventDate" + modalPrefix).value = data.fecha;
@@ -532,6 +699,9 @@
 
           // Actualiza el precio si existe
           document.getElementById("contractPrice" + modalPrefix).value = data.precio ? data.precio : '';
+
+          // Establece el solicitud_id en el botón "Contratar"
+          document.getElementById("checkout-button").setAttribute("data-solicitud-id", solicitudId);
         })
         .catch(error => console.error('Error al cargar los detalles de la solicitud:', error));
     }

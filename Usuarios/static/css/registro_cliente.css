@@ -58,6 +58,7 @@
     border-radius: 90px;
     font-size: 16px;
     cursor: pointer;
+    margin-bottom: 20px;
 }
 
 .register-form .google-register {
@@ -111,20 +112,7 @@ body {
     margin: 0;
 }
 
-.register-btn {
-    width: 100%;
-    max-width: 150px;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: background-color 0.3s;
-}
 
-.register-btn:hover {
-    background-color: #e9ecef;
-}
 
 .social-register {
     display: flex;
@@ -158,4 +146,66 @@ body {
 .google-btn:hover, .apple-btn:hover, .facebook-btn:hover {
     background-color: #e9ecef;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+#video {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+#captureButton {
+    margin-top: 10px;
+}
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Espacio entre los botones */
+}
+
+.modal-buttons .register-btn {
+    background-color: #B12A76; /* Color de fondo del botón */
+    color: white; /* Color del texto */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 40%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Cambia el color al pasar el cursor */
+.modal-buttons .register-btn:hover {
+    background-color: #9A2467;
+}
+
+.hidden {
+    display: none;
 }

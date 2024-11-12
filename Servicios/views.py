@@ -10,6 +10,7 @@ from .models import Servicio
 from .forms import PublicarServicioForm
 from django.http import JsonResponse
 from django.contrib import messages
+from django.conf import settings
 
 def servicios_sin_login(request):
     # Obtener la categoría seleccionada desde la solicitud GET
@@ -32,7 +33,8 @@ def servicios_sin_login(request):
     return render(request, 'servicios_sin_login.html', {
         'servicios': servicios,
         'notificaciones': notificaciones,
-        'categoria_seleccionada': categoria_seleccionada
+        'categoria_seleccionada': categoria_seleccionada,
+        'STRIPE_PUBLIC_KEY': settings.STRIPE_PUBLIC_KEY,
     })
 
 
