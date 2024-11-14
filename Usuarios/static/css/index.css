@@ -1,63 +1,113 @@
 /*Estilos propios de pantalla de inicio. Emiliano*/
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
 .container {
-    height: auto; /* Asegúrate de que se ajuste al contenido */
-    min-height: 100vh; /* Asegúrate de que al menos ocupe la altura completa de la ventana */
-  }
-  
+    height: auto;
+    min-height: 80vh;
+    padding: 0%;
+}
+
 .main-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-align: center;
     gap: 20px;
 }
+
 .text-area {
     flex: 1;
 }
 
-.text-area p{
-    padding-top: 20px;
-    font-size: 50px;
+.text-area h1 {
+    font-size: 2.5rem;
 }
-.btn-secondary{
-    width: 200px; /* Ancho fijo */
+
+.text-area h3 {
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
+
+.btn-secondary {
+    width: 200px;
     height: 60px;
-    font-size: 2rem; 
+    font-size: 1.5rem;
 }
 
-.image-gallery {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 10px;
-}
-
-.image-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-    max-width: 250px;
-    border-radius: 20px;
-}
-
-.carousel-inner img {
-    max-height: 400px; /* Ajusta según tus necesidades */
-    object-fit: cover; /* Para que las imágenes se ajusten sin distorsionarse */
-  }
-
-  #carouselExample {
-    width: 150px; /* Ajusta el ancho para la forma del carrusel */
-    max-height: 500px; /* Controla la altura visible del carrusel */
-    overflow: hidden;
-}
-
-.carousel-inner {
+.carousel-container {
     display: flex;
-    flex-direction: column; /* Alinea las imágenes en una columna para el formato vertical */
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    padding: 10px;
+    flex-direction: column;
 }
 
-.custom-img {
-    width: 100%; /* Ajusta las imágenes para que ocupen todo el ancho del carrusel */
-    height: 120px; /* Controla la altura de cada imagen */
-    object-fit: cover; /* Ajusta la imagen sin distorsión */
-    border-radius: 10px;
-    margin-bottom: 10px; /* Espacio entre imágenes */
+section {
+    display: flex;
+    justify-content: center; /* Para centrar los contenedores de carrusel */
+    gap: 20px;
 }
+
+.carousel-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    max-width: 200px;
+}
+
+/* Tamaños personalizados para cada panel para lograr alturas específicas */
+.panel1 { height: 300px; }
+.panel4 { height: 100px; }
+.panel2 { height: 100px; }
+.panel5 { height: 300px; }
+.panel3 { height: 200px; }
+.panel6 { height: 200px; }
+
+.carousel-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Estilos para las secciones adicionales */
+.additional-sections {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.testimonials, .how-it-works, .benefits {
+    margin-top: 50px;
+}
+
+.testimonials h2, .how-it-works h2, .benefits h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+.card, .step, .benefit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    width: 250px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.steps-container, .benefit-list {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+

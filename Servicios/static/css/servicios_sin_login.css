@@ -1,99 +1,144 @@
-.service-box {
-  border: 1px solid #ccc; /* Bordes para la división */
-  border-radius: 10px; /* Bordes redondeados */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra */
-  padding: 15px; /* Espaciado interno */
-  margin-bottom: 20px; /* Espacio entre los contenedores */
-  transition: transform 0.2s; /* Transición suave */
-  height: 250px; /* Altura fija para todos los contenedores */
+
+.service-box { 
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 20px;
+  transition: transform 0.2s;
+  height: 350px; /* Aumenta un poco la altura del contenedor */
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Asegura que los elementos se distribuyan */
+  justify-content: space-between;
 }
 
-.service-box:hover {
-  transform: scale(1.05); /* Aumenta el tamaño al pasar el mouse */
+    .service-box:hover {
+      transform: scale(1.05);
+      /* Aumenta el tamaño al pasar el mouse */
+    }
+
+    .service-box img {
+      width: 100%;
+      height: 50%;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    
+
+    .notification-dropdown {
+      position: fixed;
+      /* Coloca el dropdown */
+      right: 0;
+      /* Alinea a la derecha */
+      top: 60px;
+      /* Ajusta la distancia desde la parte superior para que no tape la navbar */
+      width: 300px;
+      /* Ancho fijo para el menú de notificaciones */
+      height: calc(100vh - 60px);
+      /* Altura máxima para ocupar el resto de la ventana */
+      background-color: white;
+      /* Fondo blanco para el dropdown */
+      border: 1px solid #ccc;
+      /* Borde del dropdown */
+      border-radius: 5px;
+      /* Bordes redondeados */
+      display: none;
+      /* Oculta el dropdown inicialmente */
+      z-index: 1000;
+      /* Asegura que el dropdown esté encima de otros elementos */
+      padding: 10px;
+      /* Espaciado interno */
+      text-align: center;
+      /* Centra el texto en el dropdown */
+      overflow-y: auto;
+      /* Habilita el desplazamiento vertical */
+    }
+
+    .notification {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      /* Ajusta el padding para que las notificaciones sean más pequeñas */
+      margin-bottom: 10px;
+      /* Espacio entre notificaciones */
+      font-size: 0.8rem;
+      /* Tamaño de fuente más pequeño */
+      text-align: center;
+      /* Centra el texto */
+    }
+
+    .notification h5 {
+      margin: 0;
+      /* Sin márgenes */
+      font-size: 1rem;
+      /* Tamaño de fuente más pequeño */
+    }
+
+    .btn-details {
+      background-color: #962b6b;
+      /* Color del botón */
+      color: white;
+      /* Color del texto */
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      margin-left: 5px;
+      font-size: 0.7rem;
+      /* Tamaño de fuente más pequeño */
+    }
+
+    .btn-details:hover {
+      background-color: #7c224d;
+      /* Color más claro al pasar el mouse */
+    }
+
+    .btn-close {
+      position: absolute;
+      top: -18.9px;
+      /* Ajustar para centrar verticalmente */
+      right: 10px;
+      /* Alineado a la derecha */
+      background: transparent;
+      /* Sin fondo */
+      border: none;
+      /* Sin borde */
+      cursor: pointer;
+      /* Cambia el cursor al pasar el mouse */
+      font-size: 40px;
+      /* Tamaño de la X más grande */
+      color: #962b6b;
+      /* Color morado */
+    }
+
+    .btn-notifications:hover {
+      background-color: #7c224d;
+      /* Color más claro al pasar el mouse */
+    }
+
+    .service-info .rating {
+      margin-bottom: 5px;
+    }
+    
+    .service-info .price {
+      font-size: 0.9rem;
+    }
+
+    .service-box h5 {
+  font-size: 1rem;
+  margin: 1px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limita a 2 líneas */
+  -webkit-box-orient: vertical;
 }
 
-.service-box img {
-  width: 90%; /* Ancho de la imagen al 90% del contenedor */
-  height: auto;
-  margin: 0 auto; /* Centra la imagen horizontalmente */
-}
-
-.service-box h5 {
-  font-size: 1rem; /* Tamaño del título más pequeño */
-}
-
-.service-info {
-  display: flex;
-  justify-content: space-between; /* Espacio entre estrellas y precio */
-  align-items: center; /* Alinea las estrellas y precio al centro verticalmente */
-  font-size: 0.7rem; /* Tamaño del rating y precio más pequeño */
-  margin-top: 5px; /* Espacio entre la descripción y la información del servicio */
-}
-
-.btn-add {
-  font-size: 0.7rem; /* Tamaño del botón más pequeño */
-  background-color: #582168; /* Color rosa */
-  color: white; /* Color del texto en el botón */
-}
-
-/* Efecto hover para el botón */
-.btn-add:hover {
-  background-color: #7c224d; /* Color rosa más oscuro al pasar el mouse */
-}
-
-.btn-notifications {
-  background-color: #582168; /* Color morado del botón */
-  border: none; /* Sin bordes */
-  border-radius: 5px; /* Bordes redondeados */
-  padding: 5px; /* Espaciado interno */
-  cursor: pointer; /* Cambia el cursor al pasar el mouse */
-  position: absolute; /* Coloca el botón en la parte superior derecha */
-  right: 15px; /* Alinea a la derecha */
-  top: 80px; /* Ajusta la distancia desde la parte superior */
-}
-
-.btn-notifications:hover {
-  background-color: #7c224d; /* Color más claro al pasar el mouse */
-}
-
-.notification-dropdown {
-  position: absolute; /* Coloca el dropdown debajo del botón */
-  right: 15px; /* Alinea a la derecha */
-  top: 130px; /* Ajusta la distancia desde la parte superior */
-  background-color: white; /* Fondo blanco para el dropdown */
-  border: 1px solid #ccc; /* Borde del dropdown */
-  border-radius: 5px; /* Bordes redondeados */
-  display: none; /* Oculta el dropdown inicialmente */
-  z-index: 1000; /* Asegura que el dropdown esté encima de otros elementos */
-  padding: 10px; /* Espaciado interno */
-  opacity: 0; /* Comienza invisible */
-  transform: translateY(-10px); /* Comienza ligeramente movido hacia arriba */
-  transition: opacity 0.3s ease, transform 0.3s ease; /* Efecto de transición suave */
-}
-
-.notification-dropdown.show {
-  display: block; /* Muestra el dropdown */
-  opacity: 1; /* Hacelo visible */
-  transform: translateY(0); /* Regresa a su posición original */
-}
-
-.notification-dropdown ul {
-  list-style: none; /* Sin puntos de lista */
-  padding: 0; /* Sin padding */
-}
-
-.notification-dropdown li {
-  padding: 5px 0; /* Espaciado entre notificaciones */
-  border-bottom: 1px solid #ccc; /* Línea divisoria entre notificaciones */
-}
-
-.notification-dropdown li:last-child {
-  border-bottom: none; /* Sin línea divisoria en la última notificación */
-}
-
-.notification-dropdown li:hover {
-  background-color: #f0f0f0; /* Color de fondo al pasar el mouse */
-}
+    
+    .service-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.8rem;
+      margin-top: 5px;
+    }
+    

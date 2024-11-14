@@ -107,10 +107,33 @@ def rechazar_solicitud(request, solicitud_id):
         solicitud.save()
 
         # Marcar la notificación original como leída
-        notificacion_proveedor = Notificacion.objects.filter(user=request.user, solicitud=solicitud, tipo_notificacion='Solicitud de Presupuesto').first()
+        notificacion_proveedor = Notificacion.objects.filter(user=request.user, solicitud=solicitud, tipo_notificacion='Solicitud de Presupuesto', leido=False).first()
         if notificacion_proveedor:
             notificacion_proveedor.leido = True
             notificacion_proveedor.save()
+
+        return JsonResponse({'status': 'success', 'message': 'Solicitud rechazada exitosamente'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
+    
+@login_required
+def rechazar_respuesta(request, solicitud_id):
+    solicitud = get_object_or_404(Solicitud_Presupuesto, id=solicitud_id)
+
+    # Verifica que el usuario actual sea el cliente de la solicitud
+    if solicitud.cliente.user != request.user:
+        return JsonResponse({'status': 'error', 'message': 'No tienes permiso para rechazar esta solicitud'}, status=403)
+
+    if request.method == 'POST':
+        # Actualiza el estado de la solicitud a 'rechazada'
+        solicitud.status = 'rechazada'
+        solicitud.save()
+
+        # Marcar la notificación original como leída
+        notificacion_cliente = Notificacion.objects.filter(user=request.user, solicitud=solicitud, tipo_notificacion='Respuesta de Solicitud', leido=False).first()
+        if notificacion_cliente:
+            notificacion_cliente.leido = True
+            notificacion_cliente.save()
 
         return JsonResponse({'status': 'success', 'message': 'Solicitud rechazada exitosamente'})
     else:

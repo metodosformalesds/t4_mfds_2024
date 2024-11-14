@@ -1,16 +1,40 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import PublicarServicioForm, MultipleImagenesServiciosForm
-from Solicitudes.forms import SolicitudPresupuestoClienteForm  # Importa el formulario desde la aplicación 'Solicitudes'
-from .models import Imagenes_Servicios, Servicio
-from Notificaciones.models import Notificacion
+from .models import Imagenes_Servicios, Servicio, Reseña
+from Solicitudes.models import Solicitud_Presupuesto
+from Notificaciones.models import Notificacion  
 from PIL import Image
 import os
 from django.contrib.auth.decorators import login_required
-from .models import Servicio
-from .forms import PublicarServicioForm
 from django.http import JsonResponse
 from django.contrib import messages
 from django.conf import settings
+from .forms import PublicarServicioForm
+from django.db.models import Avg
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+
+
+def service_list(request):
+    categoria_seleccionada = request.GET.get('categoria')  # Captura la categoría seleccionada de la URL
+    
+    # Obtén todos los servicios
+    services = Servicio.objects.all()
+
+    # Filtra los servicios por categoría si se selecciona una
+    if categoria_seleccionada:
+        services = services.filter(categoria=categoria_seleccionada)
+
+    # Obtén todas las categorías únicas para el combobox
+    categorias = Servicio.objects.values_list('categoria', flat=True).distinct()
+
+    return render(request, 'service_list.html', {
+        'servicios': services,
+        'categorias': categorias,
+        'categoria_seleccionada': categoria_seleccionada
+    })
+
 
 def servicios_sin_login(request):
     # Obtener la categoría seleccionada desde la solicitud GET
@@ -109,21 +133,33 @@ def publicar_servicio(request):
     })
 
 
+@login_required
 def publicacion_servicio(request, id):
     try:
         servicio = Servicio.objects.get(id=id)
     except Servicio.DoesNotExist:
-        return redirect('servicios_sin_login')  # Redirige si no se encuentra el servicio
+        return redirect('servicios_sin_login')
 
+    # Obtener las imágenes relacionadas con el servicio
     imagenes = Imagenes_Servicios.objects.filter(servicio=servicio)
-    
-    # Crea una instancia vacía del formulario para pasar al contexto
-    form = SolicitudPresupuestoClienteForm()
-    
+
+   # Obtener todas las reseñas relacionadas con el servicio
+    reseñas = Reseña.objects.filter(servicio=servicio).order_by('-fecha')
+
+    # Calcular el promedio de calificación
+    promedio_calificacion = reseñas.aggregate(Avg('calificacion'))['calificacion__avg']
+    if promedio_calificacion is None:
+        promedio_calificacion = 0  # Si no hay reseñas, muestra 0
+
+    # Verificar si el usuario ha calificado el servicio
+    user_has_rated = Reseña.objects.filter(servicio=servicio, usuario=request.user).exists()
+
+    # Renderizar la plantilla con el contexto adecuado
     return render(request, 'publicacion_servicio.html', {
-        'servicio': servicio, 
+        'servicio': servicio,
         'imagenes': imagenes,
-        'form': form,
+        'reseñas': reseñas,
+        'user_has_rated': user_has_rated,
         'direccion': {
             'calle': servicio.direccion.split("%20")[0],
             'numero_exterior': servicio.direccion.split("%20")[1],
@@ -212,3 +248,49 @@ def editar_servicio(request, servicio_id):
             return JsonResponse({'success': True})
         else:
             return JsonResponse({'success': False, 'errors': form.errors})
+        
+
+@login_required
+def agregar_reseña(request, solicitud_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            calificacion = int(data.get('ratingStars'))
+            comentario = data.get('comment', '')
+
+            # Obtener la solicitud
+            solicitud = get_object_or_404(Solicitud_Presupuesto, id=solicitud_id)
+
+            # Crear la reseña
+            reseña = Reseña.objects.create(
+                servicio=solicitud.servicio,
+                usuario=request.user,
+                calificacion=calificacion,
+                comentario=comentario
+            )
+            
+            # Actualizar el promedio de calificación del servicio
+            promedio = Reseña.objects.filter(servicio=solicitud.servicio).aggregate(Avg('calificacion'))['calificacion__avg'] or 0
+            solicitud.servicio.promedio_calificacion = promedio
+            solicitud.servicio.save()
+            
+            # Marca como leída la notificación de tipo "Calificar Servicio" asociada a la solicitud
+            Notificacion.objects.filter(
+                solicitud=solicitud,
+                tipo_notificacion='Calificar Servicio',
+                leido=False
+            ).update(leido=True)
+
+            # Respuesta exitosa con detalles de la reseña
+            return JsonResponse({
+                'status': 'success',
+                'usuario': request.user.email,
+                'fecha': reseña.fecha.strftime('%d/%m/%Y'),
+                'calificacion': reseña.calificacion,
+                'comentario': reseña.comentario,
+            }, status=201)
+        except Exception as e:
+            print(e)
+            return JsonResponse({'error': str(e)}, status=400)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+

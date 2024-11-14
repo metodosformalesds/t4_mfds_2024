@@ -15,4 +15,5 @@ urlpatterns = [
     path('payment_success/', views_stripe.payment_success, name='payment_success'),
     path('payment_cancel/', views_stripe.payment_cancel, name='payment_cancel'),
     path('stripe_dashboard/', views_stripe.stripe_dashboard_link, name='stripe_dashboard_link'),
-]
+    path('servicio/<int:solicitud_id>/agregar_reseña/', views.agregar_reseña, name='agregar_reseña'),
+    ]

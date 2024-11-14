@@ -79,9 +79,8 @@
         <div class="company-details">
           <h2>{{ servicio.proveedor.nombre_empresa }}</h2>
           <p>Desde ${{ servicio.precio_minimo }}</p>
-          <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#rateServiceModal">Calificar
-            servicio</button>
-        </div>
+      </div>
+      
 
         <!-- Action Buttons -->
         <div class="buttons mt-3">
@@ -154,58 +153,33 @@
     </div>
   </div>
 
-  <section class="reviews-section">
-    <h2>Reseñas</h2>
-    <div class="reviews-container">
-      <!-- Review Card 1 -->
-      <div class="review-card">
-        <h3>Nombre del usuario</h3>
-        <p class="review-date">12/12/24</p>
-        <div class="rating">
-          <span>⭐⭐⭐⭐⭐</span>
-          <span class="rating-value">0.0</span>
-        </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
-          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
-      </div>
+ <!-- Reseñas -->
+<div class="reviews-container">
+    {% for reseña in reseñas %}
+        <div class="review-card">
+          <!-- Limitar el nombre del cliente a una línea -->
+          <p class="review-client">{{ reseña.usuario.email }}</p> 
+          <p class="review-date">{{ reseña.fecha|date:"d/m/Y" }}</p>
 
-      <!-- Review Card 2 -->
-      <div class="review-card">
-        <h3>Nombre del usuario</h3>
-        <p class="review-date">12/12/24</p>
-        <div class="rating">
-          <span>⭐⭐⭐⭐⭐</span>
-          <span class="rating-value">0.0</span>
+          <!-- Calificación con estrellas centradas y el formato X/5 -->
+          <div class="rating">
+            {% for i in "12345" %}
+                {% if forloop.counter <= reseña.calificacion %}
+                    <span class="estrella full">★</span>
+                {% else %}
+                    <span class="estrella">☆</span>
+                {% endif %}
+            {% endfor %}
+            <span class="rating-value">{{ reseña.calificacion }}/5</span>
+          </div>
+          
+          <p class="review-text">{{ reseña.comentario }}</p>
         </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
-          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
-      </div>
+    {% empty %}
+        <p>No hay reseñas disponibles.</p>
+    {% endfor %}
+</div>
 
-      <!-- Review Card 3 -->
-      <div class="review-card">
-        <h3>Nombre del usuario</h3>
-        <p class="review-date">12/12/24</p>
-        <div class="rating">
-          <span>⭐⭐⭐⭐⭐</span>
-          <span class="rating-value">0.0</span>
-        </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
-          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
-      </div>
-
-      <!-- Review Card 4 -->
-      <div class="review-card">
-        <h3>Nombre del usuario</h3>
-        <p class="review-date">12/12/24</p>
-        <div class="rating">
-          <span>⭐⭐⭐⭐⭐</span>
-          <span class="rating-value">0.0</span>
-        </div>
-        <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ornare urna. Praesent
-          pretium ligula ac ante tristique molestie sit amet vel tortor.</p>
-      </div>
-    </div>
-  </section>
 
   {% if servicio.proveedor == user.proveedor %}
   <!-- Nuevos botones de Editar y Eliminar publicación alineados a la derecha -->
@@ -216,7 +190,7 @@
       publicación</button>
   </div>
   {% endif %}
-
+ 
   <!-- Pie de página -->
   <footer>
     <div class="containerfooter text-center">
@@ -229,41 +203,6 @@
     </div>
   </footer>
 
-  <!-- Modal para calificar el servicio -->
-  <div class="modal fade" id="rateServiceModal" tabindex="-1" aria-labelledby="rateServiceModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="rateServiceModalLabel">Calificar servicio</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form method="POST">
-            <div class="mb-3">
-              <label for="ratingStars" class="form-label">Calificación (1 a 5 estrellas):</label>
-              <select class="form-select" id="ratingStars" name="ratingStars" required>
-                <option value="" disabled selected>Seleccionar estrellas</option>
-                <option value="1">1 estrella</option>
-                <option value="2">2 estrellas</option>
-                <option value="3">3 estrellas</option>
-                <option value="4">4 estrellas</option>
-                <option value="5">5 estrellas</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="comment" class="form-label">Comentario (opcional):</label>
-              <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
-            </div>
-            <div class="d-flex justify-content-end">
-              <button type="submit" class="btn btn-primary me-2">Enviar calificación</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
   <!-- Modal para Editar publicación con imagen -->
   <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

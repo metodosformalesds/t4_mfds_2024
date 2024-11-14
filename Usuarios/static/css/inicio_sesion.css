@@ -9,7 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 70vh;
 }
 
 .login-form {
@@ -107,20 +107,19 @@ body {
     display: flex;
     flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
     min-height: 100vh; /* Asegura que el cuerpo ocupe toda la altura de la ventana */
-    margin: 0; /* Elimina el margen por defecto */
 }
 .login-container {
     display: flex;
     justify-content: center; /* Centrar horizontalmente */
     align-items: center; /* Centrar verticalmente */
     flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
-    margin-top: -20px; /* Espacio superior para bajar la sección */
-    margin-bottom: 40px; /* Aumentar el margen inferior para separar del footer */
+    margin-top: 40px; /* Espacio superior para bajar la sección */
+    margin-bottom: 5px; /* Aumentar el margen inferior para separar del footer */
     background-color: #ffffff; /* Fondo claro para el contraste */
 }
 .login-form {
-    width: 100%; /* Asegura que el formulario ocupe todo el ancho */
-    max-width: 600px; /* Cambiado a 600px para mayor ancho del formulario */
+    width: 90%; /* Asegura que el formulario ocupe todo el ancho */
+    max-width: 500px; /* Cambiado a 600px para mayor ancho del formulario */
 }
 .login-btn {
     width: 100%; /* Asegura que el botón ocupe todo el ancho */
