@@ -159,23 +159,27 @@
     </div>
   </div>
 
-  <!-- Reseñas -->
-  <div class="reviews-container">
+ <!-- Reseñas -->
+<div class="reviews-container">
     {% for reseña in reseñas %}
         <div class="review-card">
-          <h3>{{ reseña.usuario.email }}</h3> 
+          <!-- Limitar el nombre del cliente a una línea -->
+          <p class="review-client">{{ reseña.usuario.email }}</p> 
           <p class="review-date">{{ reseña.fecha|date:"d/m/Y" }}</p>
+
+          <!-- Calificación con estrellas centradas y el formato X/5 -->
           <div class="rating">
             {% for i in "12345" %}
                 {% if forloop.counter <= reseña.calificacion %}
-                    <span class="estrella" style="color: gold;">★</span> <!-- Color forzado en línea -->
+                    <span class="estrella full">★</span>
                 {% else %}
-                    <span class="estrella" style="color: gray;">☆</span>
+                    <span class="estrella">☆</span>
                 {% endif %}
             {% endfor %}
-        </div>
-              
-            <p class="review-text">{{ reseña.comentario }}</p>
+            <span class="rating-value">{{ reseña.calificacion }}/5</span>
+          </div>
+          
+          <p class="review-text">{{ reseña.comentario }}</p>
         </div>
     {% empty %}
         <p>No hay reseñas disponibles.</p>
@@ -192,7 +196,7 @@
       publicación</button>
   </div>
   {% endif %}
-
+ 
   <!-- Pie de página -->
   <footer>
     <div class="containerfooter text-center">
