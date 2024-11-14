@@ -80,7 +80,7 @@
     margin: 50px;
 }
 
-/*seccion de reseñas*/
+/* Sección de reseñas */
 .reviews-section {
     max-width: 1200px;
     margin: 0 auto;
@@ -88,19 +88,28 @@
 
 .reviews-container {
     display: flex;
-    justify-content: center; /* Cambia a 'center' para que las reseñas estén alineadas en el centro */
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 15px; /* Ajusta el espacio entre las reseñas si es necesario */
+    gap: 15px;
     margin: 0 auto;
 }
 
 .review-card {
-    width: 300px; /* Ajusta el ancho de cada tarjeta según tu preferencia */
+    width: 300px;
     border: 1px solid #ddd;
     padding: 15px;
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Centra el contenido en el contenedor */
+}
+
+.review-card h3 {
+    font-size: 1.2rem;
+    margin: 0;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    overflow: hidden; /* Oculta el texto desbordado */
+    text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
 }
 
 .review-date {
@@ -111,43 +120,38 @@
 
 .rating {
     display: flex;
+    justify-content: center; /* Centra las estrellas horizontalmente */
     align-items: center;
-    margin-bottom: 10px; /* Reduce el espacio inferior si quieres las estrellas más cerca del texto */
+    gap: 5px; /* Espacio entre las estrellas y el texto de la calificación */
+    margin-bottom: 10px;
 }
 
-.rating span {
+.rating .estrella {
     font-size: 18px;
-    margin: 0 10px;
-}
-
-span.estrella {
-    margin: 0;
-}
-
-.estrella {
-    color: gray; /* Color de las estrellas vacías */
+    color: gray;
 }
 
 .rating .estrella.full {
-    color: gold; /* Cambia a amarillo para las estrellas llenas */
+    color: gold;
 }
 
 .rating-value {
-    margin-left: 10px;
-    font-size: 18px;
+    font-size: 0.7rem;
     color: #333;
+    font-weight: bold;
+    margin-left: 5px; /* Espacio entre las estrellas y el valor de la calificación */
 }
 
 .review-text {
     font-size: 14px;
     color: #555;
-    line-height: 1.4; /* Reduce el espacio entre líneas */
+    line-height: 1.4;
 }
 
-/* Ajusta la disposición en pantallas pequeñas para asegurar que se vean bien */
+/* Ajuste para pantallas pequeñas */
 @media (max-width: 768px) {
     .review-card {
-        width: 100%; /* En pantallas pequeñas, ocupa el 100% del ancho */
+        width: 100%;
         margin-bottom: 15px;
     }
 }
