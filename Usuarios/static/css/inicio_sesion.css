@@ -106,15 +106,14 @@
 body {
     display: flex;
     flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
-    min-height: 90vh; /* Asegura que el cuerpo ocupe toda la altura de la ventana */
-    margin: 10px; /* Elimina el margen por defecto */
+    min-height: 100vh; /* Asegura que el cuerpo ocupe toda la altura de la ventana */
 }
 .login-container {
     display: flex;
     justify-content: center; /* Centrar horizontalmente */
     align-items: center; /* Centrar verticalmente */
     flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
-    margin-top: -5px; /* Espacio superior para bajar la sección */
+    margin-top: 40px; /* Espacio superior para bajar la sección */
     margin-bottom: 5px; /* Aumentar el margen inferior para separar del footer */
     background-color: #ffffff; /* Fondo claro para el contraste */
 }

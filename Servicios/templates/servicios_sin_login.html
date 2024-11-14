@@ -105,12 +105,25 @@
     {% elif notificacion.tipo_notificacion == 'Confirmacion de Pago' %}
     <div class="notification">
       <p>{{ notificacion.tipo_notificacion }}</p>
+      {% if user.es_proveedor %}
       <h5>{{ notificacion.solicitud.cliente.nombre_completo }}</h5>
       <h5>Contrató:</h5>
+      {% else %}
+      <h5>Contrataste:</h5>
+      {% endif %}
       <h5> {{ notificacion.solicitud.servicio.nombre }} </h5>
       <br>
       <button class="btn-details" data-bs-toggle="modal" data-bs-target="#confirmModal"
         onclick="loadSolicitudDetails('{{ notificacion.solicitud.id }}', false, true)">Ver detalles</button>
+    </div>
+    {% elif notificacion.tipo_notificacion == 'Calificar Servicio' %}
+    <div class="notification">
+      <p>{{ notificacion.tipo_notificacion }}</p>
+      <h5 style="font-size: 12px; color: gray; margin-bottom: 5px;">Califica el servicio que contrataste:</h5>
+      <h5> {{ notificacion.solicitud.servicio.nombre }} </h5>
+      <h6> {{ notificacion.solicitud.proveedor.nombre_empresa }} </h6>
+      <br>
+      <button class="btn-details" data-bs-toggle="modal" data-bs-target="#rateServiceModal" onclick="loadCalificarServicio('{{ notificacion.solicitud.id }}')">Calificar</button>
     </div>
     {% endif %}
     {% endfor %}
@@ -130,6 +143,7 @@
           <div>
             <span style="font-size: 20px;">Solicitado por:</span>
             <span id="clientName" style="font-size: 20px;">Nombre del cliente</span>
+            <span id="providerName" class="hidden">Nombre del proveedor oculto</span>
           </div>
           <br>
           <h6>Información del evento:</h6>
@@ -229,7 +243,7 @@
 
             <div class="d-flex justify-content-end">
               <button type="button" class="btn btn-primary " style="margin-right: 20px;" id="checkout-button">Contratar</button>
-              <button type="button" class="btn btn-primary ">Rechazar</button>
+              <button type="button" class="btn btn-primary me-2 " onclick="rechazarRespuesta()">Rechazar</button>
             </div>
           </form>
         </div>
@@ -248,10 +262,18 @@
 
         <div class="modal-body">
           <h3 id="serviceNameConfirm">Nombre del servicio</h3>
+          {% if user.es_proveedor %}
           <div>
             <span style="font-size: 20px;">Solicitado por:</span>
             <span id="clientNameConfirm" style="font-size: 20px;">Nombre del cliente</span>
+            <span id="providerNameConfirm" class="hidden">Nombre del proveedor</span>
           </div>
+          {% else %}
+          <div>
+            <span id="clientNameConfirm" class="hidden">Nombre del cliente</span>
+            <span id="providerNameConfirm" style="font-size: 20px;">Nombre del proveedor</span>
+          </div>
+          {% endif %}
           <br>
           <h6>Información del evento:</h6>
           <form>
@@ -290,6 +312,45 @@
             </div>
             <p>Estado: Pagado</p>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para calificar el servicio -->
+  <div class="modal fade" id="rateServiceModal" tabindex="-1" aria-labelledby="rateServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="rateServiceModalLabel">Calificar el servicio contratado</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="reviewForm">
+            <div class="mb-3">
+                <h3 id="serviceNameRating">Nombre del servicio</h3>
+                <p id="providerNameRating">Nombre del proveedor</p>
+                <label for="ratingStars" class="form-label">Calificación:</label>
+                <select class="form-select" id="ratingStars" name="ratingStars" required>
+                    <option value="" disabled selected>Seleccionar estrellas</option>
+                    <option value="0">0 estrellas</option>
+                    <option value="1">1 estrella</option>
+                    <option value="2">2 estrellas</option>
+                    <option value="3">3 estrellas</option>
+                    <option value="4">4 estrellas</option>
+                    <option value="5">5 estrellas</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="comment" class="form-label">Comentario (opcional):</label>
+                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-primary me-2" onclick="submitReview()">Enviar reseña</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </form>
+        
         </div>
       </div>
     </div>
@@ -563,6 +624,9 @@
       // Asigna el ID de la solicitud para que se pueda acceder en la funcion responderSolicitud()
       document.getElementById("detailsModal").setAttribute("data-solicitud-id", solicitudId);
 
+      // Asigna el ID de la solicitud para que se pueda acceder en la funcion rechazarSolicitud()
+      document.getElementById("answerModal").setAttribute("data-solicitud-id", solicitudId);
+
       // Realiza una solicitud AJAX para obtener los detalles de la solicitud
       fetch(`/Solicitudes/obtener_solicitud/${solicitudId}/`)
         .then(response => response.json())
@@ -570,7 +634,7 @@
           console.log(data);
           // Asigna los valores a los elementos correctos, usando el prefijo si es el segundo modal
           document.getElementById("serviceName" + modalPrefix).textContent = data.servicio;
-          document.getElementById("providerNameAnswer").textContent = data.proveedor;
+          document.getElementById("providerName" + modalPrefix).textContent = data.proveedor;
           document.getElementById("clientName" + modalPrefix).textContent = data.cliente;
           document.getElementById("guestCount" + modalPrefix).value = data.personas;
           document.getElementById("eventDuration" + modalPrefix).value = data.duracion;
@@ -633,6 +697,27 @@
         .catch(error => console.error('Error:', error));
     }
 
+    function rechazarRespuesta() {
+      const solicitudId = document.getElementById("answerModal").getAttribute("data-solicitud-id");
+
+      fetch(`/Solicitudes/rechazar_respuesta/${solicitudId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')  // Para enviar el token CSRF
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            alert('Solicitud rechazada exitosamente');
+            location.reload();  // Recarga la página para actualizar las notificaciones
+          } else {
+            alert('Error al rechazar la solicitud');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
     // Función para obtener el token CSRF
     function getCookie(name) {
@@ -649,6 +734,61 @@
       }
       return cookieValue;
     }
+
+
+    function loadCalificarServicio(solicitudId) {
+      // Asigna el ID del servicio para que se pueda acceder en la funcion submitReview()
+      document.getElementById("rateServiceModal").setAttribute("data-solicitud-id", solicitudId);
+
+      // Realiza una solicitud AJAX para obtener los detalles del servicio
+      fetch(`/Solicitudes/obtener_solicitud/${solicitudId}/`)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // Asigna el nombre de servicio y proveedor al modal de calificación
+          document.getElementById("serviceNameRating").textContent = data.servicio;
+          document.getElementById("providerNameRating").textContent = data.proveedor;
+        })
+        .catch(error => console.error('Error al cargar los detalles de la solicitud:', error));
+    }
+
+    // Función para enviar la reseña
+  function submitReview() {
+      const submitReviewButton = document.querySelector('#rateServiceModal .btn-primary');
+      submitReviewButton.disabled = true;  // Deshabilitar el botón al hacer clic
+
+      const solicitudId = document.getElementById("rateServiceModal").getAttribute("data-solicitud-id");
+      const ratingStars = document.getElementById('ratingStars').value;
+      const comment = document.getElementById('comment').value;
+      //const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  
+      fetch(`/Servicios/servicio/${solicitudId}/agregar_reseña/`, {
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': "{{ csrf_token }}",
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              ratingStars: ratingStars,
+              comment: comment,
+          }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Datos recibidos del servidor:", data);
+        if (data.status === 'success') {
+            alert('Servicio calificado exitosamente');
+            location.reload();  // Recarga la página para actualizar las notificaciones
+          } else {
+            alert('Error al calificar el servicio ' + data.error);
+          }
+      })
+      .catch(error => {
+          console.error('Error en la solicitud:', error);
+          alert("Hubo un problema al enviar la reseña. Detalles: " + error.message);
+          submitReviewButton.disabled = false; // Habilitar el botón si hay error
+      });
+  }
   </script>
 </body>
 

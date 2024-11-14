@@ -127,7 +127,7 @@ def payment_success(request):
     try:
         checkout_session = stripe.checkout.Session.retrieve(session_id)
         
-        # Supongamos que `metadata` tiene el `solicitud_id` que pasaste al crear la sesión
+        # `metadata` tiene la `solicitud_id` pasada al crear la sesión
         solicitud_id = checkout_session.metadata.get('solicitud_id')
         solicitud = get_object_or_404(Solicitud_Presupuesto, id=solicitud_id)  # Obtén la solicitud de la base de datos
         
@@ -140,13 +140,36 @@ def payment_success(request):
             servicio=solicitud.servicio
         )
         
-        #Crea una notificacion para el proveedor
+        #Crea una notificacion de confirmacion de pago para el proveedor
         Notificacion.objects.create(
             user=solicitud.proveedor.user, 
             solicitud=solicitud,
             tipo_notificacion='Confirmacion de Pago',
             leido=False #Por defecto no leido
         )
+        
+        #Crea una notificacion de confirmacion de pago para el cliente
+        Notificacion.objects.create(
+            user=solicitud.cliente.user, 
+            solicitud=solicitud,
+            tipo_notificacion='Confirmacion de Pago',
+            leido=False #Por defecto no leido
+        )
+        
+        #Crea una notificacion para calificar el servicio
+        Notificacion.objects.create(
+            user=solicitud.cliente.user, 
+            solicitud=solicitud,
+            tipo_notificacion='Calificar Servicio',
+            leido=False #Por defecto no leido
+        )
+        
+        # Marca como leída la notificación de tipo "Respuesta de Solicitud" asociada a la solicitud
+        Notificacion.objects.filter(
+            solicitud=solicitud,
+            tipo_notificacion='Respuesta de Solicitud',
+            leido=False
+        ).update(leido=True)
         
         return render(request, 'payment_success.html', {
             'solicitud': solicitud

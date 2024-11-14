@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import PublicarServicioForm, MultipleImagenesServiciosForm
 from .models import Imagenes_Servicios, Servicio, Reseña
+from Solicitudes.models import Solicitud_Presupuesto
 from Notificaciones.models import Notificacion  
 from PIL import Image
 import os
@@ -153,16 +154,19 @@ def publicacion_servicio(request, id):
     # Verificar si el usuario ha calificado el servicio
     user_has_rated = Reseña.objects.filter(servicio=servicio, usuario=request.user).exists()
 
-    # Imprimir los nombres de usuario en la consola para verificar
-    for reseña in reseñas:
-        print(f"Usuario: {reseña.usuario.username if reseña.usuario else 'Sin usuario'}")  # Esto imprimirá el nombre de usuario o indicará si está vacío
-
     # Renderizar la plantilla con el contexto adecuado
     return render(request, 'publicacion_servicio.html', {
         'servicio': servicio,
         'imagenes': imagenes,
         'reseñas': reseñas,
         'user_has_rated': user_has_rated,
+        'direccion': {
+            'calle': servicio.direccion.split("%20")[0],
+            'numero_exterior': servicio.direccion.split("%20")[1],
+            'numero_interior': servicio.direccion.split("%20")[2] if " " in servicio.direccion.split("%20")[2] else " ",
+            'colonia': servicio.direccion.split("%20")[3],
+            'codigo_postal': servicio.direccion.split("%20")[4],
+        },
     })
 
 def eliminar_publicacion(request, id):
@@ -245,43 +249,48 @@ def editar_servicio(request, servicio_id):
         else:
             return JsonResponse({'success': False, 'errors': form.errors})
         
-        
-@csrf_exempt
+
 @login_required
-def agregar_reseña(request, servicio_id):
+def agregar_reseña(request, solicitud_id):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
             calificacion = int(data.get('ratingStars'))
             comentario = data.get('comment', '')
 
-            # Obtener el servicio
-            servicio = Servicio.objects.get(id=servicio_id)
-
-            # Verificar si el usuario ya ha calificado este servicio
-            if Reseña.objects.filter(servicio=servicio, usuario=request.user).exists():
-                return JsonResponse({'error': 'Ya has calificado este servicio'}, status=400)
+            # Obtener la solicitud
+            solicitud = get_object_or_404(Solicitud_Presupuesto, id=solicitud_id)
 
             # Crear la reseña
             reseña = Reseña.objects.create(
-                servicio=servicio,
+                servicio=solicitud.servicio,
                 usuario=request.user,
                 calificacion=calificacion,
                 comentario=comentario
             )
+            
+            # Actualizar el promedio de calificación del servicio
+            promedio = Reseña.objects.filter(servicio=solicitud.servicio).aggregate(Avg('calificacion'))['calificacion__avg'] or 0
+            solicitud.servicio.promedio_calificacion = promedio
+            solicitud.servicio.save()
+            
+            # Marca como leída la notificación de tipo "Calificar Servicio" asociada a la solicitud
+            Notificacion.objects.filter(
+                solicitud=solicitud,
+                tipo_notificacion='Calificar Servicio',
+                leido=False
+            ).update(leido=True)
 
             # Respuesta exitosa con detalles de la reseña
             return JsonResponse({
-                'usuario': request.user.username,
+                'status': 'success',
+                'usuario': request.user.email,
                 'fecha': reseña.fecha.strftime('%d/%m/%Y'),
                 'calificacion': reseña.calificacion,
                 'comentario': reseña.comentario,
             }, status=201)
         except Exception as e:
+            print(e)
             return JsonResponse({'error': str(e)}, status=400)
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-def actualizar_promedio_resena(servicio):
-    promedio = Reseña.objects.filter(servicio=servicio).aggregate(Avg('calificacion'))['calificacion__avg'] or 0
-    servicio.promedio_calificacion = promedio
-    servicio.save()

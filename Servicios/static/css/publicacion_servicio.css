@@ -119,16 +119,12 @@
 }
 
 .rating {
-    display: flex;
-    justify-content: center; /* Centra las estrellas horizontalmente */
-    align-items: center;
-    gap: 5px; /* Espacio entre las estrellas y el texto de la calificación */
     margin-bottom: 10px;
 }
 
 .rating .estrella {
     font-size: 18px;
-    color: gray;
+    color: rgb(231, 202, 39);
 }
 
 .rating .estrella.full {
