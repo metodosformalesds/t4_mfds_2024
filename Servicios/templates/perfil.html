@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Perfil
+{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/perfil.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container mt-5">
+  <!-- Detalles del Perfil -->
+  <div>
+    <h3>Detalles del Perfil</h3>
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="nombre" name="nombre" value="Nombre del Usuario" disabled>
+    </div>
+    <div class="mb-3">
+      <label for="correo" class="form-label">Correo Electrónico</label>
+      <input type="email" class="form-control" id="correo" name="correo" value="correo@ejemplo.com" disabled>
+    </div>
+  </div>
+
+  <!-- Contenido dinámico según el tipo de usuario -->
+  {% if is_cliente %}
+  <div class="mt-5">
+    <h3>Historial de Compras</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Servicio</th>
+          <th>Fecha</th>
+          <th>Monto Total</th>
+          <th>Detalles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Decoración de Bodas</td>
+          <td>12/11/2024</td>
+          <td>$10,000 MXN</td>
+          <td><a href="#">Ver más</a></td>
+        </tr>
+        <tr>
+          <td>Servicio de DJ</td>
+          <td>05/10/2024</td>
+          <td>$7,500 MXN</td>
+          <td><a href="#">Ver más</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {% if is_proveedor %}
+  <div class="mt-5">
+    <h3>Historial de Ventas</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Servicio</th>
+          <th>Fecha</th>
+          <th>Monto Total</th>
+          <th>Detalles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Decoración de Cumpleaños</td>
+          <td>20/10/2024</td>
+          <td>$15,000 MXN</td>
+          <td><a href="#">Ver más</a></td>
+        </tr>
+        <tr>
+          <td>Servicio de Meseros</td>
+          <td>02/11/2024</td>
+          <td>$5,000 MXN</td>
+          <td><a href="#">Ver más</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</div>
+{% endblock content %}

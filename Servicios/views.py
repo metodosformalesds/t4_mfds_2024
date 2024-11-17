@@ -13,8 +13,18 @@ from .forms import PublicarServicioForm
 from django.db.models import Avg
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
 
+def perfil(request):
+    # Determina si el usuario es cliente o proveedor
+    is_cliente = hasattr(request.user, 'cliente')  # Suponiendo que tienes un modelo Cliente relacionado con User
+    is_proveedor = hasattr(request.user, 'proveedor')  # Suponiendo que tienes un modelo Proveedor relacionado con User
 
+    return render(request, 'perfil.html', {
+        'is_cliente': is_cliente,
+        'is_proveedor': is_proveedor,
+    })
 
 def service_list(request):
     categoria_seleccionada = request.GET.get('categoria')  # Captura la categoría seleccionada de la URL

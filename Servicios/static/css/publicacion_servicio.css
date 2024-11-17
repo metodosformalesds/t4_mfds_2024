@@ -12,15 +12,14 @@
     margin-top: 20px;
 }
 
-/* Adjust action-section to align buttons and image */
+/* Ajuste de botones en acción */
 .action-section {
     display: flex;
-    align-items: center; /* Align vertically centered */
+    align-items: center;
     gap: 20px;
-    margin-bottom: 20px; /* Add margin at the bottom */
+    margin-bottom: 20px;
 }
 
-/* Buttons section remains the same */
 .buttons {
     display: flex;
     gap: 10px;
@@ -29,10 +28,10 @@
 .img-fluid {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Mantiene las proporciones pero llena el contenedor */
+    object-fit: contain;
 }
 
-/* Style for the buttons */
+/* Estilo de botones */
 .quote-btn, .message-btn {
     background-color: #6c27b7;
     color: white;
@@ -41,24 +40,16 @@
     cursor: pointer;
     font-size: 16px;
     border-radius: 5px;
-    margin: 0; /* Ensure no extra margin around the buttons */
 }
 
 .quote-btn:hover, .message-btn:hover {
     background-color: #5a2195;
 }
 
-/* Fix for the space below the buttons */
-.company-details, .contact-info {
-    margin-bottom: 0; /* Remove extra margin */
-    padding: 0;
-}
-
-/*seccion de mapa*/
+/* Sección del mapa */
 .container2 {
     max-width: 1200px;
     margin: 0 auto;
-
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -72,7 +63,6 @@
     flex-grow: 1;
 }
 
-
 .map img {
     max-width: 100%;
     height: auto;
@@ -81,11 +71,6 @@
 }
 
 /* Sección de reseñas */
-.reviews-section {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
 .reviews-container {
     display: flex;
     justify-content: center;
@@ -101,25 +86,7 @@
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Centra el contenido en el contenedor */
-}
-
-.review-card h3 {
-    font-size: 1.2rem;
-    margin: 0;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    overflow: hidden; /* Oculta el texto desbordado */
-    text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
-}
-
-.review-date {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 10px;
-}
-
-.rating {
-    margin-bottom: 10px;
+    text-align: center;
 }
 
 .rating .estrella {
@@ -127,27 +94,52 @@
     color: rgb(231, 202, 39);
 }
 
-.rating .estrella.full {
-    color: gold;
+/* Ajustes de carrusel */
+.carousel-inner img {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 10px;
 }
 
-.rating-value {
-    font-size: 0.7rem;
-    color: #333;
-    font-weight: bold;
-    margin-left: 5px; /* Espacio entre las estrellas y el valor de la calificación */
+#carouselServicio {
+    max-width: 100%;
+    overflow: hidden;
 }
 
-.review-text {
-    font-size: 14px;
-    color: #555;
-    line-height: 1.4;
+.carousel-control-prev,
+.carousel-control-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: white; /* Fondo blanco */
+    border-radius: 50%; /* Forma circular */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Sombra */
+    z-index: 10; /* Asegura que esté por encima */
+    position: absolute; /* Asegura la posición sobre las imágenes */
+    top: 50%; /* Centrado verticalmente */
+    transform: translateY(-50%); /* Asegura el centro exacto */
 }
 
-/* Ajuste para pantallas pequeñas */
-@media (max-width: 768px) {
-    .review-card {
-        width: 100%;
-        margin-bottom: 15px;
-    }
+.carousel-control-prev {
+    left: 10px; /* Ajusta la posición hacia la izquierda */
+}
+
+.carousel-control-next {
+    right: 10px; /* Ajusta la posición hacia la derecha */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-size: 50%; /* Tamaño adecuado para las flechas */
+    filter: invert(0); /* Negro predeterminado */
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo más claro al pasar el mouse */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7); /* Sombra más fuerte al pasar el mouse */
 }

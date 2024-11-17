@@ -1,0 +1,37 @@
+/* perfil.css */
+.card {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.img-fluid {
+    border: 2px solid #007bff;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+
+.nav-tabs .nav-link {
+    font-weight: bold;
+  }
+  
+  .table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  h3 {
+    color: #007bff;
+  }
+  
+  .mt-5 {
+    margin-top: 3rem !important;
+  }
+  
+  .list-group-item {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+  }
+  
