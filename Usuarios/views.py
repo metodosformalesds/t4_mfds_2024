@@ -30,9 +30,10 @@ def inicio(request):
     return render(request, 'index.html')
 
 def acerca_de(request):
-    """Renderiza la página 'Acerca de'.
+    """
+    Renderiza la página de 'Acerca de'.
 
-    Esta vista muestra la página 'Acerca de' de la aplicación.
+    Esta vista muestra información sobre la aplicación y su propósito.
 
     Args:
         request: El objeto HttpRequest que contiene la información de la solicitud.
@@ -43,6 +44,20 @@ def acerca_de(request):
     return render(request, 'acerca_de.html')
 
 def registro_cliente(request):
+        
+    """
+    Vista para registrar un cliente.
+
+    Esta vista renderiza el formulario de registro para un cliente. Si se envía el formulario con datos válidos, se
+    verifica si las fotos de la identificación y el rostro coinciden. Si coinciden, se guarda el usuario en la base de datos y se redirige a la página de servicios.
+
+    Args:
+        request: El objeto HttpRequest que contiene la información de la solicitud.
+
+    Returns:
+        HttpResponse: La respuesta que renderiza el template 'registro_cliente.html' con el formulario de registro.
+    """
+
     # Si la solicitud es de tipo POST quiere decir que se recibieron datos
     if request.method == 'POST':
         form = RegistroClienteForm(request.POST, request.FILES)
@@ -97,6 +112,18 @@ def registro_cliente(request):
 
 
 def registro_proveedor(request):
+    """
+    Vista para registrar un proveedor de servicios.
+
+    Esta vista renderiza el formulario de registro para un proveedor. Si se envía el formulario con datos válidos, se
+    verifica si las fotos de la identificación y el rostro coinciden. Si coinciden, se guarda el usuario en la base de datos y se redirige a la página de servicios.
+
+    Args:
+        request: El objeto HttpRequest que contiene la información de la solicitud.
+
+    Returns:
+        HttpResponse: La respuesta que renderiza el template 'registro_proveedor.html' con el formulario de registro.
+    """
     # Si la solicitud es de tipo POST quiere decir que se recibieron datos
     if request.method == 'POST':
         form = RegistroProveedorForm(request.POST, request.FILES)
@@ -156,6 +183,21 @@ def registro_proveedor(request):
 
 def inicio_sesion(request):
     # Si la solicitud es de tipo POST quiere decir que se recibieron datos
+    """
+    Vista para el inicio de sesión.
+
+    Si la solicitud es de tipo POST se procesa el formulario de inicio de sesión.
+    Si el formulario es válido se autentica al usuario y se redirige a la página de
+    servicios. Si el formulario no es válido se agrega un mensaje de error y
+    se vuelve a renderizar el formulario.
+    Si la solicitud no es de tipo POST se renderiza el formulario vacío.
+    
+    Args:
+        request: El objeto HttpRequest que contiene la información de la solicitud.
+
+    Returns:
+        HttpResponse: La respuesta que renderiza el template 'inicio_sesion.html' con el formulario de inicio de sesion. 
+    """
     if request.method == 'POST':
         form = InicioSesionForm(request.POST)
         if form.is_valid():
@@ -173,5 +215,16 @@ def inicio_sesion(request):
     return render(request, 'inicio_sesion.html', {'form': form})
 
 def cerrar_sesion(request):
+    """
+    Vista para cerrar la sesion del usuario actual.
+
+    Cierra la sesion del usuario actual y redirige a la pagina de inicio.
+
+    Args:
+        request: El objeto HttpRequest que contiene la informacion de la solicitud.
+
+    Returns:
+        HttpResponse: La respuesta que redirige a la pagina de inicio.
+    """
     logout(request) #Elimina la cookie de sesion
     return redirect('index')
