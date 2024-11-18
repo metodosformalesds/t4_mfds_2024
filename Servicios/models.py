@@ -9,7 +9,6 @@ class Servicio(models.Model):
     categoria = models.CharField(max_length=255)
     direccion = models.CharField(max_length=500)
     precio_minimo = models.DecimalField(max_digits=10, decimal_places=2)
-    precio_maximo = models.DecimalField(max_digits=10, decimal_places=2)
     informacion_detallada = models.TextField()
     promedio_calificacion = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
     

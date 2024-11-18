@@ -12,6 +12,7 @@ from Notificaciones.models import Notificacion
 from Pagos.models import Contratacion
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime
+from decimal import Decimal
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -86,6 +87,8 @@ def create_checkout_session(request, solicitud_id):
 
         if not proveedor.stripe_account_id:
             return JsonResponse({'error': 'El proveedor no tiene una cuenta de Stripe configurada.'}, status=400)
+        
+        precio_total = solicitud.precio * Decimal('1.08')  # Aplica el 8% de IVA al precio total
 
         # Crear la sesión de checkout de Stripe
         checkout_session = stripe.checkout.Session.create(
@@ -96,7 +99,7 @@ def create_checkout_session(request, solicitud_id):
                     'product_data': {
                         'name': servicio.nombre,
                     },
-                    'unit_amount': int(solicitud.precio * 100),  # Stripe usa centavos
+                    'unit_amount': int(precio_total * 100),  # Stripe usa centavos
                 },
                 'quantity': 1,
             }],
@@ -104,7 +107,7 @@ def create_checkout_session(request, solicitud_id):
             success_url=request.build_absolute_uri(reverse('payment_success')) + '?session_id={CHECKOUT_SESSION_ID}',
             cancel_url=request.build_absolute_uri(reverse('payment_cancel')),
             payment_intent_data={
-                'application_fee_amount': int(solicitud.precio * 10),  # Comisión del 10%
+                'application_fee_amount': int(precio_total * 10),  # Comisión del 10%
                 'transfer_data': {
                     'destination': proveedor.stripe_account_id,
                 },
@@ -131,13 +134,21 @@ def payment_success(request):
         solicitud_id = checkout_session.metadata.get('solicitud_id')
         solicitud = get_object_or_404(Solicitud_Presupuesto, id=solicitud_id)  # Obtén la solicitud de la base de datos
         
+        # Actualiza el precio total con el 8% de IVA
+        solicitud.precio_con_iva = solicitud.precio * Decimal('1.08')
+        
+        # Verifica si ya existe una contratación con este session_id para evitar duplicados
+        if Contratacion.objects.filter(stripe_session_id=session_id).exists():
+            return render(request, 'payment_success.html', {'solicitud': solicitud, 'message': 'Esta transacción ya fue procesada.'})
+        
         #Guarda los datos de la transaccion
         Contratacion.objects.create(
-            precio=solicitud.precio,
+            precio=solicitud.precio_con_iva,
             estado_transaccion='completada',
             fecha_contratacion=datetime.now(),
             cliente=solicitud.cliente,
-            servicio=solicitud.servicio
+            servicio=solicitud.servicio,
+            stripe_session_id=session_id  # Asocia el session_id
         )
         
         #Crea una notificacion de confirmacion de pago para el proveedor

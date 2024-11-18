@@ -12,7 +12,7 @@ class PublicarServicioForm(forms.ModelForm):
     
     class Meta:
         model = Servicio #El modelo de este formulario es Servicio
-        fields = ['nombre', 'categoria', 'precio_minimo', 'precio_maximo', 'informacion_detallada']
+        fields = ['nombre', 'categoria', 'precio_minimo','informacion_detallada']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'categoria': forms.Select(choices=[
@@ -23,7 +23,6 @@ class PublicarServicioForm(forms.ModelForm):
                 ('Fotografia', 'Fotografía'), 
                 ('Decoracion', 'Decoración')], attrs={'class': 'form-select'}),
             'precio_minimo': forms.NumberInput(attrs={'class': 'form-control'}),
-            'precio_maximo': forms.NumberInput(attrs={'class': 'form-control'}),
             'informacion_detallada': forms.Textarea(attrs={'class': 'form-control'}),
         }
 

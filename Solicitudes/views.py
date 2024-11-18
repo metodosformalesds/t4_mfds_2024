@@ -43,7 +43,9 @@ def obtener_solicitud(request, solicitud_id):
     data = {
         'servicio': solicitud.servicio.nombre,
         'proveedor': solicitud.proveedor.nombre_empresa,
+        'proveedor_contacto': solicitud.proveedor.user.email,
         'cliente': solicitud.cliente.nombre_completo,
+        'cliente_contacto': solicitud.cliente.user.email,
         'personas': solicitud.personas,
         'duracion': solicitud.duracion,
         'status': solicitud.status,

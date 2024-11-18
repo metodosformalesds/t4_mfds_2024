@@ -15,15 +15,16 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
+from decimal import Decimal
 
+@login_required
 def perfil(request):
-    # Determina si el usuario es cliente o proveedor
-    is_cliente = hasattr(request.user, 'cliente')  # Suponiendo que tienes un modelo Cliente relacionado con User
-    is_proveedor = hasattr(request.user, 'proveedor')  # Suponiendo que tienes un modelo Proveedor relacionado con User
-
+    notificaciones = Notificacion.objects.filter(user=request.user, tipo_notificacion='Confirmacion de Pago').order_by('-fecha')
+    for notificacion in notificaciones:
+        # Calcula el precio con IVA
+        notificacion.precio_con_iva = notificacion.solicitud.precio * Decimal('1.08')
     return render(request, 'perfil.html', {
-        'is_cliente': is_cliente,
-        'is_proveedor': is_proveedor,
+        'notificaciones': notificaciones,
     })
 
 def service_list(request):
@@ -58,8 +59,8 @@ def servicios_sin_login(request):
     
     # Verificar si el usuario ha iniciado sesión
     if request.user.is_authenticated:
-        # Obtener todas las notificaciones del usuario
-        notificaciones = Notificacion.objects.filter(user=request.user, leido=False)
+        # Obtener todas las notificaciones del usuario, ordenadas de más reciente a más antigua
+        notificaciones = Notificacion.objects.filter(user=request.user, leido=False).order_by('-fecha')
     else:
         # Si no está autenticado, no se cargan notificaciones
         notificaciones = None

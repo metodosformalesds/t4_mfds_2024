@@ -8,3 +8,4 @@ class Contratacion(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     estado_transaccion = models.CharField(max_length=20, choices=[('pendiente', 'Pendiente'), ('completada', 'Completada')])
     fecha_contratacion = models.DateField()
+    stripe_session_id = models.CharField(max_length=255, unique=True, null=True, blank=True)  # Evita duplicados

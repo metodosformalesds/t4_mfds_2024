@@ -345,6 +345,7 @@
                   <option value="Catering" {% if servicio.categoria == "Catering" %}selected{% endif %}>Catering</option>
                   <option value="Fotografia" {% if servicio.categoria == "Fotografia" %}selected{% endif %}>Fotografía</option>
                   <option value="Decoracion" {% if servicio.categoria == "Decoracion" %}selected{% endif %}>Decoración</option>
+                  <option value="Otro" {% if servicio.categoria == "Otro" %}selected{% endif %}>Otro</option>
                 </select>
               </div>
             </div>
@@ -379,11 +380,6 @@
                 <label for="precio_minimo" class="form-label">Precio mínimo:</label>
                 <input type="number" class="form-control" id="precio_minimo" name="precio_minimo"
                   value="{{ servicio.precio_minimo }}" required>
-              </div>
-              <div class="col-md-3">
-                <label for="precio_maximo" class="form-label">Precio máximo:</label>
-                <input type="number" class="form-control" id="precio_maximo" name="precio_maximo"
-                  value="{{ servicio.precio_maximo }}" required>
               </div>
             </div>
             <div class="row mb-3">

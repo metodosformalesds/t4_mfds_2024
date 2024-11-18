@@ -34,4 +34,21 @@
     background-color: #f9f9f9;
     margin-bottom: 10px;
   }
-  
+
+  .btn-details {
+    background-color: #962b6b;
+    /* Color del botón */
+    color: white;
+    /* Color del texto */
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-left: 5px;
+    font-size: 0.7rem;
+    /* Tamaño de fuente más pequeño */
+  }
+
+  .btn-details:hover {
+    background-color: #7c224d;
+    /* Color más claro al pasar el mouse */
+  }
