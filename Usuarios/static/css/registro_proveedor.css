@@ -27,9 +27,7 @@
     text-align: center;
 }
 
-.register-form input[type="text"],
-.register-form input[type="email"],
-.register-form input[type="password"] {
+.register-form input:not(.form-check-input) {
     display: block;
     margin: 0 auto;
     width: 75%;
@@ -40,7 +38,7 @@
     font-size: 16px;
 }
 
-.register-form label {
+.register-form label:not(.form-check-label) {
     font-size: 14px;
     margin-bottom: 10px;
     display: block;
@@ -207,4 +205,34 @@ body {
 
 .hidden {
     display: none;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px; /* Espaciado opcional entre los checkboxes */
+}
+
+.form-check-label {
+    font-size: 14px;
+    margin-left: 10px; /* Espacio entre el checkbox y la etiqueta */
+}
+
+.form-check-input {
+    width: 20px; /* Reduce el tamaño del checkbox */
+    height: 20px;
+    margin-right: 5px; /* Espaciado entre el checkbox y el texto */
+    cursor: pointer; /* Cambia a cursor de mano al pasar por encima */
+}
+
+.form-check-label a {
+    text-decoration: underline; /* Opcional: subraya el enlace */
+    color: #B12A76; /* Color para el enlace */
+    font-size: 14px; /* Tamaño del enlace */
+    cursor: pointer;
+}
+
+.form-check-label a:hover {
+    color: #9A2467; /* Cambia el color del enlace al pasar el mouse */
 }

@@ -20,6 +20,21 @@
         <!-- Esto generará los campos del formulario y los mensajes de error automáticamente -->
         {{ form.as_p }}
 
+        <div class="form-check">
+            <input type="checkbox" id="terminosCheckbox" name="terminos" class="form-check-input" required>
+            <label class="form-check-label" for="terminosCheckbox">
+                Acepto <a href="#" data-bs-toggle="modal" data-bs-target="#terminosModal">términos de servicio</a>
+            </label>
+        </div>
+        
+        <div class="form-check">
+            <input type="checkbox" id="privacidadCheckbox" name="privacidad" class="form-check-input" required>
+            <label class="form-check-label" for="privacidadCheckbox">
+                Acepto <a href="#" data-bs-toggle="modal" data-bs-target="#privacidadModal">políticas de privacidad</a>
+            </label>
+        </div>
+        
+
         <label for="fotoRostro">Captura de Rostro:</label>
         <input type="hidden" id="fotoRostro" name="foto_rostro">
         <button type="button" onclick="mostrarModal()" class="register-btn">Activar cámara</button>
