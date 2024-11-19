@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 import environ
+from dotenv import load_dotenv
 from pathlib import Path
 
 
@@ -29,7 +30,18 @@ SECRET_KEY = 'django-insecure-uz7))qty0ah^7744lcdxg7)0b=9rwo&kvq3g^k#65*55_f-g(5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://mfdsteam4.pythonanywhere.com/', 'deco-rent.com', 'www.deco-rent.com'] 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://mfdsteam4.pythonanywhere.com/', '4d4b-189-248-73-167.ngrok-free.app', 'deco-rent.com', 'www.deco-rent.com'] 
+CSRF_TRUSTED_ORIGINS = ['https://4d4b-189-248-73-167.ngrok-free.app', 'https://deco-rent.com/']
+
+# URL pública para producción
+NGROK_URL = None  # Aqui se configuro la url de NGROK para hacer pruebas locales
+PRODUCTION_URL = 'https://deco-rent.com/'  # Se establece el dominio real
+
+# Configuración de sesión
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Sesiones en la base de datos
+SESSION_COOKIE_NAME = 'sessionid'  # Nombre de la cookie
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # La sesión no expira al cerrar el navegador
+SESSION_COOKIE_HTTPONLY = True  # Asegura que las cookies no sean accesibles desde JavaScript
 
 
 # Application definition
@@ -52,6 +64,7 @@ INSTALLED_APPS = [
     'Pagos',
     'Notificaciones',
     'Calificaciones',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -65,8 +78,13 @@ MIDDLEWARE = [
     
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+
 
 ROOT_URLCONF = 'DecoRent.urls'
 TEMPLATES = [
@@ -160,7 +178,7 @@ AUTHENTICATION_BACKENDS = [
 AUTH_USER_MODEL = 'Usuarios.User'  # Asegúrate de que apunte a tu modelo personalizado
 
 #En caso de cambiar el ID para pruebas locales, volverlo a cambiar antes de hacer push al repositorio
-SITE_ID = 3 #Se movio el ID
+SITE_ID = 4 #Se movio el ID
 
 #API aws reko
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')

@@ -9,4 +9,7 @@ urlpatterns = [
     path('inicio_sesion/', views.inicio_sesion, name='inicio_sesion'),
     path('cerrar_sesion/', views.cerrar_sesion, name='cerrar_sesion'),
     path('accounts/', include('allauth.urls')),#Google
+    path('captura_bio/', views.captura_bio, name='captura_bio'),
+    path('get_temp_image/', views.get_temp_image, name='get_temp_image'),
+
 ]
