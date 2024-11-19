@@ -125,13 +125,15 @@ def registro_cliente(request):
                     default_storage.delete(identificacion_path)
             else:
                 form.add_error(None, "No se capturó una foto para el rostro.")
+        else:
+            form.add_error(None, "Error al procesar el formulario. Asegúrate de que los datos sean correctos.")        
     else:
         form = RegistroClienteForm()
         qr_token = str(uuid4())  # Genera un token único
         request.session['qr_token'] = qr_token  # Guarda el token en la sesión
-        qr_url = request.build_absolute_uri(f"{reverse('captura_bio')}?token={qr_token}")  # URL del QR
+        qr_url = f"{settings.PRODUCTION_URL}{reverse('captura_bio')}?token={qr_token}"  # URL del QR
         return render(request, 'registro_cliente.html', {'form': form, 'qr_url': qr_url, 'qr_token': qr_token})
-
+    return render(request, 'registro_cliente.html', {'form': form})
 
 def registro_proveedor(request):
     """
@@ -193,13 +195,16 @@ def registro_proveedor(request):
                     default_storage.delete(identificacion_path)
             else:
                 form.add_error(None, "No se capturó una foto para el rostro.")
+        else:
+            form.add_error(None, "Error al procesar el formulario. Asegúrate de que los datos sean correctos.")        
     else:
         form = RegistroProveedorForm()
         qr_token = str(uuid4())  # Genera un token único
         request.session['qr_token'] = qr_token  # Guarda el token en la sesión
-        qr_url = request.build_absolute_uri(f"{reverse('captura_bio')}?token={qr_token}")  # URL del QR
+        qr_url = f"{settings.PRODUCTION_URL}{reverse('captura_bio')}?token={qr_token}"# URL del QR
         return render(request, 'registro_proveedor.html', {'form': form, 'qr_url': qr_url, 'qr_token': qr_token})
-
+    
+    return render(request, 'registro_proveedor.html', {'form': form})
 def captura_bio(request):
     """Renderiza la página para capturar la biometría."""
     return render(request, 'captura_bio.html')
