@@ -8,62 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/registro_cliente.css' %}">
 {% endblock css %}
 
-{% block content %}
-
-<section class="register-container">
-    <form method="POST" enctype="multipart/form-data" class="register-form" id="registerForm">
-        {% csrf_token %}
-        <h2>Regístrate como cliente</h2>
-
-        {{ form.as_p }}
-
-        <label for="fotoRostro">Captura de Rostro:</label>
-        <input type="hidden" id="fotoRostro" name="foto_rostro">
-        <button type="button" onclick="mostrarModal()" class="register-btn">Activar cámara</button>
-
-        <button type="submit" class="register-btn" style="margin-top: 20px;">Registrarse</button>
-
-        <label>¿Ya tienes una cuenta? <a href="{% url 'inicio_sesion' %}">Da clic aquí</a></label>
-
-        {% load socialaccount %}
-        {% providers_media_js %}
-
-        <div class="social-register">
-            <div class="social-btn">
-                <a href="{% provider_login_url 'google' %}" class="google-btn">
-                    <img src="{% static 'images/google_logo.png' %}" alt="Google logo" class="google-logo">
-                    Registrarse con Google
-                </a>
-            </div>
-        </div>
-        <label>¿Deseas publicar tus servicios? <a href="{% url 'registro_proveedor' %}">Registrarse como proveedor
-            aquí</a></label>
-    </form>
-</section>
-
-<!-- Modal para la cámara -->
-<div id="cameraModal" class="modal">
-    <div class="modal-content">
-        <h3>Captura tu rostro</h3>
-        <video id="video" autoplay playsinline></video>
-        <div class="modal-buttons">
-            <button type="button" onclick="capturarFoto()" class="register-btn">Capturar Foto</button>
-            <button type="button" onclick="cerrarModal()" class="register-btn">Cerrar</button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal para aviso de dispositivo sin cámara -->
-<div id="noCameraModal" class="modal">
-    <div class="modal-content">
-        <h3>Registro Obligatorio con Cámara</h3>
-        <p>No se detectó una cámara en este dispositivo o el acceso a la cámara fue denegado. Para completar el registro, escanea el siguiente código QR desde un dispositivo con cámara</p>
-        <div id="qrCode"></div> <!-- Aquí se generará el código QR -->
-        <div class="modal-buttons">  
-            <button type="button" onclick="cerrarNoCameraModal()" class="register-btn">Cerrar</button>
-        </div>
-    </div>
-</div>
+{% block js %} 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script> <!-- Librería para generar QR -->
 
@@ -154,5 +99,64 @@
     }
     
 </script>
+
+{% endblock js %}
+
+{% block content %}
+
+<section class="register-container">
+    <form method="POST" enctype="multipart/form-data" class="register-form" id="registerForm">
+        {% csrf_token %}
+        <h2>Regístrate como cliente</h2>
+
+        {{ form.as_p }}
+
+        <label for="fotoRostro">Captura de Rostro:</label>
+        <input type="hidden" id="fotoRostro" name="foto_rostro">
+        <button type="button" onclick="mostrarModal()" class="register-btn">Activar cámara</button>
+
+        <button type="submit" class="register-btn" style="margin-top: 20px;">Registrarse</button>
+
+        <label>¿Ya tienes una cuenta? <a href="{% url 'inicio_sesion' %}">Da clic aquí</a></label>
+
+        {% load socialaccount %}
+        {% providers_media_js %}
+
+        <div class="social-register">
+            <div class="social-btn">
+                <a href="{% provider_login_url 'google' %}" class="google-btn">
+                    <img src="{% static 'images/google_logo.png' %}" alt="Google logo" class="google-logo">
+                    Registrarse con Google
+                </a>
+            </div>
+        </div>
+        <label>¿Deseas publicar tus servicios? <a href="{% url 'registro_proveedor' %}">Registrarse como proveedor
+            aquí</a></label>
+    </form>
+</section>
+
+<!-- Modal para la cámara -->
+<div id="cameraModal" class="modalCamara">
+    <div class="modalCamara-content">
+        <h3>Captura tu rostro</h3>
+        <video id="video" autoplay playsinline></video>
+        <div class="modal-buttons">
+            <button type="button" onclick="capturarFoto()" class="register-btn">Capturar Foto</button>
+            <button type="button" onclick="cerrarModal()" class="register-btn">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para aviso de dispositivo sin cámara -->
+<div id="noCameraModal" class="modalCamara">
+    <div class="modalCamara-content">
+        <h3>Registro Obligatorio con Cámara</h3>
+        <p>No se detectó una cámara en este dispositivo o el acceso a la cámara fue denegado. Para completar el registro, escanea el siguiente código QR desde un dispositivo con cámara</p>
+        <div id="qrCode"></div> <!-- Aquí se generará el código QR -->
+        <div class="modal-buttons">  
+            <button type="button" onclick="cerrarNoCameraModal()" class="register-btn">Cerrar</button>
+        </div>
+    </div>
+</div>
 
 {% endblock content %}

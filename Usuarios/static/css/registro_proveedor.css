@@ -148,9 +148,7 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra al pasar el mouse */
 }
 
-
-
-.modal {
+.modalCamara {
     display: none; /* Oculto por defecto */
     position: fixed;
     z-index: 1000;
@@ -164,7 +162,7 @@ body {
     align-items: center;
 }
 
-.modal-content {
+.modalCamara-content {
     background-color: #fefefe;
     padding: 20px;
     border-radius: 10px;
