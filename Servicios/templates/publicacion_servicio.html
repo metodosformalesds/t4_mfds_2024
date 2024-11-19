@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
@@ -42,6 +43,9 @@
         <ul class="navbar-nav ms-auto">
           {% if user.is_authenticated %}
           <li class="nav-item">
+            <a class="nav-link active" href="{% url 'perfil' %}">Perfil</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link active" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
           </li>
           {% else %}
@@ -56,82 +60,83 @@
       </div>
     </div>
   </nav>
+
   <div class="container">
     <div class="row">
-      <!-- Columna de Información -->
-      <div class="col-md-6">
-        <!-- Service Name and Rating -->
-        <div class="service-header">
-          <h1>{{ servicio.nombre }}</h1>
-          <div class="rating">
-            {% for i in "12345" %}
-            {% if forloop.counter <= servicio.promedio_calificacion %} <span class="estrella">★</span>
-              {% else %}
-              <span class="estrella">☆</span>
-              {% endif %}
-              {% endfor %}
-              <span> {{servicio.promedio_calificacion}} </span>
-              <a href="#"> Ver Reseñas</a>
+
+    <div class="container">
+    <div class="row align-items-center">
+        <!-- Columna de Información -->
+        <div class="col-md-6">
+            <div class="service-header">
+                <h1>{{ servicio.nombre }}</h1>
+                <div class="rating">
+                    {% for i in "12345" %}
+                    {% if forloop.counter <= servicio.promedio_calificacion %}
+                    <span class="estrella">★</span>
+                    {% else %}
+                    <span class="estrella">☆</span>
+                    {% endif %}
+                    {% endfor %}
+                    <span> {{ servicio.promedio_calificacion }} </span>
+                    <a href="#"> Ver Reseñas</a>
+                </div>
+            </div>
+
+            <div class="company-details">
+                <h2>{{ servicio.proveedor.nombre_empresa }}</h2>
+                <p>Desde ${{ servicio.precio_minimo }}</p>
+            </div>
+
+            <div class="buttons mt-3">
+                {% if user.is_authenticated %}
+                {% if user.es_cliente %}
+                <button class="quote-btn" data-bs-toggle="modal" data-bs-target="#requestQuoteModal">Solicitar
+                    presupuesto</button>
+                {% else %}
+                <button class="quote-btn not-client">Solicitar presupuesto</button>
+                {% endif %}
+                {% else %}
+                <a href="{% url 'registro_cliente' %}" class="quote-btn" style="text-decoration: none;">Solicitar
+                    presupuesto</a>
+                {% endif %}
+            </div>
+
+            <div class="contact-info">
+                <p><strong>Contacto de la empresa</strong></p>
+                <p>📧 <a href="mailto:{{ servicio.proveedor.user.email }}">{{ servicio.proveedor.user.email }}</a></p>
+            </div>
+        </div>
+
+        <!-- Columna de la Imagen -->
+        <div class="col-md-6">
+            <div id="carouselServicio" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for imagen in servicio.imagenes.all %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ imagen.imagen.url }}" 
+                             class="d-block w-100" 
+                             alt="{{ servicio.nombre }}" 
+                             style="width: 100%; height: 300px; object-fit: contain; object-position: center; border-radius: 10px;">
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- Botones de navegación con estilo -->
+                <button class="carousel-control-prev custom-carousel-btn" type="button" data-bs-target="#carouselServicio" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next custom-carousel-btn" type="button" data-bs-target="#carouselServicio" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
           </div>
         </div>
-
-        <!-- Company Name and Price -->
-        <div class="company-details">
-          <h2>{{ servicio.proveedor.nombre_empresa }}</h2>
-          <p>Desde ${{ servicio.precio_minimo }}</p>
       </div>
-      
-
-        <!-- Action Buttons -->
-        <div class="buttons mt-3">
-          {% if user.is_authenticated %}
-          {% if user.es_cliente %}
-          <button class="quote-btn" data-bs-toggle="modal" data-bs-target="#requestQuoteModal">Solicitar
-            presupuesto</button>
-          {% else %}
-          <button class="quote-btn not-client">Solicitar
-            presupuesto</button>
-          {% endif %}
-          {% else %}
-          <a href="{% url 'registro_cliente' %}" class="quote-btn" style="text-decoration: none;">Solicitar
-            presupuesto</a>
-          {% endif %}
-        </div>
-
-        <!-- Contact Info -->
-        <div class="contact-info">
-          <p><strong>Contacto de la empresa</strong></p>
-          <p>📧 <a href="mailto:{{ servicio.proveedor.user.email }}">{{ servicio.proveedor.user.email }}</a></p>
-        </div>
-      </div>
-
-      <!-- Columna de la Imagen -->
-      <!-- Carrusel de imagenes con Bootstrap -->
-      <div id="carouselServicio" class="carousel slide col-md-6 justify-content-center align-items-center"
-        data-bs-ride="carousel">
-
-        <!-- Imágenes del Carrusel -->
-        <div class="carousel-inner">
-          {% for imagen in servicio.imagenes.all %}
-          <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <img src="{{ imagen.imagen.url }}" class="d-block w-100 img-fluid" alt="{{ servicio.nombre }}">
-          </div>
-          {% endfor %}
-        </div>
-
-        <!-- Controles de navegación -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselServicio" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselServicio" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Siguiente</span>
-        </button>
-      </div>
-
     </div>
-  </div>
+</div>
+
 
   <!-- Description Section -->
   <div class="container">
@@ -190,19 +195,133 @@
       publicación</button>
   </div>
   {% endif %}
+</div>
  
   <!-- Pie de página -->
-  <footer>
-    <div class="containerfooter text-center">
+<footer>
+  <div class="container text-center">
       <p>&copy; 2024 DecoRent. Todos los derechos reservados.</p>
       <ul class="list-inline">
-        <li class="list-inline-item"><a href="#terminos">Términos de Servicio</a></li>
-        <li class="list-inline-item"><a href="#privacidad">Política de Privacidad</a></li>
-        <li class="list-inline-item"><a href="#contacto">Contacto</a></li>
+          <li class="list-inline-item"><a href="#" data-bs-toggle="modal" data-bs-target="#terminosModal">Términos de Servicio</a></li>
+          <li class="list-inline-item"><a href="#" data-bs-toggle="modal" data-bs-target="#privacidadModal">Política de Privacidad</a></li>
+          <li class="list-inline-item"><a href="#" data-bs-toggle="modal" data-bs-target="#contactoModal">Contacto</a></li>
       </ul>
+  </div>
+</footer>
+   <!-- Modales -->
+  <!-- Términos de Servicio Modal -->
+  <div class="modal fade" id="terminosModal" tabindex="-1" aria-labelledby="terminosModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="terminosModalLabel">Términos de Servicio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Bienvenido a DecoRent, la plataforma en línea dedicada a la renta de servicios para eventos especiales. Al acceder o utilizar nuestro sitio web y servicios, aceptas cumplir con estos Términos de Servicio. Por favor, léelos cuidadosamente antes de proceder.<br><br>
+            1. Aceptación de los Términos<br>
+            Al registrarte y utilizar DecoRent, aceptas estos Términos de Servicio en su totalidad. Nos reservamos el derecho de modificar o actualizar estos términos en cualquier momento. Cualquier cambio entrará en vigor una vez publicado en nuestro sitio, y al continuar usando los servicios, aceptas estos cambios.<br><br>
+            2. Uso Permitido<br>
+            DecoRent está destinado a usuarios que buscan organizar eventos mediante la renta de servicios. Los usuarios deben actuar de buena fe y proporcionar información precisa en sus reservas. Queda prohibido el uso de la plataforma para cualquier actividad que infrinja la ley o que vaya en contra de los intereses de DecoRent o sus usuarios.<br><br>
+            3. Registro de Usuarios y Seguridad<br>
+            Al registrarte en DecoRent, eres responsable de mantener la confidencialidad de tus datos de acceso. Eres responsable de todas las actividades realizadas bajo tu cuenta. DecoRent no se hace responsable de cualquier acceso no autorizado a tu cuenta si no tomaste las medidas adecuadas para proteger tu información.<br><br>
+            4. Servicios de Terceros<br>
+            DecoRent actúa como intermediario para conectar a clientes con proveedores de servicios para eventos. No garantizamos la disponibilidad ni la calidad de los servicios prestados por terceros. Los proveedores de servicios son responsables de cumplir con los compromisos acordados. En caso de problemas o reclamaciones sobre el servicio, DecoRent ofrecerá asistencia para facilitar la resolución.<br><br>
+            5. Política de Reservas y Pagos<br>
+            Los usuarios pueden realizar reservas de servicios de manera anticipada. Los precios, términos de pago y políticas de cancelación estarán especificados en el momento de la reserva. Es importante que el usuario revise todos los detalles antes de confirmar cualquier transacción.<br><br>
+            6. Limitación de Responsabilidad<br>
+            DecoRent no será responsable por daños directos, indirectos, incidentales o consecuentes que puedan surgir del uso de nuestra plataforma o de los servicios ofrecidos. DecoRent no se hace responsable por incumplimientos o daños derivados de los servicios prestados por proveedores externos.<br><br>
+            7. Propiedad Intelectual<br>
+            Todos los materiales, contenido y diseño del sitio son propiedad de DecoRent y están protegidos por derechos de autor. Queda prohibida su reproducción, distribución o modificación sin el consentimiento expreso de DecoRent.<br><br>
+            8. Modificaciones a los Términos<br>
+            DecoRent se reserva el derecho de actualizar o modificar estos Términos de Servicio en cualquier momento. Las actualizaciones se publicarán en nuestro sitio web y recomendamos a los usuarios revisar regularmente esta página para mantenerse informados.<br><br>
+            9. Contacto<br>
+            Si tienes preguntas o comentarios sobre estos Términos de Servicio, no dudes en contactarnos a través de nuestra página de contacto o enviando un correo a contacto@decorent.com. Estaremos encantados de atenderte y resolver cualquier duda.<br><br>
+            Al aceptar estos Términos de Servicio, declaras que has leído, comprendido y estás de acuerdo con todas las condiciones aquí expuestas. Gracias por elegir DecoRent. Nos esforzamos en ofrecer una experiencia excepcional para que tus eventos sean memorables y exitosos.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
     </div>
-  </footer>
+  </div>
 
+  <!-- Política de Privacidad Modal -->
+  <div class="modal fade" id="privacidadModal" tabindex="-1" aria-labelledby="privacidadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="privacidadModalLabel">Política de Privacidad</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            En DecoRent, respetamos tu privacidad y nos comprometemos a proteger los datos personales que nos compartes. Esta Política de Privacidad describe cómo recopilamos, utilizamos y protegemos tu información, y tus derechos en relación con ella.<br><br>
+            1. Información que Recopilamos<br>
+            Para proporcionarte nuestros servicios, podemos recopilar información personal como tu nombre, dirección de correo electrónico, número de teléfono y detalles específicos del evento que deseas organizar. Estos datos son necesarios para gestionar tus reservas y ofrecerte una experiencia personalizada.<br><br>
+            2. Uso de la Información<br>
+            La información personal que recopilamos se utiliza para procesar tus solicitudes de reserva, coordinar servicios con los proveedores, y mejorar nuestra plataforma para ofrecerte una experiencia óptima. También podemos utilizar tu información para enviarte comunicaciones importantes sobre tu reserva o notificaciones sobre actualizaciones relevantes de nuestros servicios.<br><br>
+            3. Protección de Datos<br>
+            Empleamos medidas de seguridad físicas y electrónicas avanzadas para proteger tu información personal contra el acceso no autorizado, pérdida o alteración. Solo el personal autorizado de DecoRent y nuestros proveedores de servicios tienen acceso a estos datos, siempre bajo estrictas condiciones de confidencialidad.<br><br>
+            4. Compartición de Información con Terceros<br>
+            Compartimos tus datos personales únicamente con proveedores de servicios seleccionados, cuando es necesario para llevar a cabo el servicio contratado (por ejemplo, para coordinar la entrega de un servicio en la fecha de tu evento). Nos aseguramos de que estos proveedores cumplan con altos estándares de confidencialidad y seguridad.<br><br>
+            5. Cookies y Tecnologías Similares<br>
+            DecoRent puede utilizar cookies y tecnologías similares para mejorar la experiencia de usuario en nuestro sitio web. Estas herramientas nos permiten recordar tus preferencias y realizar un seguimiento de la navegación para optimizar el rendimiento de nuestra plataforma.<br><br>
+            6. Tus Derechos<br>
+            Tienes derecho a acceder, rectificar o eliminar tus datos personales en cualquier momento. Si deseas actualizar tu información o tienes dudas sobre cómo gestionamos tus datos, puedes contactarnos y te asistiremos en todo momento.<br><br>
+            7. Modificaciones a esta Política<br>
+            DecoRent puede actualizar esta Política de Privacidad para reflejar cambios en nuestras prácticas o por razones legales. Te notificaremos de cualquier cambio publicando la versión actualizada en esta página.<br><br>
+            Gracias por confiar en DecoRent para la organización de tus eventos. Estamos comprometidos a proteger tu privacidad y a proporcionarte una experiencia segura y de calidad.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contacto Modal -->
+  <div class="modal fade" id="contactoModal" tabindex="-1" aria-labelledby="contactoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="contactoModalLabel">Contacto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Estamos aquí para ayudarte. Puedes ponerte en contacto con nosotros a través del formulario a continuación o utilizar los siguientes datos:<br><br>
+            <strong>Correo Electrónico:</strong> contacto@decorent.com<br>
+            <strong>Teléfono:</strong> +52 (123) 456-7890<br>
+            <strong>Dirección:</strong> Calle Principal 123, Ciudad Juárez, Chihuahua, México<br><br>
+            Nuestro equipo está disponible de lunes a viernes de 9:00 a.m. a 6:00 p.m., y los sábados de 10:00 a.m. a 2:00 p.m.
+          </p>
+          <hr>
+          <form>
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombre" required>
+            </div>
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" id="correo" required>
+            </div>
+            <div class="mb-3">
+              <label for="mensaje" class="form-label">Mensaje</label>
+              <textarea class="form-control" id="mensaje" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Modal para Editar publicación con imagen -->
   <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -232,6 +351,7 @@
                   <option value="Catering" {% if servicio.categoria == "Catering" %}selected{% endif %}>Catering</option>
                   <option value="Fotografia" {% if servicio.categoria == "Fotografia" %}selected{% endif %}>Fotografía</option>
                   <option value="Decoracion" {% if servicio.categoria == "Decoracion" %}selected{% endif %}>Decoración</option>
+                  <option value="Otro" {% if servicio.categoria == "Otro" %}selected{% endif %}>Otro</option>
                 </select>
               </div>
             </div>
@@ -266,11 +386,6 @@
                 <label for="precio_minimo" class="form-label">Precio mínimo:</label>
                 <input type="number" class="form-control" id="precio_minimo" name="precio_minimo"
                   value="{{ servicio.precio_minimo }}" required>
-              </div>
-              <div class="col-md-3">
-                <label for="precio_maximo" class="form-label">Precio máximo:</label>
-                <input type="number" class="form-control" id="precio_maximo" name="precio_maximo"
-                  value="{{ servicio.precio_maximo }}" required>
               </div>
             </div>
             <div class="row mb-3">

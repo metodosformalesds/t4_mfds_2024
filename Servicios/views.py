@@ -13,30 +13,50 @@ from .forms import PublicarServicioForm
 from django.db.models import Avg
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
+from decimal import Decimal
 
+@login_required
+def perfil(request):
+    """
+    Vista para mostrar el perfil del usuario actual.
 
+    Muestra las notificaciones de confirmación de pago del usuario actual, ordenadas de más reciente a más antigua. 
+    Cada notificación se acompaña de su precio con IVA.
 
-def service_list(request):
-    categoria_seleccionada = request.GET.get('categoria')  # Captura la categoría seleccionada de la URL
-    
-    # Obtén todos los servicios
-    services = Servicio.objects.all()
+    Decoradores:
+        @login_required: Requiere que el usuario esté autenticado para acceder a esta función.
 
-    # Filtra los servicios por categoría si se selecciona una
-    if categoria_seleccionada:
-        services = services.filter(categoria=categoria_seleccionada)
+    Args:
+        request (HttpRequest): El objeto HTTP que contiene los datos de la solicitud.
 
-    # Obtén todas las categorías únicas para el combobox
-    categorias = Servicio.objects.values_list('categoria', flat=True).distinct()
-
-    return render(request, 'service_list.html', {
-        'servicios': services,
-        'categorias': categorias,
-        'categoria_seleccionada': categoria_seleccionada
+    Returns:
+        HttpResponse: La respuesta HTTP con el perfil del usuario actual.
+    """
+    notificaciones = Notificacion.objects.filter(user=request.user, tipo_notificacion='Confirmacion de Pago').order_by('-fecha')
+    for notificacion in notificaciones:
+        # Calcula el precio con IVA
+        notificacion.precio_con_iva = notificacion.solicitud.precio * Decimal('1.08')
+    return render(request, 'perfil.html', {
+        'notificaciones': notificaciones,
     })
 
-
 def servicios_sin_login(request):
+    """
+    Vista para mostrar los servicios en la plataforma sin requerir autenticación.
+
+    Muestra todos los servicios en la plataforma, o los servicios que coinciden con la categoría seleccionada 
+    mediante el parámetro GET "categoria".
+
+    Si el usuario ha iniciado sesión, se cargan sus notificaciones no leídas, ordenadas de más reciente a más antigua.
+
+    Args:
+        request (HttpRequest): El objeto HTTP que contiene los datos de la solicitud.
+
+    Returns:
+        HttpResponse: La respuesta HTTP con la lista de servicios en la plataforma.
+    """
     # Obtener la categoría seleccionada desde la solicitud GET
     categoria_seleccionada = request.GET.get('categoria')
     
@@ -48,8 +68,8 @@ def servicios_sin_login(request):
     
     # Verificar si el usuario ha iniciado sesión
     if request.user.is_authenticated:
-        # Obtener todas las notificaciones del usuario
-        notificaciones = Notificacion.objects.filter(user=request.user, leido=False)
+        # Obtener todas las notificaciones del usuario, ordenadas de más reciente a más antigua
+        notificaciones = Notificacion.objects.filter(user=request.user, leido=False).order_by('-fecha')
     else:
         # Si no está autenticado, no se cargan notificaciones
         notificaciones = None
@@ -63,6 +83,36 @@ def servicios_sin_login(request):
 
 
 def publicar_servicio(request):
+    """
+    Vista para la publicación de un nuevo servicio por parte de un proveedor.
+
+    Esta función permite a los proveedores registrar un nuevo servicio en el sistema. Incluye la validación 
+    de datos del formulario del servicio, la validación y almacenamiento de imágenes relacionadas, 
+    y la generación automática de una dirección en formato URL compatible con Google Maps.
+
+    Funcionalidad:
+        - Si la solicitud es de tipo POST:
+            - Valida los datos ingresados en el formulario del servicio (`PublicarServicioForm`) y 
+              las imágenes enviadas (`MultipleImagenesServiciosForm`).
+            - Verifica que se carguen un máximo de 5 imágenes y que todas tengan una extensión válida.
+            - Verifica que los archivos cargados sean imágenes válidas.
+            - Guarda el servicio en la base de datos y asocia las imágenes al servicio.
+            - Redirige al usuario a la vista `servicios_sin_login` tras un registro exitoso.
+        - Si la solicitud es de tipo GET:
+            - Renderiza el formulario vacío para permitir al usuario registrar un nuevo servicio.
+
+    Validaciones:
+        - Máximo 5 imágenes cargadas.
+        - Extensiones de imágenes válidas: `jpg`, `jpeg`, `png`, `gif`.
+        - Verificación de que los archivos cargados sean imágenes.
+        
+    Args:
+        request (HttpRequest): La solicitud HTTP enviada por el cliente. Puede ser de tipo POST o GET.
+
+    Returns:
+        HttpResponse: Renderiza el formulario en `publicar_servicio.html` si la solicitud es GET o si hay errores 
+        de validación. Redirige a `servicios_sin_login` en caso de éxito.
+    """
     # Si la solicitud es de tipo POST quiere decir que se recibieron datos
     if request.method == 'POST':
         servicio_form = PublicarServicioForm(request.POST)
@@ -135,6 +185,37 @@ def publicar_servicio(request):
 
 @login_required
 def publicacion_servicio(request, id):
+    """
+    Vista para mostrar los detalles de un servicio publicado.
+
+    Esta función permite a los usuarios visualizar los detalles de un servicio específico,
+    incluidas las imágenes asociadas, reseñas, calificación promedio y dirección desglosada.
+    También verifica si el usuario actual ya ha calificado el servicio.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP enviada por el cliente.
+        id (int): El ID del servicio que se desea mostrar.
+
+    Funcionalidad:
+        - Busca el servicio correspondiente al ID proporcionado.
+        - Recupera todas las imágenes relacionadas con el servicio.
+        - Obtiene las reseñas relacionadas con el servicio, ordenadas por fecha (más recientes primero).
+        - Calcula el promedio de las calificaciones del servicio.
+        - Verifica si el usuario actual ya ha dejado una reseña para el servicio.
+        - Divide la dirección del servicio en componentes individuales: calle, número exterior,
+          número interior, colonia y código postal.
+
+    Returns:
+        HttpResponse: Renderiza la plantilla `publicacion_servicio.html` con el siguiente contexto:
+            - `servicio`: El objeto del servicio.
+            - `imagenes`: Lista de imágenes relacionadas con el servicio.
+            - `reseñas`: Lista de reseñas relacionadas con el servicio.
+            - `user_has_rated`: Indicador booleano de si el usuario ya calificó el servicio.
+            - `direccion`: Diccionario con los componentes desglosados de la dirección.
+
+    Redirecciones:
+        - Redirige a `servicios_sin_login` si el servicio no existe.
+    """
     try:
         servicio = Servicio.objects.get(id=id)
     except Servicio.DoesNotExist:
@@ -170,6 +251,26 @@ def publicacion_servicio(request, id):
     })
 
 def eliminar_publicacion(request, id):
+    """Vista para eliminar una publicación de servicio.
+
+    Recibe como parámetro el `id` del servicio a eliminar.
+
+    Primero, intenta obtener el objeto del servicio con el `id` proporcionado.
+    Si no se encuentra, redirige a `servicios_sin_login`.
+
+    Luego, obtiene todas las imágenes relacionadas con el servicio y las elimina
+    físicamente de la carpeta `media` y de la base de datos.
+
+    Finalmente, elimina el servicio de la base de datos y redirige a
+    `servicios_sin_login`.
+    
+    Args:
+        request (HttpRequest): La solicitud HTTP enviada por el cliente.
+        id (int): El ID del servicio que se desea mostrar.
+
+    Returns:
+        HttpResponse: Redirige a `servicios_sin_login` si el servicio se elimina correctamente.
+    """
     try:
         servicio = Servicio.objects.get(id=id)
     except Servicio.DoesNotExist:
@@ -190,6 +291,39 @@ def eliminar_publicacion(request, id):
     
 # Código para editar publicación
 def editar_servicio(request, servicio_id):
+    """
+    Vista para editar la publicación de un servicio.
+
+    Esta función permite a los proveedores actualizar los datos de un servicio existente, incluidas
+    las imágenes asociadas y los detalles de la dirección. También realiza validaciones de los datos
+    enviados y de las nuevas imágenes cargadas.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP enviada por el cliente. Puede ser de tipo POST para
+        actualizar los datos o GET para obtener el servicio a editar.
+        servicio_id (int): El ID del servicio que se desea editar.
+
+    Funcionalidad:
+        - Recupera el servicio utilizando el ID proporcionado.
+        - Si la solicitud es de tipo POST:
+            - Valida los datos enviados mediante `PublicarServicioForm`.
+            - Actualiza los datos del servicio, incluidas las imágenes asociadas.
+            - Construye una nueva dirección en formato URL para Google Maps.
+            - Valida las imágenes cargadas (máximo 5 imágenes, extensiones válidas, y archivos que sean imágenes).
+            - Guarda los cambios en la base de datos.
+            - Devuelve una respuesta JSON con el estado de éxito o los errores de validación.
+        - Si la solicitud no es POST, no se realiza ninguna acción específica en esta función.
+
+    Validaciones:
+        - Se valida que no se carguen más de 5 imágenes.
+        - Solo se permiten extensiones de imágenes válidas (`jpg`, `jpeg`, `png`, `gif`, `bmp`, `webp`).
+        - Se verifica que los archivos cargados sean imágenes válidas.
+
+    Returns:
+        JsonResponse: Una respuesta JSON con el estado del proceso:
+            - `success: True` si el servicio se actualizó correctamente.
+            - `success: False` y detalles de errores si hubo problemas con los datos enviados.
+    """
     servicio = get_object_or_404(Servicio, id=servicio_id)
     
     if request.method == 'POST':
@@ -252,6 +386,33 @@ def editar_servicio(request, servicio_id):
 
 @login_required
 def agregar_reseña(request, solicitud_id):
+    """
+    Vista para agregar una reseña de un servicio.
+
+    Esta función permite a los usuarios calificar y comentar un servicio que han contratado previamente.
+    La reseña se crea vinculada a la solicitud de presupuesto correspondiente y se actualiza el promedio
+    de calificación del servicio.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP enviada por el cliente. Debe ser de tipo POST y contener
+        los datos de la reseña en formato JSON.
+        solicitud_id (int): El ID de la solicitud de presupuesto asociada al servicio que se desea calificar.
+
+    Funcionalidad:
+        - Valida que la solicitud sea de tipo POST.
+        - Obtiene y parsea el cuerpo de la solicitud en formato JSON.
+        - Recupera la solicitud de presupuesto correspondiente al ID proporcionado.
+        - Crea una nueva reseña con la calificación y el comentario proporcionados.
+        - Calcula y actualiza el promedio de calificación del servicio asociado.
+        - Marca como leída la notificación de tipo "Calificar Servicio" asociada a la solicitud.
+        - Devuelve una respuesta JSON con los detalles de la reseña creada en caso de éxito.
+
+    Returns:
+        JsonResponse:
+            - `status: success` con los detalles de la reseña si se crea correctamente.
+            - `error` con el mensaje de error y código de estado correspondiente si ocurre un problema.
+            - `error` con el mensaje "Método no permitido" si la solicitud no es de tipo POST.
+    """
     if request.method == 'POST':
         try:
             data = json.loads(request.body)

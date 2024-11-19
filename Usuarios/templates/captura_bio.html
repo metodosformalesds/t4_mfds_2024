@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura Biométrica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #video {
+            width: 100%;
+            max-width: 600px;
+            margin: 10px 0;
+        }
+        #capture-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #capture-btn:hover {
+            background-color: #0056b3;
+        }
+        #loader {
+            font-size: 18px;
+            color: #007bff;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Captura Biométrica</h2>
+    <video id="video" autoplay playsinline muted></video>
+    <br>
+    <button id="capture-btn">Capturar</button>
+    <div id="loader">Procesando...</div>
+
+    <script>
+        const video = document.getElementById("video");
+        const captureBtn = document.getElementById("capture-btn");
+        const loader = document.getElementById("loader");
+
+        // Obtener el token desde la URL
+        const token = new URLSearchParams(window.location.search).get("token");
+        if (!token) {
+            alert("Token no válido. Verifica que estés accediendo desde el QR generado.");
+            window.location.href = "/"; // Redirige a la página principal
+        }
+
+        // Activar la cámara
+        function activarCamara() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(error => {
+                    console.error("Error al activar la cámara:", error);
+                    alert("No se pudo activar la cámara. Verifica los permisos o usa otro dispositivo.");
+                });
+        }
+
+        // Capturar y enviar la imagen al servidor
+        captureBtn.addEventListener("click", () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext("2d");
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+            const imageData = canvas.toDataURL("image/png");
+        
+            if (!imageData || imageData.length < 100) {
+                alert("Error al capturar la imagen. Inténtalo de nuevo.");
+                return;
+            }
+
+            // Mostrar el indicador de carga
+            loader.style.display = "block";
+
+            // Manejo de timeout para la solicitud
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // Timeout de 10 segundos
+
+            // Enviar la imagen al servidor con el token
+            fetch("{% url 'get_temp_image' %}?token=" + token, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ image: imageData }),
+                signal: controller.signal
+            })
+            .then(response => {
+                clearTimeout(timeoutId); // Limpiar el timeout si hay respuesta
+                return response.json();
+            })
+            .then(data => {
+                loader.style.display = "none"; // Ocultar el indicador de carga
+                if (data.success) {
+                    alert("Imagen capturada y enviada correctamente.");
+                    window.close(); // Cierra la ventana del celular
+                } else {
+                    alert("Error al guardar la imagen: " + data.message);
+                }
+            })
+            .catch(error => {
+                loader.style.display = "none"; // Ocultar el indicador de carga
+                if (error.name === "AbortError") {
+                    alert("El proceso tomó demasiado tiempo. Intenta nuevamente.");
+                } else {
+                    console.error("Error al enviar la imagen al servidor:", error);
+                    alert("No se pudo enviar la imagen al servidor.");
+                }
+            });
+        });
+
+        // Activar la cámara al cargar la página
+        activarCamara();
+    </script>
+</body>
+</html>
