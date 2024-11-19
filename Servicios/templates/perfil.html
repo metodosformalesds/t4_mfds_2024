@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Perfil
+{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/perfil.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container mt-5">
+  <!-- Detalles del Perfil -->
+  <div>
+    <h3>Detalles del Perfil</h3>
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      {% if user.es_cliente %}
+      <input type="text" class="form-control" id="nombre" name="nombre" value="{{user.cliente.nombre_completo}}" disabled>
+      {% else %}
+      <input type="text" class="form-control" id="nombre" name="nombre" value="{{user.proveedor.nombre_empresa}}" disabled>
+      {% endif %}
+    </div>
+    <div class="mb-3">
+      <label for="correo" class="form-label">Correo Electrónico</label>
+      <input type="email" class="form-control" id="correo" name="correo" value="{{user.email}}" disabled>
+    </div>
+  </div>
+
+  <!-- Contenido dinámico según el tipo de usuario -->
+  
+  <div class="mt-5">
+    {% if user.es_cliente %}
+    <h3>Historial de Compras</h3>
+    {% else %}
+    <h3>Historial de Ventas</h3>
+    {% endif %}
+    {% if notificaciones %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Servicio</th>
+          <th>Fecha</th>
+          <th>Monto Total</th>
+          <th>Detalles</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for notificacion in notificaciones %}
+        <tr>
+          <td>{{ notificacion.solicitud.id }}</td>
+          <td>{{ notificacion.solicitud.servicio.nombre }}</td>
+          <td>{{ notificacion.fecha }}</td>
+          <td>{{ notificacion.precio_con_iva|floatformat:2 }}</td>
+          <td>
+            <button class="btn-details" data-bs-toggle="modal" data-bs-target="#confirmModal"
+        onclick="loadSolicitudDetails('{{ notificacion.solicitud.id }}', false, true)">Ver detalles</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      {% if user.es_cliente %}
+      <br>
+      <p>No has realizado ninguna compra en la plataforma.</p>
+      {% else %}
+      <br>
+      <p>No has realizado ninguna venta en la plataforma.</p>
+      {% endif %}
+    {% endif %}
+  </div>
+  
+</div>
+
+<!-- Modal para Ver la Confirmacion de un pago -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailsModalLabel">Solicitud de servicio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <h3 id="serviceNameConfirm">Nombre del servicio</h3>
+        {% if user.es_proveedor %}
+        <div>
+          <span style="font-size: 20px;">Solicitado por:</span>
+          <span id="clientNameConfirm" style="font-size: 20px;">Nombre del cliente</span>
+          <span id="providerNameConfirm" class="hidden">Nombre del proveedor</span>
+          <span id="providerContactConfirm" class="hidden">Contacto del proveedor</span>
+        </div>
+        <div>
+          <span>Contacto:</span> 
+          <span id="clientContactConfirm">Contacto del cliente</span>
+        </div>
+        {% else %}
+        <div>
+          <span id="clientNameConfirm" class="hidden">Nombre del cliente</span>
+          <span id="clientContactConfirm" class="hidden">Contacto del cliente</span>
+          <span id="providerNameConfirm" style="font-size: 20px;">Nombre del proveedor</span>
+        </div>
+        <div>
+          <span>Contacto:</span> 
+          <span id="providerContactConfirm">Contacto del proveedor</span>
+        </div>
+        {% endif %}
+        <br>
+        <h6>Información del evento:</h6>
+        <form>
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label class="form-label">Cantidad de invitados:</label>
+              <input type="number" class="form-control" id="guestCountConfirm" readonly>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Duración del evento (horas):</label>
+              <input type="number" class="form-control" id="eventDurationConfirm" readonly>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Fecha:</label>
+              <input type="date" class="form-control" id="eventDateConfirm" readonly>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Tipo de evento:</label>
+              <input type="text" class="form-control" id="eventTypeConfirm" readonly>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label class="form-label">Dirección:</label>
+              <input type="text" class="form-control" id="eventAddressConfirm" readonly>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Subtotal:</label>
+              <input type="number" class="form-control" id="contractPriceConfirm" readonly>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">IVA (8%):</label>
+              <input type="number" class="form-control" id="ivaConfirm" readonly>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Precio de contratación:</label>
+              <input type="number" class="form-control" id="totalConfirm" readonly>
+            </div>
+          </div>
+          <p>Estado: Pagado</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function loadSolicitudDetails(solicitudId) {
+      // Realiza una solicitud AJAX para obtener los detalles de la solicitud
+      fetch(`/Solicitudes/obtener_solicitud/${solicitudId}/`)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // Asigna los valores a los elementos correctos, usando el prefijo si es el segundo modal
+          document.getElementById("serviceNameConfirm").textContent = data.servicio;
+          document.getElementById("providerNameConfirm").textContent = data.proveedor;
+          document.getElementById("providerContactConfirm").textContent = data.proveedor_contacto;
+          document.getElementById("clientNameConfirm").textContent = data.cliente;
+          document.getElementById("clientContactConfirm").textContent = data.cliente_contacto;
+          document.getElementById("guestCountConfirm").value = data.personas;
+          document.getElementById("eventDurationConfirm").value = data.duracion;
+          document.getElementById("eventDateConfirm").value = data.fecha;
+          document.getElementById("eventTypeConfirm").value = data.tipo_evento;
+          document.getElementById("eventAddressConfirm").value = data.direccion;
+
+          // Actualiza el precio si existe
+          document.getElementById("contractPriceConfirm").value = data.precio ? data.precio : '';
+          document.getElementById("ivaConfirm").value = data.precio ? (data.precio*0.08).toFixed(2) : '';
+          document.getElementById("totalConfirm").value = data.precio ? (data.precio*1.08).toFixed(2) : '';
+        })
+        .catch(error => console.error('Error al cargar los detalles de la solicitud:', error));
+    }
+</script>
+{% endblock content %}

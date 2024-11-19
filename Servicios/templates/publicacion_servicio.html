@@ -43,6 +43,9 @@
         <ul class="navbar-nav ms-auto">
           {% if user.is_authenticated %}
           <li class="nav-item">
+            <a class="nav-link active" href="{% url 'perfil' %}">Perfil</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link active" href="{% url 'cerrar_sesion' %}">Cerrar sesión</a>
           </li>
           {% else %}
@@ -57,82 +60,83 @@
       </div>
     </div>
   </nav>
+
   <div class="container">
     <div class="row">
-      <!-- Columna de Información -->
-      <div class="col-md-6">
-        <!-- Service Name and Rating -->
-        <div class="service-header">
-          <h1>{{ servicio.nombre }}</h1>
-          <div class="rating">
-            {% for i in "12345" %}
-            {% if forloop.counter <= servicio.promedio_calificacion %} <span class="estrella">★</span>
-              {% else %}
-              <span class="estrella">☆</span>
-              {% endif %}
-              {% endfor %}
-              <span> {{servicio.promedio_calificacion}} </span>
-              <a href="#"> Ver Reseñas</a>
+
+    <div class="container">
+    <div class="row align-items-center">
+        <!-- Columna de Información -->
+        <div class="col-md-6">
+            <div class="service-header">
+                <h1>{{ servicio.nombre }}</h1>
+                <div class="rating">
+                    {% for i in "12345" %}
+                    {% if forloop.counter <= servicio.promedio_calificacion %}
+                    <span class="estrella">★</span>
+                    {% else %}
+                    <span class="estrella">☆</span>
+                    {% endif %}
+                    {% endfor %}
+                    <span> {{ servicio.promedio_calificacion }} </span>
+                    <a href="#"> Ver Reseñas</a>
+                </div>
+            </div>
+
+            <div class="company-details">
+                <h2>{{ servicio.proveedor.nombre_empresa }}</h2>
+                <p>Desde ${{ servicio.precio_minimo }}</p>
+            </div>
+
+            <div class="buttons mt-3">
+                {% if user.is_authenticated %}
+                {% if user.es_cliente %}
+                <button class="quote-btn" data-bs-toggle="modal" data-bs-target="#requestQuoteModal">Solicitar
+                    presupuesto</button>
+                {% else %}
+                <button class="quote-btn not-client">Solicitar presupuesto</button>
+                {% endif %}
+                {% else %}
+                <a href="{% url 'registro_cliente' %}" class="quote-btn" style="text-decoration: none;">Solicitar
+                    presupuesto</a>
+                {% endif %}
+            </div>
+
+            <div class="contact-info">
+                <p><strong>Contacto de la empresa</strong></p>
+                <p>📧 <a href="mailto:{{ servicio.proveedor.user.email }}">{{ servicio.proveedor.user.email }}</a></p>
+            </div>
+        </div>
+
+        <!-- Columna de la Imagen -->
+        <div class="col-md-6">
+            <div id="carouselServicio" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for imagen in servicio.imagenes.all %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ imagen.imagen.url }}" 
+                             class="d-block w-100" 
+                             alt="{{ servicio.nombre }}" 
+                             style="width: 100%; height: 300px; object-fit: contain; object-position: center; border-radius: 10px;">
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- Botones de navegación con estilo -->
+                <button class="carousel-control-prev custom-carousel-btn" type="button" data-bs-target="#carouselServicio" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next custom-carousel-btn" type="button" data-bs-target="#carouselServicio" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
           </div>
         </div>
-
-        <!-- Company Name and Price -->
-        <div class="company-details">
-          <h2>{{ servicio.proveedor.nombre_empresa }}</h2>
-          <p>Desde ${{ servicio.precio_minimo }}</p>
       </div>
-      
-
-        <!-- Action Buttons -->
-        <div class="buttons mt-3">
-          {% if user.is_authenticated %}
-          {% if user.es_cliente %}
-          <button class="quote-btn" data-bs-toggle="modal" data-bs-target="#requestQuoteModal">Solicitar
-            presupuesto</button>
-          {% else %}
-          <button class="quote-btn not-client">Solicitar
-            presupuesto</button>
-          {% endif %}
-          {% else %}
-          <a href="{% url 'registro_cliente' %}" class="quote-btn" style="text-decoration: none;">Solicitar
-            presupuesto</a>
-          {% endif %}
-        </div>
-
-        <!-- Contact Info -->
-        <div class="contact-info">
-          <p><strong>Contacto de la empresa</strong></p>
-          <p>📧 <a href="mailto:{{ servicio.proveedor.user.email }}">{{ servicio.proveedor.user.email }}</a></p>
-        </div>
-      </div>
-
-      <!-- Columna de la Imagen -->
-      <!-- Carrusel de imagenes con Bootstrap -->
-      <div id="carouselServicio" class="carousel slide col-md-6 justify-content-center align-items-center"
-        data-bs-ride="carousel">
-
-        <!-- Imágenes del Carrusel -->
-        <div class="carousel-inner">
-          {% for imagen in servicio.imagenes.all %}
-          <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <img src="{{ imagen.imagen.url }}" class="d-block w-100 img-fluid" alt="{{ servicio.nombre }}">
-          </div>
-          {% endfor %}
-        </div>
-
-        <!-- Controles de navegación -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselServicio" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselServicio" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Siguiente</span>
-        </button>
-      </div>
-
     </div>
-  </div>
+</div>
+
 
   <!-- Description Section -->
   <div class="container">
@@ -191,6 +195,7 @@
       publicación</button>
   </div>
   {% endif %}
+</div>
  
   <!-- Pie de página -->
 <footer>
@@ -346,6 +351,7 @@
                   <option value="Catering" {% if servicio.categoria == "Catering" %}selected{% endif %}>Catering</option>
                   <option value="Fotografia" {% if servicio.categoria == "Fotografia" %}selected{% endif %}>Fotografía</option>
                   <option value="Decoracion" {% if servicio.categoria == "Decoracion" %}selected{% endif %}>Decoración</option>
+                  <option value="Otro" {% if servicio.categoria == "Otro" %}selected{% endif %}>Otro</option>
                 </select>
               </div>
             </div>
@@ -380,11 +386,6 @@
                 <label for="precio_minimo" class="form-label">Precio mínimo:</label>
                 <input type="number" class="form-control" id="precio_minimo" name="precio_minimo"
                   value="{{ servicio.precio_minimo }}" required>
-              </div>
-              <div class="col-md-3">
-                <label for="precio_maximo" class="form-label">Precio máximo:</label>
-                <input type="number" class="form-control" id="precio_maximo" name="precio_maximo"
-                  value="{{ servicio.precio_maximo }}" required>
               </div>
             </div>
             <div class="row mb-3">

@@ -16,6 +16,21 @@
 
         {{ form.as_p }}
 
+        <div class="form-check">
+            <input type="checkbox" id="terminosCheckbox" name="terminos" class="form-check-input" required>
+            <label class="form-check-label" for="terminosCheckbox">
+                Acepto <a href="#" data-bs-toggle="modal" data-bs-target="#terminosModal">términos de servicio</a>
+            </label>
+        </div>
+        
+        <div class="form-check">
+            <input type="checkbox" id="privacidadCheckbox" name="privacidad" class="form-check-input" required>
+            <label class="form-check-label" for="privacidadCheckbox">
+                Acepto <a href="#" data-bs-toggle="modal" data-bs-target="#privacidadModal">políticas de privacidad</a>
+            </label>
+        </div>
+        
+
         <label for="fotoRostro">Captura de Rostro:</label>
         <input type="hidden" id="fotoRostro" name="foto_rostro">
         <button type="button" onclick="activarCamara()" class="register-btn">Activar cámara</button>
@@ -41,8 +56,8 @@
 </section>
 
 <!-- Modal para la cámara -->
-<div id="cameraModal" class="modal">
-    <div class="modal-content">
+<div id="cameraModal" class="modalCamara">
+    <div class="modalCamara-content">
         <h3>Captura tu rostro</h3>
         <video id="video" autoplay playsinline></video>
         <div class="modal-buttons">
@@ -53,8 +68,8 @@
 </div>
 
 <!-- Modal para aviso de dispositivo sin cámara -->
-<div id="noCameraModal" class="modal">
-    <div class="modal-content">
+<div id="noCameraModal" class="modalCamara">
+    <div class="modalCamara-content">
         <h3>Registro Obligatorio con Cámara</h3>
         <p>No se detectó una cámara en este dispositivo o el acceso a la cámara fue denegado. Para completar el registro, escanea el siguiente código QR desde un dispositivo con cámara.</p>
         <div id="qrCode"></div>

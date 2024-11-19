@@ -45,7 +45,7 @@
     <p><strong>Nombre del servicio:</strong> {{ solicitud.servicio.nombre }}</p>
     <p><strong>Proveedor:</strong> {{ solicitud.proveedor.nombre_empresa }}</p>
     <p><strong>Contacto del proveedor:</strong> {{ solicitud.proveedor.user.email }}</p>
-    <p><strong>Precio:</strong> ${{ solicitud.precio }} MXN</p>
+    <p><strong>Precio:</strong> ${{ solicitud.precio_con_iva|floatformat:2 }} MXN</p>
     <p><strong>Fecha del evento:</strong> {{ solicitud.fecha }}</p>
     <p><strong>Dirección del evento:</strong> {{ solicitud.direccion }}</p>
 </main>
