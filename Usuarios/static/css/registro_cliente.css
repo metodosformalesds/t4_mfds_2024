@@ -208,4 +208,36 @@ body {
 
 .hidden {
     display: none;
+ }
+
+/* Asegura que las checkboxes y el texto ocupen solo el espacio necesario */
+.form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Espacio entre las filas */
+    gap: 5px; /* Espacio entre el checkbox y el texto */
+}
+
+.form-check-input {
+    width: 18px; /* Reduce el tamaño del checkbox */
+    height: 18px;
+    margin-right: 5px; /* Espaciado entre el checkbox y el texto */
+    cursor: pointer; /* Cambia a cursor de mano al pasar por encima */
+}
+
+.form-check-label {
+    font-size: 14px; /* Ajusta el tamaño del texto */
+    line-height: 1.2; /* Espaciado vertical más compacto */
+    cursor: pointer; /* Cambia a cursor de mano al pasar por encima */
+}
+
+.form-check-label a {
+    text-decoration: underline; /* Opcional: subraya el enlace */
+    color: #B12A76; /* Color para el enlace */
+    font-size: 14px; /* Tamaño del enlace */
+    cursor: pointer;
+}
+
+.form-check-label a:hover {
+    color: #9A2467; /* Cambia el color del enlace al pasar el mouse */
 }
