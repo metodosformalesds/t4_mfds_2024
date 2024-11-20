@@ -93,7 +93,8 @@
         //Vacia el contenido del input de la foto del rostro que devuelve el form en caso de error
         document.getElementById("id_foto_rostro").value = '';
         const qrToken = "{{ qr_token }}"; // Token generado en la vista
-        const qrUrl = "{% url 'captura_bio' %}?token=" + qrToken;
+        const qrUrl = "{{ qr_url }}"; // Usa la URL generada desde el backend
+
         
         function verificarImagenTemporal() {
             fetch("{% url 'get_temp_image' %}?token=" + qrToken, {
