@@ -9,7 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70vh;
+    height: 80vh;
 }
 
 .login-form {
@@ -136,7 +136,7 @@ body {
 }
 .google-login, .apple-login, .facebook-login {
     margin-top: 10px; /* Espacio encima del botón de Google */
-    padding-left: 70px; /* Espacio para mover los botones hacia la derecha */
+    padding-left: 11px; /* Espacio para mover los botones hacia la derecha */
 }
 .social-btn {
     margin: 10px 0; /* Espacio vertical entre los botones */

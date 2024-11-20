@@ -526,6 +526,12 @@
   <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Para usar las flechas -->
 
   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const fechaInput = document.getElementById('id_fecha');
+        const hoy = new Date().toISOString().split('T')[0]; // Obtener la fecha actual en formato yyyy-mm-dd
+        fechaInput.setAttribute('min', hoy); // Establecer la fecha mínima
+    });
+    
     // Manejo de la solicitud de presupuesto
     document.getElementById('submitSolicitud').addEventListener('click', function (event) {
       event.preventDefault();
