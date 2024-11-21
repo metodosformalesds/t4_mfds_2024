@@ -34,7 +34,7 @@ CSRF_TRUSTED_ORIGINS = ['https://4d4b-189-248-73-167.ngrok-free.app', 'https://d
 
 # URL pública para producción
 NGROK_URL = None  # Aqui se configuro la url de NGROK para hacer pruebas locales
-PRODUCTION_URL = 'https://deco-rent.com/'  # Se establece el dominio real
+PRODUCTION_URL = 'https://deco-rent.com'  # Se establece el dominio real
 
 # Configuración de sesión
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Sesiones en la base de datos
