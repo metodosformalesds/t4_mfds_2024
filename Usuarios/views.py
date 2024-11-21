@@ -27,7 +27,17 @@ NGROK_URL = settings.NGROK_URL if hasattr(settings, 'https://4d4b-189-248-73-167
 
 
 def inicio(request):
-    """Renderiza la página de inicio."""
+    """
+    Renderiza la página de inicio.
+    
+    Esta vista muestra la página principal de la aplicación.
+    
+    Args:
+        request: El objeto HttpRequest que contiene la información de la solicitud.
+        
+    Returns:
+        HttpResponse: La respuesta que renderiza el template 'index.html'.
+    """
     return render(request, 'index.html')
 
 

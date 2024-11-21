@@ -676,17 +676,33 @@
   <script>
     var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
 
+    /**
+     * Maneja el evento de clic en el botón de checkout.
+     * 
+     * Esta función realiza una solicitud POST al servidor para crear una sesión de checkout con Stripe
+     * utilizando el ID de la solicitud asociado al botón. Una vez creada la sesión, redirige al usuario
+     * a Stripe para completar el pago. Si ocurre un error, se muestra un mensaje de alerta y se registra
+     * en la consola.
+     * 
+     * @event click
+     * @function
+     * @returns {void}
+     */
     document.getElementById("checkout-button").addEventListener("click", function () {
+      // Obtiene el ID de la solicitud desde el atributo "data-solicitud-id" del botón
         const solicitudId = this.getAttribute("data-solicitud-id");
+
+        // Realiza una solicitud POST al servidor para crear una sesión de checkout
         fetch(`/Servicios/create_checkout_session/${solicitudId}/`, {
             method: "POST",
             headers: {
-                "X-CSRFToken": "{{ csrf_token }}",
+                "X-CSRFToken": "{{ csrf_token }}", // Incluye el token CSRF para proteger la solicitud
             },
         })
-        .then(response => response.json())
+        .then(response => response.json()) 
         .then(data => {
             if (data.error) {
+                // Muestra un mensaje de error si la respuesta contiene un error
                 alert(data.error);
                 return;
             }
@@ -703,6 +719,19 @@
   <script>
     let connectedAccountId = null;
     const stripeButton = document.getElementById("create-stripe-account-button");
+
+    /**
+     * Maneja la creación de una cuenta connect en Stripe al hacer clic en el botón.
+     * 
+     * Este script verifica si el botón de Stripe existe en la página. Cuando se hace clic en el botón,
+     * realiza una solicitud POST a la vista de Django para crear una cuenta connect en Stripe.
+     * Si hay un error, muestra un mensaje de error. En caso de éxito, oculta el botón de creación
+     * y redirige al usuario para completar el proceso en Stripe.
+     * 
+     * @event click
+     * @function
+     * @returns {void}
+     */
     if (stripeButton) { // Verifica si el botón existe
       stripeButton.onclick = async function () {
       document.getElementById("error").classList.add("hidden");
@@ -722,17 +751,29 @@
             document.getElementById("error").innerText = data.error;
             return;
           }
-
+          // Obtiene el ID de la cuenta conectada de Stripe
           connectedAccountId = data.account;
 
+          // Oculta el botón de creación de cuenta
           document.getElementById("create-stripe-account-button").classList.add("hidden");
 
+          // Llama a la función para crear el enlace de la cuenta y redirigir al usuario
           createAccountLinkAndRedirect(connectedAccountId);
         });
     };
     }
 
-    // Función para crear el enlace de la cuenta y redirigir al usuario
+    /**
+     * Crea un enlace para la cuenta de Stripe y redirige al usuario.
+     * 
+     * Esta función realiza una solicitud POST a la vista de Django para generar un enlace de cuenta connect
+     * en Stripe. Si hay un error, muestra un mensaje en la interfaz de usuario. Si la solicitud es exitosa,
+     * redirige al usuario a la URL proporcionada por Stripe para completar la configuración de su cuenta connect.
+     * 
+     * @function createAccountLinkAndRedirect
+     * @param {string} accountId - El ID de la cuenta connect en Stripe.
+     * @returns {void}
+     */
     function createAccountLinkAndRedirect(accountId) {
       fetch("{% url 'create_account_link' %}", {
         method: "POST",
@@ -770,6 +811,20 @@
       // Código para actualizar el modal del proveedor
     }
 
+    /**
+     * Carga los detalles de una solicitud y actualiza los valores en el modal correspondiente.
+     *
+     * Esta función realiza una solicitud AJAX para obtener los detalles de una solicitud específica
+     * utilizando su ID. Los datos recibidos se asignan a los elementos del modal para mostrar
+     * la información al usuario. Adicionalmente, soporta la actualización de diferentes modales
+     * mediante prefijos en los IDs de los elementos HTML.
+     *
+     * @function loadSolicitudDetails
+     * @param {number} solicitudId - El ID de la solicitud que se desea cargar.
+     * @param {boolean} [isAnswerModal=false] - Indica si los datos deben ser asignados al modal de respuesta.
+     * @param {boolean} [isConfirmModal=false] - Indica si los datos deben ser asignados al modal de confirmación.
+     * @returns {void}
+     */
     function loadSolicitudDetails(solicitudId, isAnswerModal = false, isConfirmModal = false) {
       // Define el prefijo para diferenciar los IDs de los modales
       const modalPrefix = (isAnswerModal ? 'Answer' : '') + (isConfirmModal ? 'Confirm' : '');
@@ -809,6 +864,18 @@
         .catch(error => console.error('Error al cargar los detalles de la solicitud:', error));
     }
 
+    /**
+     * Envía una solicitud al servidor para responder a una solicitud específica al cliente 
+     * con el precio especificado.
+     *
+     * Esta función obtiene el ID de la solicitud y el precio introducido por el proveedor,
+     * y realiza una solicitud POST al servidor para responder a la solicitud. Si la respuesta
+     * es exitosa, muestra un mensaje de confirmación y recarga la página para actualizar las notificaciones.
+     * En caso de error, muestra un mensaje de alerta.
+     *
+     * @function responderSolicitud
+     * @returns {void}
+     */
     function responderSolicitud() {
       const solicitudId = document.getElementById("detailsModal").getAttribute("data-solicitud-id");
       const precio = document.getElementById("contractPrice").value;
@@ -833,6 +900,17 @@
         .catch(error => console.error('Error:', error));
     }
 
+    /**
+     * Envía una solicitud al servidor para rechazar una solicitud específica.
+     *
+     * Esta función obtiene el ID de la solicitud desde el modal y realiza una solicitud POST
+     * al servidor para marcar la solicitud como rechazada. Si la respuesta es exitosa,
+     * muestra un mensaje de confirmación y recarga la página para reflejar los cambios.
+     * En caso de error, muestra un mensaje de alerta.
+     *
+     * @function rechazarSolicitud
+     * @returns {void}
+     */
     function rechazarSolicitud() {
       const solicitudId = document.getElementById("detailsModal").getAttribute("data-solicitud-id");
 
@@ -855,6 +933,17 @@
         .catch(error => console.error('Error:', error));
     }
 
+    /**
+     * Envía una solicitud al servidor para rechazar la respuesta del proveedor a una solicitud específica.
+     *
+     * Esta función obtiene el ID de la solicitud desde el modal de respuesta y realiza una solicitud POST
+     * al servidor para marcar la respuesta como rechazada. Si la operación es exitosa, muestra un mensaje
+     * de confirmación y recarga la página para reflejar los cambios. En caso de error, muestra un mensaje
+     * de alerta.
+     *
+     * @function rechazarRespuesta
+     * @returns {void}
+     */
     function rechazarRespuesta() {
       const solicitudId = document.getElementById("answerModal").getAttribute("data-solicitud-id");
 
@@ -877,23 +966,52 @@
         .catch(error => console.error('Error:', error));
     }
 
-    // Función para obtener el token CSRF
+    /**
+     * Obtiene el valor de una cookie especificada por su nombre.
+     * 
+     * Esta función busca en el documento todas las cookies almacenadas y, si encuentra una 
+     * que coincida con el nombre proporcionado, devuelve su valor. Si no se encuentra 
+     * ninguna cookie con el nombre especificado, devuelve `null`.
+     * 
+     * @function getCookie
+     * @param {string} name - El nombre de la cookie que se desea obtener.
+     * @returns {string|null} El valor de la cookie si existe, o `null` si no se encuentra.
+     */
     function getCookie(name) {
       let cookieValue = null;
+
+      // Verifica si hay cookies definidas en el documento
       if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
+        const cookies = document.cookie.split(';'); // Divide las cookies en un array
+
+        // Itera a través de las cookies para encontrar la que coincida con el nombre
         for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
+          const cookie = cookies[i].trim(); // Elimina los espacios en blanco alrededor de la cookie
+
+          // Verifica si la cookie actual comienza con el nombre proporcionado
           if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            // Decodifica el valor de la cookie y lo asigna a cookieValue
             cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
+            break; // Sale del bucle si se encuentra la cookie
           }
         }
       }
-      return cookieValue;
+      return cookieValue; // Retorna el valor de la cookie o null si no se encontró
     }
 
 
+    /**
+     * Carga los detalles del servicio en el modal de calificación.
+     *
+     * Esta función asigna el ID de la solicitud al modal de calificación para su uso posterior 
+     * y realiza una solicitud AJAX para obtener los detalles del servicio relacionado con la 
+     * solicitud. Los datos obtenidos se utilizan para rellenar el modal con el nombre del servicio 
+     * y el nombre del proveedor.
+     *
+     * @function loadCalificarServicio
+     * @param {number} solicitudId - El ID de la solicitud que se desea cargar.
+     * @returns {void}
+     */
     function loadCalificarServicio(solicitudId) {
       // Asigna el ID del servicio para que se pueda acceder en la funcion submitReview()
       document.getElementById("rateServiceModal").setAttribute("data-solicitud-id", solicitudId);
@@ -910,7 +1028,18 @@
         .catch(error => console.error('Error al cargar los detalles de la solicitud:', error));
     }
 
-    // Función para enviar la reseña
+  /**
+   * Envía una reseña para un servicio específico y actualiza la interfaz según el resultado.
+   * 
+   * Esta función recoge la calificación (estrellas) y el comentario del usuario desde el modal 
+   * de calificación y realiza una solicitud POST al servidor para guardar la reseña. 
+   * Deshabilita el botón de envío mientras se procesa la solicitud para evitar envíos duplicados.
+   * En caso de éxito, recarga la página; si ocurre un error, muestra un mensaje de alerta y 
+   * vuelve a habilitar el botón.
+   * 
+   * @function submitReview
+   * @returns {void}
+   */
   function submitReview() {
       const submitReviewButton = document.querySelector('#rateServiceModal .btn-primary');
       submitReviewButton.disabled = true;  // Deshabilitar el botón al hacer clic

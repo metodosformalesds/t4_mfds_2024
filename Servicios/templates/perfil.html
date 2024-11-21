@@ -159,6 +159,17 @@ Perfil
 </div>
 
 <script>
+/**
+  * Carga los detalles de una solicitud y actualiza los valores del modal.
+  *
+  * Esta función realiza una solicitud AJAX para obtener los detalles de una solicitud específica
+  * utilizando su ID. Los datos recibidos se asignan a los elementos del modal para mostrar
+  * la información al usuario.
+  *
+  * @function loadSolicitudDetails
+  * @param {number} solicitudId - El ID de la solicitud que se desea cargar.
+  * @returns {void}
+  */
   function loadSolicitudDetails(solicitudId) {
       // Realiza una solicitud AJAX para obtener los detalles de la solicitud
       fetch(`/Solicitudes/obtener_solicitud/${solicitudId}/`)
