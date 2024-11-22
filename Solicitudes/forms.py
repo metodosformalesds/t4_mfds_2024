@@ -3,6 +3,7 @@ from .models import Solicitud_Presupuesto
 
 class SolicitudPresupuestoClienteForm(forms.ModelForm):
     """
+    Clase implementada por Alan
     Formulario para que los clientes soliciten presupuestos de servicios.
 
     El formulario `SolicitudPresupuestoClienteForm` permite a los clientes completar la información 
@@ -59,6 +60,7 @@ class SolicitudPresupuestoClienteForm(forms.ModelForm):
         
     def clean_personas(self):
         """
+        Funcion implementada por Alan
         Limpia el campo `personas` para asegurarse de que contenga un número entero mayor a cero.
 
         Valida que el campo `personas` sea un número entero mayor a cero. Si no cumple esta condición, 
@@ -76,6 +78,7 @@ class SolicitudPresupuestoClienteForm(forms.ModelForm):
     
     def clean_duracion(self):
         """
+        Funcion implementada por Alan
         Valida el campo `duracion` para asegurarse de que sea mayor a cero.
 
         Este método se llama cuando se limpia el campo `duracion`. 

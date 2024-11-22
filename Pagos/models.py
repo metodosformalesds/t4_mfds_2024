@@ -4,6 +4,7 @@ from Servicios.models import Servicio
 
 class Contratacion(models.Model):
     """
+    Clase implementada por Alan
     Modelo que representa una contratación de un servicio por parte de un cliente.
 
     Este modelo almacena la información relacionada con la contratación de un servicio,

@@ -27,12 +27,24 @@ NGROK_URL = settings.NGROK_URL if hasattr(settings, 'https://4d4b-189-248-73-167
 
 
 def inicio(request):
-    """Renderiza la página de inicio."""
+    """
+    Funcion implementada por Alan
+    Renderiza la página de inicio.
+    
+    Esta vista muestra la página principal de la aplicación.
+    
+    Args:
+        request: El objeto HttpRequest que contiene la información de la solicitud.
+        
+    Returns:
+        HttpResponse: La respuesta que renderiza el template 'index.html'.
+    """
     return render(request, 'index.html')
 
 
 def acerca_de(request):
     """
+    Funcion implementada por Alan
     Renderiza la página de 'Acerca de'.
 
     Esta vista muestra información sobre la aplicación y su propósito.
@@ -56,7 +68,7 @@ def comparar_rostros(identificacion_bytes, foto_rostro_bytes):
         )
         return response['FaceMatches']
     except ClientError as e:
-        raise RuntimeError(f"Error de AWS Rekognition: {e.response['Error']['Message']}")
+        raise RuntimeError(f"Ingresa una identificacion valida")
     except Exception as e:
         raise RuntimeError(f"Error inesperado: {str(e)}")
 
@@ -252,6 +264,7 @@ def get_temp_image(request):
 def inicio_sesion(request):
     # Si la solicitud es de tipo POST quiere decir que se recibieron datos
     """
+    Funcion implementada por Alan
     Vista para el inicio de sesión.
 
     Si la solicitud es de tipo POST se procesa el formulario de inicio de sesión.
@@ -285,6 +298,7 @@ def inicio_sesion(request):
 
 def cerrar_sesion(request):
     """
+    Funcion implementada por Alan
     Vista para cerrar la sesion del usuario actual.
 
     Cierra la sesion del usuario actual y redirige a la pagina de inicio.

@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 class EmailBackend(ModelBackend):
     """
+    Clase implementada por Alan
     Backend de autenticación personalizado basado en correo electrónico.
 
     Este backend permite a los usuarios autenticarse utilizando su dirección de correo electrónico
@@ -18,6 +19,7 @@ class EmailBackend(ModelBackend):
     """
     def authenticate(self, request, username=None, password=None, **kwargs):
         """
+        Funcion implementada por Alan
         Autentica a un usuario mediante correo electrónico y contraseña.
 
         Este método intenta encontrar un usuario con la dirección de correo electrónico proporcionada.
@@ -47,6 +49,7 @@ class EmailBackend(ModelBackend):
 
     def get_user(self, user_id):
         """
+        Funcion implementada por Alan
         Recupera un usuario por su ID.
 
         Este método busca un usuario en la base de datos utilizando su ID. Si el usuario no existe,

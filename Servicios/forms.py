@@ -5,6 +5,7 @@ from django.forms.utils import flatatt
 #Formulario para la publicacion de servicios
 class PublicarServicioForm(forms.ModelForm):
     """
+    Clase implementada por Alan
     Formulario para la publicación de servicios.
 
     Este formulario permite a los proveedores registrar nuevos servicios en la plataforma. Incluye campos
@@ -68,6 +69,7 @@ class PublicarServicioForm(forms.ModelForm):
 #Clase personalizada para recibir multiples archivos
 class MultipleFileField(forms.FileField):
     """
+    Clase implementada por Alan
     Campo personalizado para manejar la carga de múltiples archivos.
 
     Esta clase extiende `forms.FileField` para permitir la selección y carga de múltiples
@@ -122,6 +124,7 @@ from .forms import PublicarServicioForm, MultipleImagenesServiciosForm
 @login_required
 def publicar_servicio(request):
     """
+    Funcion implementada por Alan
     Vista para la publicación de un nuevo servicio.
 
     Esta función permite a los proveedores crear y publicar un nuevo servicio en la plataforma,

@@ -7,6 +7,7 @@ from .models import User
 #Formulario para el registro de clientes
 class RegistroClienteForm(UserCreationForm):
     """
+    Clase implementada por Alan
     Formulario para el registro de clientes.
 
     Este formulario hereda de `UserCreationForm` y permite a los usuarios registrarse como clientes en el sistema.
@@ -67,6 +68,7 @@ class RegistroClienteForm(UserCreationForm):
     # Funcion para guardar el usuario
     def save(self, commit=True):
         """
+        Funcion implementada por Alan
         Guarda el usuario registrado.
 
         Sobrescribe el método `save` del formulario para realizar personalizaciones antes de guardar el usuario.
@@ -86,6 +88,7 @@ class RegistroClienteForm(UserCreationForm):
 
 class RegistroProveedorForm(UserCreationForm):
     """
+    Clase implementada por Alan
     Formulario para el registro de proveedores.
 
     Este formulario hereda de `UserCreationForm` y permite a los usuarios registrarse como proveedores en el sistema.
@@ -145,6 +148,7 @@ class RegistroProveedorForm(UserCreationForm):
     # Funcion para guardar el usuario
     def save(self, commit=True):
         """
+        Funcion implementada por Alan
         Guarda el usuario registrado.
 
         Sobrescribe el método `save` del formulario para realizar personalizaciones antes de guardar el usuario.
@@ -164,6 +168,7 @@ class RegistroProveedorForm(UserCreationForm):
     
 class InicioSesionForm(forms.Form):
     """
+    Clase implementada por Alan
     Formulario de inicio de sesión.
 
     Este formulario permite a los usuarios ingresar sus credenciales (correo electrónico y contraseña)
@@ -191,6 +196,7 @@ class InicioSesionForm(forms.Form):
     #Funcion que valida los datos de inicio de sesion
     def clean(self):
         """
+        Funcion implementada por Alan
         Valida los datos de inicio de sesión.
 
         Este método valida que las credenciales ingresadas (correo y contraseña) coincidan con un usuario

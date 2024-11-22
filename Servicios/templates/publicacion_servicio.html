@@ -526,7 +526,37 @@
   <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Para usar las flechas -->
 
   <script>
-    // Manejo de la solicitud de presupuesto
+    /**
+     * Función implementada por Alan
+     * Establece la fecha mínima seleccionable en un campo de tipo date al cargar la página.
+     *
+     * Esta función se ejecuta cuando el DOM ha sido completamente cargado. Obtiene el elemento
+     * de entrada de fecha por su ID y establece el atributo `min` para que los usuarios solo puedan
+     * seleccionar fechas iguales o posteriores a la fecha actual.
+     *
+     * @function
+     * @event DOMContentLoaded
+     * @returns {void}
+     */
+    document.addEventListener('DOMContentLoaded', function () {
+        const fechaInput = document.getElementById('id_fecha');
+        const hoy = new Date().toISOString().split('T')[0]; // Obtener la fecha actual en formato yyyy-mm-dd
+        fechaInput.setAttribute('min', hoy); // Establecer la fecha mínima
+    });
+    
+    /**
+     * Función implementada por Alan
+     * Maneja el envío del formulario de solicitud de presupuesto mediante AJAX.
+     *
+     * Esta función intercepta el evento de clic en el botón de envío, recopila los datos del formulario
+     * y los envía al servidor usando una solicitud POST. Muestra alertas de éxito o errores según la 
+     * respuesta del servidor y oculta el modal correspondiente si la operación es exitosa.
+     *
+     * @event click
+     * @function
+     * @param {Event} event - El evento de clic asociado al botón de envío.
+     * @returns {void}
+     */
     document.getElementById('submitSolicitud').addEventListener('click', function (event) {
       event.preventDefault();
 
@@ -559,7 +589,18 @@
         .catch(error => console.error('Error:', error));
     });
 
-    // Mensaje para usuarios proveedores al hacer clic en "Solicitar presupuesto"
+    /**
+     * Función implementada por Alan
+     * Muestra un mensaje de advertencia para usuarios proveedores al intentar realizar una solicitud de presupuesto.
+     *
+     * Esta función se ejecuta cuando el DOM ha sido completamente cargado. Escucha el evento de clic en el botón
+     * con la clase `.not-client` y muestra una alerta indicando que solo los clientes pueden realizar solicitudes
+     * de presupuesto. Evita la acción predeterminada del botón.
+     *
+     * @function
+     * @event DOMContentLoaded
+     * @returns {void}
+     */
     document.addEventListener('DOMContentLoaded', function () {
       const notClientButton = document.querySelector('.not-client');
       if (notClientButton) {

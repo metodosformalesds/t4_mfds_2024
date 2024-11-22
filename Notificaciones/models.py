@@ -4,6 +4,7 @@ from Solicitudes.models import Solicitud_Presupuesto
 
 class Notificacion(models.Model):
     """
+    Clase implementada por Alan
     Modelo que representa una notificación dentro del sistema.
 
     Este modelo almacena notificaciones enviadas a los usuarios, relacionadas con diferentes

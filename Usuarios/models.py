@@ -26,6 +26,7 @@ class UserManager(BaseUserManager):
 #Extension del modelo de usuarios de django para clientes y proveedores
 class User(AbstractUser):
     """
+    Clase implementada por Alan
     Modelo de usuario personalizado para el sistema.
 
     Este modelo reemplaza el campo 'username' predeterminado de Django
@@ -84,6 +85,7 @@ class User(AbstractUser):
 #Modelo para clientes derivado de User
 class Cliente(models.Model):
     """
+    Clase implementada por Alan
     Modelo que representa un cliente en el sistema.
 
     Este modelo está vinculado de forma directa al modelo de usuario personalizado (`User`)
@@ -100,6 +102,7 @@ class Cliente(models.Model):
 #Modelo para proveedores derivado de User
 class Proveedor(models.Model):
     """
+    Clase implementada por Alan
     Modelo que representa un proveedor en el sistema.
 
     Este modelo está vinculado de forma directa al modelo de usuario personalizado (`User`)
