@@ -16,7 +16,6 @@ import json
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from decimal import Decimal
-from django.core.paginator import Paginator
 
 @login_required
 def perfil(request):
@@ -68,28 +67,19 @@ def servicios_sin_login(request):
         servicios = Servicio.objects.filter(categoria__iexact=categoria_seleccionada)
     else:
         servicios = Servicio.objects.all()
-        
-        # Configuración de la paginación
-        paginator = Paginator(servicios, 18)  # Mostrar 18 servicios por página
-        page_number = request.GET.get('page')  # Obtener el número de página desde la URL
-        page_obj = paginator.get_page(page_number)  # Obtener la página actual
     
-    # Verificar si el usuario ha iniciado sesión y obtener "Mis servicios"
+    # Verificar si el usuario ha iniciado sesión
     if request.user.is_authenticated:
-        proveedor = request.user.proveedor  # Accede al proveedor asociado al usuario
-        mis_servicio = Servicio.objects.filter(proveedor=proveedor)  # Obtén los servicios de ese proveedor
         # Obtener todas las notificaciones del usuario, ordenadas de más reciente a más antigua
         notificaciones = Notificacion.objects.filter(user=request.user, leido=False).order_by('-fecha')
     else:
-        mis_servicio = []  # Si no está autenticado, no hay servicios que mostrar
-        notificaciones = None  # Si no está autenticado, no se cargan notificaciones
+        # Si no está autenticado, no se cargan notificaciones
+        notificaciones = None
     
     return render(request, 'servicios_sin_login.html', {
-        'mis_servicio': mis_servicio,  # Pasa los servicios a la plantilla
-        'servicios': page_obj.object_list,
+        'servicios': servicios,
         'notificaciones': notificaciones,
         'categoria_seleccionada': categoria_seleccionada,
-        'page_obj': page_obj,  # Objeto de la página para la navegación
         'STRIPE_PUBLIC_KEY': settings.STRIPE_PUBLIC_KEY,
     })
 
