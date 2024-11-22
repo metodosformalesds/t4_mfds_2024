@@ -5,6 +5,7 @@ from django.conf import settings
 
 class Servicio(models.Model):
     """
+    Clase implementada por Alan
     Modelo que representa un servicio ofrecido por un proveedor.
 
     Este modelo almacena la información relacionada con un servicio que un proveedor puede ofrecer
@@ -39,6 +40,7 @@ class Servicio(models.Model):
     
 class Imagenes_Servicios(models.Model):
     """
+    Clase implementada por Alan
     Modelo que representa las imágenes asociadas a un servicio.
 
     Este modelo almacena las imágenes relacionadas con un servicio en la plataforma. Cada imagen

@@ -12,6 +12,7 @@ import json
 @login_required #Decorado para asegurarse de que el usuario haya iniciado sesión
 def solicitar_presupuesto(request, servicio_id):
     """
+    Funcion implementada por Alan
     Solicita un presupuesto para un servicio específico.
 
     Esta función permite a un usuario autenticado enviar una solicitud de presupuesto para un 
@@ -70,6 +71,7 @@ def solicitar_presupuesto(request, servicio_id):
     
 def obtener_solicitud(request, solicitud_id):
     """
+    Funcion implementada por Alan
     Obtiene los detalles de una solicitud de presupuesto específica.
     
     Esta función devuelve un objeto JSON con los detalles de la solicitud de presupuesto
@@ -104,6 +106,7 @@ def obtener_solicitud(request, solicitud_id):
 @login_required
 def responder_solicitud(request, solicitud_id):
     """
+    Funcion implementada por Alan
     Responde a una solicitud de presupuesto.
 
     Esta función permite al proveedor responder a una solicitud de presupuesto creada por un cliente. 
@@ -176,6 +179,7 @@ def responder_solicitud(request, solicitud_id):
 @login_required
 def rechazar_solicitud(request, solicitud_id):
     """
+    Funcion implementada por Alan
     Rechaza una solicitud de presupuesto.
 
     Esta función permite al proveedor rechazar una solicitud de presupuesto creada por un cliente. 
@@ -227,6 +231,7 @@ def rechazar_solicitud(request, solicitud_id):
 @login_required
 def rechazar_respuesta(request, solicitud_id):
     """
+    Funcion implementada por Alan
     Rechaza la respuesta de una solicitud de presupuesto.
 
     Esta función permite al cliente rechazar la respuesta de una solicitud de presupuesto enviada 

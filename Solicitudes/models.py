@@ -4,6 +4,7 @@ from Servicios.models import Servicio
 
 class Solicitud_Presupuesto(models.Model):
     """
+    Clase implementada por Alan
     Modelo que representa una solicitud de presupuesto para un servicio.
 
     Descripción detallada:

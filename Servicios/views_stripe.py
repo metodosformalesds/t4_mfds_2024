@@ -20,6 +20,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 @csrf_exempt
 def create_account(request):
     """
+    Funcion implementada por Alan
     Crea una cuenta conectada de Stripe para un proveedor.
 
     Esta función permite a los proveedores crear una cuenta conectada de Stripe tipo "express",
@@ -69,6 +70,7 @@ def create_account(request):
 @csrf_exempt
 def create_account_link(request):
     """
+    Funcion implementada por Alan
     Crea un enlace de cuenta conectada de Stripe para la configuración inicial.
 
     Esta función genera un enlace de configuración ("account_onboarding") para que un proveedor pueda
@@ -121,6 +123,7 @@ def create_account_link(request):
 @login_required
 def stripe_onboarding_complete(request):
     """
+    Funcion implementada por Alan
     Completa el proceso de configuración de la cuenta conectada de Stripe.
 
     Esta función se utiliza como punto de retorno después de que un proveedor completa el proceso de
@@ -160,6 +163,7 @@ def stripe_onboarding_complete(request):
 @csrf_exempt
 def create_checkout_session(request, solicitud_id):
     """
+    Funcion implementada por Alan
     Crea una sesión de pago en Stripe para una solicitud de presupuesto.
 
     Esta función genera una sesión de pago en Stripe utilizando los detalles de una solicitud de
@@ -233,6 +237,7 @@ def create_checkout_session(request, solicitud_id):
     
 def payment_success(request):
     """
+    Funcion implementada por Alan
     Maneja el flujo posterior a un pago exitoso en Stripe.
 
     Esta función verifica la sesión de pago de Stripe, procesa los datos relacionados con la transacción,
@@ -334,6 +339,7 @@ def payment_success(request):
 
 def payment_cancel(request):    
     """
+    Funcion implementada por Alan
     Vista que maneja la cancelación de un pago.
 
     Esta vista genera el template 'payment_cancel.html' cuando se cancela el proceso de un pago.
@@ -349,6 +355,7 @@ def payment_cancel(request):
 @login_required
 def stripe_dashboard_link(request):
     """
+    Funcion implementada por Alan
     Genera un enlace para que el proveedor pueda acceder a su Express Dashboard de Stripe.
 
     La vista verifica que el usuario sea un proveedor y tenga una cuenta de Stripe asociada. Si se cumple esta

@@ -21,6 +21,7 @@ from django.core.paginator import Paginator
 @login_required
 def perfil(request):
     """
+    Funcion implementada por Alan
     Vista para mostrar el perfil del usuario actual.
 
     Muestra las notificaciones de confirmación de pago del usuario actual, ordenadas de más reciente a más antigua. 
@@ -45,6 +46,7 @@ def perfil(request):
 
 def servicios_sin_login(request):
     """
+    Funcion implementada por Luis y Alan
     Vista para mostrar los servicios en la plataforma sin requerir autenticación.
 
     Muestra todos los servicios en la plataforma, o los servicios que coinciden con la categoría seleccionada 
@@ -94,6 +96,7 @@ def servicios_sin_login(request):
 
 def publicar_servicio(request):
     """
+    Funcion implementada por Alan
     Vista para la publicación de un nuevo servicio por parte de un proveedor.
 
     Esta función permite a los proveedores registrar un nuevo servicio en el sistema. Incluye la validación 
@@ -196,6 +199,7 @@ def publicar_servicio(request):
 @login_required
 def publicacion_servicio(request, id):
     """
+    Funcion implementada por Alan
     Vista para mostrar los detalles de un servicio publicado.
 
     Esta función permite a los usuarios visualizar los detalles de un servicio específico,
@@ -261,7 +265,9 @@ def publicacion_servicio(request, id):
     })
 
 def eliminar_publicacion(request, id):
-    """Vista para eliminar una publicación de servicio.
+    """
+    Funcion implementada por Alan
+    Vista para eliminar una publicación de servicio.
 
     Recibe como parámetro el `id` del servicio a eliminar.
 
