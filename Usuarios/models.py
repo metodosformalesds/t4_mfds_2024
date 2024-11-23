@@ -3,7 +3,27 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import BaseUserManager
 
 class UserManager(BaseUserManager):
+        """
+    Luis Angel Hernandez Vargas
+    Esta clase extiende la funcionalidad del administrador de usuarios predeterminado en Django.
+    Permite la creación de usuarios estándar y superusuarios mediante métodos personalizados.
+    """
     def create_user(self, email, password=None, **extra_fields):
+                """
+        Luis Angel Hernandez Vargas
+        Crea y guarda un usuario estándar con el correo electrónico y la contraseña proporcionados.
+        
+        Args:
+            email (str): Dirección de correo electrónico del usuario. Es obligatorio.
+            password (str, optional): Contraseña del usuario. Puede ser None.
+            **extra_fields: Otros campos adicionales que se pueden agregar al usuario.
+        
+        Returns:
+            user (User): Instancia del usuario creado.
+
+        Raises:
+            ValueError: Si el correo electrónico no se proporciona.
+        """
         if not email:
             raise ValueError('El usuario debe tener un email')
         email = self.normalize_email(email)
@@ -13,6 +33,21 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
+               """
+        Luis Angel Hernandez Vargas
+        Crea y guarda un superusuario con el correo electrónico y la contraseña proporcionados.
+        
+        Args:
+            email (str): Dirección de correo electrónico del superusuario. Es obligatorio.
+            password (str, optional): Contraseña del superusuario. Puede ser None.
+            **extra_fields: Otros campos adicionales que se pueden agregar al superusuario.
+        
+        Returns:
+            user (User): Instancia del superusuario creado.
+
+        Raises:
+            ValueError: Si los campos `is_staff` o `is_superuser` no son True.
+        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
