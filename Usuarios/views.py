@@ -15,6 +15,7 @@ from uuid import uuid4
 from botocore.exceptions import ClientError
 import boto3
 
+# Configura el cliente de AWS Rekognition con las credenciales y la región especificadas en las configuraciones.
 rekognition_client = boto3.client(
     'rekognition',
     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -59,7 +60,20 @@ def acerca_de(request):
 
 
 def comparar_rostros(identificacion_bytes, foto_rostro_bytes):
-    """Función centralizada para comparar rostros usando Rekognition."""
+        """
+    Luis Angel Hernandez Vargas
+    Compara dos imágenes utilizando AWS Rekognition para determinar si los rostros coinciden.
+    
+    Args:
+        identificacion_bytes (bytes): Imagen de identificación en formato binario.
+        foto_rostro_bytes (bytes): Foto del rostro en formato binario.
+        
+    Returns:
+        list: Lista de coincidencias de rostros proporcionada por AWS Rekognition.
+    
+    Raises:
+        RuntimeError: Si ocurre un error con la API de Rekognition o cualquier error inesperado.
+    """
     try:
         response = rekognition_client.compare_faces(
             SourceImage={'Bytes': identificacion_bytes},
@@ -217,12 +231,35 @@ def registro_proveedor(request):
         return render(request, 'registro_proveedor.html', {'form': form, 'qr_url': qr_url, 'qr_token': qr_token})
     
     return render(request, 'registro_proveedor.html', {'form': form})
+
+
 def captura_bio(request):
-    """Renderiza la página para capturar la biometría."""
+        """
+    Luis Angel Hernandez Vargas
+    Renderiza la página para la captura de biometría del usuario.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Respuesta renderizada con la plantilla de captura de biometría.
+    """
     return render(request, 'captura_bio.html')
 
 @csrf_exempt
 def get_temp_image(request):
+        """
+    Luis Angel Hernandez Vargas
+    Maneja solicitudes GET y POST para la gestión de imágenes temporales asociadas a un token.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP. Puede ser de tipo GET o POST.
+        
+    Returns:
+        JsonResponse: Respuesta JSON que indica el resultado de la operación.
+            - En POST: Indica si la imagen fue almacenada temporalmente.
+            - En GET: Devuelve la imagen en formato base64 si existe, o un mensaje de error si no.
+    """
     token = request.GET.get('token') or request.session.get('qr_token')
 
     if request.method == "POST":
