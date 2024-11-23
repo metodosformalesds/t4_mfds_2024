@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <!-- 
+    Documento implementado por Luis Angel Hernández
+    Página para capturar datos biométricos mediante la cámara del dispositivo.
+    
+    Este documento contiene:
+    - Estilos para el diseño de la interfaz.
+    - Lógica en JavaScript para la activación de la cámara y envío de imágenes.
+    
+    -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Captura Biométrica</title>
     <style>
+               /*
+        Estilos implementados por Luis Angel Hernández
+        Diseñan la página para mostrar un video de la cámara,
+        un botón de captura y un indicador de carga.
+        
+        - body: Define la tipografía y el alineado del contenido.
+        - #video: Ajusta el tamaño del video para dispositivos.
+        - #capture-btn: Estiliza el botón de captura.
+        - #loader: Muestra un mensaje de carga.
+        */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -34,6 +53,13 @@
     </style>
 </head>
 <body>
+        <!-- 
+    Elementos principales de la página:
+    - Un título que indica la función de la página.
+    - Un video para mostrar la vista previa de la cámara.
+    - Un botón para capturar la imagen.
+    - Un indicador de carga que aparece durante el procesamiento.
+    -->
     <h2>Captura Biométrica</h2>
     <video id="video" autoplay playsinline muted></video>
     <br>
@@ -41,18 +67,39 @@
     <div id="loader">Procesando...</div>
 
     <script>
+                /*
+        Script implementado por Luis Angel Hernández
+        Lógica en JavaScript para gestionar la cámara y el envío de imágenes al servidor.
+        */
         const video = document.getElementById("video");
         const captureBtn = document.getElementById("capture-btn");
         const loader = document.getElementById("loader");
 
-        // Obtener el token desde la URL
+               /**
+         * Obtiene el token desde la URL y valida su presencia.
+         *
+         * Esta función extrae el token requerido para la operación desde los parámetros
+         * de la URL. Si no se encuentra, muestra un mensaje de error y redirige al usuario
+         * a la página principal.
+         */
         const token = new URLSearchParams(window.location.search).get("token");
         if (!token) {
             alert("Token no válido. Verifica que estés accediendo desde el QR generado.");
             window.location.href = "/"; // Redirige a la página principal
         }
 
-        // Activar la cámara
+                /**
+         * Activa la cámara del dispositivo.
+         *
+         * Esta función solicita permisos para usar la cámara mediante getUserMedia.
+         * Si el usuario acepta, muestra el video en el elemento HTML correspondiente.
+         *
+         * Args:
+         *     None.
+         *
+         * Returns:
+         *     None.
+         */
         function activarCamara() {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
@@ -64,7 +111,19 @@
                 });
         }
 
-        // Capturar y enviar la imagen al servidor
+               /**
+         * Captura una imagen desde la cámara y la envía al servidor.
+         *
+         * Este evento se activa al hacer clic en el botón de captura. La función toma
+         * un fotograma del video, lo convierte en base64 y lo envía al servidor para
+         * su procesamiento, usando un token para autenticación.
+         *
+         * Args:
+         *     None.
+         *
+         * Returns:
+         *     None.
+         */
         captureBtn.addEventListener("click", () => {
             const canvas = document.createElement("canvas");
             canvas.width = video.videoWidth;
