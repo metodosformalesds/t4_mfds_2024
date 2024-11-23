@@ -87,6 +87,14 @@
     const noCameraModal = document.getElementById("noCameraModal");
     const fotoRostroInput = document.getElementById("fotoRostro");
 
+        /**
+     * Verifica periódicamente si una imagen temporal está disponible en el servidor.
+     * 
+     * Realiza solicitudes GET a un endpoint para comprobar si existe una imagen capturada
+     * desde otro dispositivo. Si la encuentra, la sincroniza con el campo oculto del formulario.
+     * 
+     * @returns {void}
+     */
 
     document.addEventListener("DOMContentLoaded", () => {
         const fotoRostroInput = document.getElementById("fotoRostro");
@@ -130,7 +138,14 @@
     });
     
     
-
+    /**
+     * Valida que se haya capturado una foto antes de enviar el formulario.
+     * 
+     * Previene el envío del formulario si el campo `fotoRostro` está vacío,
+     * mostrando un mensaje de advertencia al usuario.
+     * 
+     * @returns {void}
+     */
 
     document.getElementById("registerForm").addEventListener("submit", (e) => {
         const fotoRostroInput = document.getElementById("fotoRostro");
@@ -142,7 +157,16 @@
         }
     });
     
-
+    /**
+     * Activa la cámara del dispositivo y muestra el modal para captura de rostro.
+     * 
+     * Utiliza la API `navigator.mediaDevices.getUserMedia` para acceder a la cámara.
+     * Si se detecta un error (como la ausencia de cámara o falta de permisos),
+     * muestra un modal alternativo para registro con código QR.
+     * 
+     * @returns {void}
+     */
+    
     function activarCamara() {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then((stream) => {
@@ -155,11 +179,27 @@
             });
     }
 
+        /**
+     * Cierra el modal de captura de cámara y detiene el stream de video.
+     * 
+     * Llama a la función `detenerCamara` para liberar los recursos utilizados por
+     * la cámara y oculta el modal de captura.
+     * 
+     * @returns {void}
+     */
     function cerrarModal() {
         cameraModal.style.display = "none";
         detenerCamara();
     }
 
+        /**
+     * Detiene el stream de video activo y libera los recursos de la cámara.
+     * 
+     * Obtiene el stream asignado al elemento `<video>` y detiene cada una de
+     * sus pistas activas (tracks). Luego, limpia el contenido del elemento `<video>`.
+     * 
+     * @returns {void}
+     */
     function detenerCamara() {
         const stream = video.srcObject;
         if (stream) {
@@ -169,6 +209,15 @@
         }
     }
 
+        /**
+     * Captura una imagen del video activo y la guarda en el campo oculto del formulario.
+     * 
+     * Crea un elemento `<canvas>` donde se dibuja el cuadro actual del video usando
+     * `drawImage`. Convierte el contenido del lienzo a una cadena Base64 (formato PNG)
+     * y lo asigna al input oculto `fotoRostro` para enviarlo al servidor.
+     * 
+     * @returns {void}
+     */
     function capturarFoto() {
         const canvas = document.createElement("canvas");
         canvas.width = video.videoWidth;
@@ -187,6 +236,14 @@
         alert("Foto capturada exitosamente.");
         cerrarModal();
     }
+        /**
+     * Muestra el modal para dispositivos sin cámara.
+     * 
+     * El modal incluye un mensaje indicando que la cámara no está disponible
+     * y genera un código QR que redirige al usuario a un dispositivo con cámara.
+     * 
+     * @returns {void}
+     */
 
     function mostrarNoCameraModal() {
         noCameraModal.style.display = "flex";
@@ -195,10 +252,26 @@
         generarQRCode(qrUrl);
     }
 
+        /**
+     * Cierra el modal para dispositivos sin cámara.
+     * 
+     * Oculta el modal mostrado previamente por `mostrarNoCameraModal`.
+     * 
+     * @returns {void}
+     */
     function cerrarNoCameraModal() {
         noCameraModal.style.display = "none";
     }
 
+        /**
+     * Genera un código QR con una URL específica.
+     * 
+     * Utiliza la biblioteca `QRious` para generar un código QR dinámico y lo
+     * renderiza dentro de un elemento `<canvas>` en el modal correspondiente.
+     * 
+     * @param {string} url - La URL que será codificada en el código QR.
+     * @returns {void}
+     */
     function generarQRCode(url) {
         const qrElement = document.getElementById("qrCode");
         qrElement.innerHTML = ""; // Limpia contenido previo
